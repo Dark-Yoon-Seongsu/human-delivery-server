@@ -1,6 +1,7 @@
 package goorm.humandelivery.domain.model.entity;
 
 
+import goorm.humandelivery.driver.domain.TaxiDriver;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

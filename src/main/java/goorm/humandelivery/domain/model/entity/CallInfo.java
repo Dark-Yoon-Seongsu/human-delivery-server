@@ -1,6 +1,7 @@
 package goorm.humandelivery.domain.model.entity;
 
 import goorm.humandelivery.customer.domain.Customer;
+import goorm.humandelivery.driver.domain.TaxiType;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -46,9 +47,5 @@ public class CallInfo extends BaseEntity {
 
 	@Enumerated(value = EnumType.STRING)
 	private TaxiType taxiType;
-
-
-
-
 
 }

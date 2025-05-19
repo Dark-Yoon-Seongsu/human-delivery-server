@@ -1,7 +1,7 @@
 package goorm.humandelivery.domain.model.request;
 
 import goorm.humandelivery.common.util.annotation.ValidEnum;
-import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
+import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import lombok.Getter;
 import lombok.Setter;
 

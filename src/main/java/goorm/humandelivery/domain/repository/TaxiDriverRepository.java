@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import goorm.humandelivery.domain.model.entity.Taxi;
-import goorm.humandelivery.domain.model.entity.TaxiDriver;
+import goorm.humandelivery.driver.domain.Taxi;
+import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.domain.model.response.TaxiTypeResponse;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

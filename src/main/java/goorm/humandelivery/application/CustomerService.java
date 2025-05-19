@@ -1,7 +1,7 @@
 package goorm.humandelivery.application;
 
+import goorm.humandelivery.customer.application.port.out.LoadCustomerPort;
 import goorm.humandelivery.customer.domain.Customer;
-import goorm.humandelivery.customer.application.port.out.CustomerRepository;
 import goorm.humandelivery.customer.exception.CustomerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CustomerService {
 
-    private final CustomerRepository customerRepository;
+    private final LoadCustomerPort customerRepository;
 
     @Transactional(readOnly = true)
     public Customer findCustomerByLoginId(String loginId) {

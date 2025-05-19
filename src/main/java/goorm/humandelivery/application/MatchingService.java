@@ -9,7 +9,7 @@ import goorm.humandelivery.common.exception.MatchingEntityNotFoundException;
 import goorm.humandelivery.common.exception.TaxiDriverEntityNotFoundException;
 import goorm.humandelivery.domain.model.entity.CallInfo;
 import goorm.humandelivery.domain.model.entity.Matching;
-import goorm.humandelivery.domain.model.entity.TaxiDriver;
+import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.domain.model.request.CreateMatchingRequest;
 import goorm.humandelivery.domain.repository.CallInfoRepository;
 import goorm.humandelivery.domain.repository.MatchingRepository;

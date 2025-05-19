@@ -3,7 +3,7 @@ package goorm.humandelivery.domain.model.request;
 import goorm.humandelivery.domain.model.entity.CallInfo;
 import goorm.humandelivery.customer.domain.Customer;
 import goorm.humandelivery.domain.model.entity.Location;
-import goorm.humandelivery.domain.model.entity.TaxiType;
+import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

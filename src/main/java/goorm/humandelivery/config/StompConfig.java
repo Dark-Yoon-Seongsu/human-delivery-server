@@ -2,6 +2,7 @@ package goorm.humandelivery.config;
 
 import java.security.Principal;
 
+import goorm.humandelivery.common.application.port.out.JwtTokenProviderPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -19,7 +20,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import goorm.humandelivery.common.security.jwt.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,11 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
-	private final JwtUtil jwtUtil;
+	private final JwtTokenProviderPort jwtTokenProviderPort;
 
 	@Autowired
-	public StompConfig(JwtUtil jwtUtil) {
-		this.jwtUtil = jwtUtil;
+	public StompConfig(JwtTokenProviderPort jwtTokenProviderPort) {
+		this.jwtTokenProviderPort = jwtTokenProviderPort;
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
 						String token = accessor.getFirstNativeHeader("Authorization");
 
 						// 1. 인증 로직 수행 (예: JWT 검증)
-						boolean isValid = jwtUtil.validateToken(token);
+						boolean isValid = jwtTokenProviderPort.validateToken(token);
 
 						if (!isValid) {
 							// 발생한 예외는 STOMP 클라이언트에게 ERROR 프레임으로 반환됨 -> 클라이언트로..
@@ -109,7 +109,7 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
 						// 2. 토큰으로부터 Authentication 객체 생성.
 						// SecurityContext 에 등록할 필요 없음.
-						Authentication authentication = jwtUtil.getAuthentication(token);
+						Authentication authentication = jwtTokenProviderPort.getAuthentication(token);
 						log.info("authentication: {}", authentication);
 
 						// 3. accessor 에 authentication 객체 세팅

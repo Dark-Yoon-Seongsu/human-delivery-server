@@ -1,6 +1,6 @@
 package goorm.humandelivery.application;
 
-import static goorm.humandelivery.domain.model.entity.TaxiDriverStatus.*;
+import static goorm.humandelivery.driver.domain.TaxiDriverStatus.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
-import goorm.humandelivery.domain.model.entity.TaxiType;
+import goorm.humandelivery.driver.domain.TaxiDriverStatus;
+import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.infrastructure.messaging.MessagingService;
 import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;

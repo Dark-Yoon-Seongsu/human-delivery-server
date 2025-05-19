@@ -1,7 +1,7 @@
 package goorm.humandelivery.customer.application;
 
 import goorm.humandelivery.common.exception.IncorrectPasswordException;
-import goorm.humandelivery.customer.application.port.out.CustomerRepository;
+import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
 import goorm.humandelivery.customer.dto.request.LoginCustomerRequest;
 import goorm.humandelivery.customer.dto.request.RegisterCustomerRequest;
 import goorm.humandelivery.customer.dto.response.LoginCustomerResponse;
@@ -26,11 +26,11 @@ public class LoginCustomerServiceTest {
     private RegisterCustomerService registerCustomerService;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private SaveCustomerPort saveCustomerPort;
 
     @AfterEach
     void tearDown() {
-        customerRepository.deleteAllInBatch();
+        saveCustomerPort.deleteAllInBatch();
     }
 
     @Nested

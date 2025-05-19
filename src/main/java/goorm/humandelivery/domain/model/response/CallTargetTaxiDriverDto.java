@@ -1,6 +1,6 @@
 package goorm.humandelivery.domain.model.response;
 
-import goorm.humandelivery.domain.model.entity.TaxiDriver;
+import goorm.humandelivery.driver.domain.TaxiDriver;
 import lombok.Getter;
 
 @Getter

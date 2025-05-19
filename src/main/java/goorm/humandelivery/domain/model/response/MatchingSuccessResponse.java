@@ -1,6 +1,6 @@
 package goorm.humandelivery.domain.model.response;
 
-import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
+import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

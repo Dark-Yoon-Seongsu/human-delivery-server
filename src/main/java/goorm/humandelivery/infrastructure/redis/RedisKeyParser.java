@@ -1,7 +1,7 @@
 package goorm.humandelivery.infrastructure.redis;
 
-import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
-import goorm.humandelivery.domain.model.entity.TaxiType;
+import goorm.humandelivery.driver.domain.TaxiDriverStatus;
+import goorm.humandelivery.driver.domain.TaxiType;
 
 public class RedisKeyParser {
 

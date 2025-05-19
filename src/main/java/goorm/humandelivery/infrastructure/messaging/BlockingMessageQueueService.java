@@ -1,12 +1,9 @@
 package goorm.humandelivery.infrastructure.messaging;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +11,8 @@ import goorm.humandelivery.api.WebSocketCustomerController;
 import goorm.humandelivery.application.WebSocketCustomerService;
 import goorm.humandelivery.common.exception.NoAvailableTaxiException;
 import goorm.humandelivery.domain.model.entity.CallStatus;
-import goorm.humandelivery.domain.model.entity.Location;
-import goorm.humandelivery.domain.model.entity.TaxiDriver;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.domain.model.internal.QueueMessage;
-import goorm.humandelivery.domain.model.response.CallTargetTaxiDriverDto;
 import goorm.humandelivery.domain.repository.TaxiDriverRepository;
 import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.RequiredArgsConstructor;

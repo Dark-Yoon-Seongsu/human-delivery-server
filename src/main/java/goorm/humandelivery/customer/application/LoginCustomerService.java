@@ -1,10 +1,10 @@
 package goorm.humandelivery.customer.application;
 
+import goorm.humandelivery.common.application.port.out.JwtTokenProviderPort;
 import goorm.humandelivery.common.exception.IncorrectPasswordException;
-import goorm.humandelivery.common.security.jwt.JwtUtil;
 import goorm.humandelivery.customer.application.port.in.LoginCustomerUseCase;
+import goorm.humandelivery.customer.application.port.out.LoadCustomerPort;
 import goorm.humandelivery.customer.domain.Customer;
-import goorm.humandelivery.customer.application.port.out.CustomerRepository;
 import goorm.humandelivery.customer.exception.CustomerNotFoundException;
 import goorm.humandelivery.customer.dto.request.LoginCustomerRequest;
 import goorm.humandelivery.customer.dto.response.LoginCustomerResponse;
@@ -18,19 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LoginCustomerService implements LoginCustomerUseCase {
 
-    private final CustomerRepository customerRepository;
+    private final LoadCustomerPort loadCustomerPort;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenProviderPort jwtTokenProviderPort;
 
     @Override
     public LoginCustomerResponse authenticateAndGenerateToken(LoginCustomerRequest loginCustomerRequest) {
-        Customer customer = customerRepository.findByLoginId(loginCustomerRequest.getLoginId())
+        Customer customer = loadCustomerPort.findByLoginId(loginCustomerRequest.getLoginId())
                 .orElseThrow(CustomerNotFoundException::new);
 
         if (!bCryptPasswordEncoder.matches(loginCustomerRequest.getPassword(), customer.getPassword())) {
             throw new IncorrectPasswordException();
         }
 
-        return new LoginCustomerResponse(jwtUtil.generateToken(customer.getLoginId()));
+        return new LoginCustomerResponse(jwtTokenProviderPort.generateToken(customer.getLoginId()));
     }
 }

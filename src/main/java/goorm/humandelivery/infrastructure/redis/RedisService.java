@@ -23,8 +23,8 @@ import goorm.humandelivery.common.exception.LocationNotInRedisException;
 import goorm.humandelivery.common.exception.RedisKeyNotFoundException;
 import goorm.humandelivery.domain.model.entity.CallStatus;
 import goorm.humandelivery.domain.model.entity.Location;
-import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
-import goorm.humandelivery.domain.model.entity.TaxiType;
+import goorm.humandelivery.driver.domain.TaxiDriverStatus;
+import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.domain.model.request.UpdateTaxiDriverStatusResponse;
 import lombok.extern.slf4j.Slf4j;
 

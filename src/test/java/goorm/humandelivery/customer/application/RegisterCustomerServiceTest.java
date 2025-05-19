@@ -1,8 +1,8 @@
 package goorm.humandelivery.customer.application;
 
-import goorm.humandelivery.customer.exception.DuplicateLoginIdException;
+import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
+import goorm.humandelivery.common.exception.DuplicateLoginIdException;
 import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
-import goorm.humandelivery.customer.application.port.out.CustomerRepository;
 import goorm.humandelivery.customer.dto.request.RegisterCustomerRequest;
 import goorm.humandelivery.customer.dto.response.RegisterCustomerResponse;
 import org.junit.jupiter.api.AfterEach;
@@ -22,15 +22,15 @@ class RegisterCustomerServiceTest {
     private RegisterCustomerService registerCustomerService;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private SaveCustomerPort saveCustomerPort;
 
     @AfterEach
     void tearDown() {
-        customerRepository.deleteAllInBatch();
+        saveCustomerPort.deleteAllInBatch();
     }
 
     @Nested
-    @DisplayName("회원가입 테스트")
+    @DisplayName("승객 회원가입 테스트")
     class RegisterTest {
         @Test
         @DisplayName("회원가입 정보를 받아 회원을 생성한다")
