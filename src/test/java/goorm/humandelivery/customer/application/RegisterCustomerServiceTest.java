@@ -1,7 +1,7 @@
 package goorm.humandelivery.customer.application;
 
 import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
-import goorm.humandelivery.common.exception.DuplicateLoginIdException;
+import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
 import goorm.humandelivery.customer.dto.request.RegisterCustomerRequest;
 import goorm.humandelivery.customer.dto.response.RegisterCustomerResponse;

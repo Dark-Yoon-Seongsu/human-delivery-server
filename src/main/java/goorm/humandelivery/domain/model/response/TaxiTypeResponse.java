@@ -10,5 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TaxiTypeResponse {
 
-	private TaxiType taxiType;
+    private TaxiType taxiType;
 }

@@ -11,6 +11,6 @@ import lombok.Setter;
 @Getter
 public class CallCancelRequest {
 
-	private Long callId;
+    private Long callId;
 
 }

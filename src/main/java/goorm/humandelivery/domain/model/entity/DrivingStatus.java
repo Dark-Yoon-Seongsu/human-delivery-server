@@ -1,12 +1,12 @@
 package goorm.humandelivery.domain.model.entity;
 
 public enum DrivingStatus {
-	ON_DRIVING("손님탑승완료"),
-	COMPLETE("운행완료");
+    ON_DRIVING("손님탑승완료"),
+    COMPLETE("운행완료");
 
-	private final String description;
+    private final String description;
 
-	DrivingStatus(String description) {
-		this.description = description;
-	}
+    DrivingStatus(String description) {
+        this.description = description;
+    }
 }

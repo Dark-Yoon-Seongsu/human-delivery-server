@@ -1,6 +1,5 @@
 package goorm.humandelivery.domain.model.request;
 
-import goorm.humandelivery.domain.model.entity.DrivingStatus;
 import goorm.humandelivery.domain.model.entity.Location;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,11 +8,11 @@ import lombok.Setter;
 @Setter
 public class CreateDrivingInfoRequest {
 
-	private Long matchingId;
-	private Location departPosition;
+    private Long matchingId;
+    private Location departPosition;
 
-	public CreateDrivingInfoRequest(Long matchingId, Location departPosition) {
-		this.matchingId = matchingId;
-		this.departPosition = departPosition;
-	}
+    public CreateDrivingInfoRequest(Long matchingId, Location departPosition) {
+        this.matchingId = matchingId;
+        this.departPosition = departPosition;
+    }
 }

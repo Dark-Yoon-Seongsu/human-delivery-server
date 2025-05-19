@@ -1,6 +1,5 @@
 package goorm.humandelivery.driver.application;
 
-import goorm.humandelivery.common.exception.DuplicateLoginIdException;
 import goorm.humandelivery.driver.application.port.in.RegisterTaxiDriverUseCase;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiDriverPort;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiPort;
@@ -8,6 +7,7 @@ import goorm.humandelivery.driver.domain.*;
 import goorm.humandelivery.driver.dto.request.RegisterTaxiDriverRequest;
 import goorm.humandelivery.driver.dto.request.RegisterTaxiRequest;
 import goorm.humandelivery.driver.dto.response.RegisterTaxiDriverResponse;
+import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

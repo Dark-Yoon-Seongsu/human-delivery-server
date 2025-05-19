@@ -7,9 +7,9 @@ import lombok.Setter;
 @Setter
 public class CallRejectResponse {
 
-	private Long callId;
+    private Long callId;
 
-	public CallRejectResponse(Long callId) {
-		this.callId = callId;
-	}
+    public CallRejectResponse(Long callId) {
+        this.callId = callId;
+    }
 }

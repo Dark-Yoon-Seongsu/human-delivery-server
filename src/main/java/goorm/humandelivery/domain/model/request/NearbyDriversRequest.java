@@ -12,19 +12,18 @@ import lombok.Setter;
 @NoArgsConstructor
 public class NearbyDriversRequest {
 
-	/**
-	 * TODO -> location으로 변경
-	 */
+    /**
+     * TODO -> location으로 변경
+     */
 
-	@NotNull
-	private Location location;
+    @NotNull
+    private Location location;
 
-	@NotNull
-	private Double radiusInKm;
+    @NotNull
+    private Double radiusInKm;
 
-	@NotNull
-	private TaxiType taxiType;
-
+    @NotNull
+    private TaxiType taxiType;
 
 
 }

@@ -1,10 +1,8 @@
 package goorm.humandelivery.domain.model.entity;
 
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import jakarta.validation.constraints.NotNull;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,11 +14,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Location {
 
-	@NotNull
-	private Double latitude;   // 위도
+    @NotNull
+    private Double latitude;   // 위도
 
-	@NotNull
-	private Double longitude;  // 경도
+    @NotNull
+    private Double longitude;  // 경도
 
 
 }

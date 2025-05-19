@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterCustomerResponse {
 
-	private String loginId;
+    private String loginId;
 
 }

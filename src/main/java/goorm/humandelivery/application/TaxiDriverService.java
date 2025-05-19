@@ -1,11 +1,11 @@
 package goorm.humandelivery.application;
 
-import goorm.humandelivery.common.exception.TaxiDriverEntityNotFoundException;
 import goorm.humandelivery.domain.model.response.TaxiTypeResponse;
 import goorm.humandelivery.domain.repository.TaxiDriverRepository;
 import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
+import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
 import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
 import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;

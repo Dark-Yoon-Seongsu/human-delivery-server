@@ -9,11 +9,11 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DrivingInfoResponse {
 
-	private boolean isDrivingStarted;
-	private boolean isDrivingFinished;
+    private boolean isDrivingStarted;
+    private boolean isDrivingFinished;
 
-	public DrivingInfoResponse(boolean isDrivingStarted, boolean isDrivingFinished) {
-		this.isDrivingStarted = isDrivingStarted;
-		this.isDrivingFinished = isDrivingFinished;
-	}
+    public DrivingInfoResponse(boolean isDrivingStarted, boolean isDrivingFinished) {
+        this.isDrivingStarted = isDrivingStarted;
+        this.isDrivingFinished = isDrivingFinished;
+    }
 }

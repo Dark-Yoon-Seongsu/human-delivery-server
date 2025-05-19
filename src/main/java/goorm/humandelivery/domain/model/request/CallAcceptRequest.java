@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class CallAcceptRequest {
 
-	@NotBlank
-	private Long callId;
+    @NotBlank
+    private Long callId;
 
 }

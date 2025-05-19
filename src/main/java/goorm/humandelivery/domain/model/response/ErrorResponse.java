@@ -2,10 +2,8 @@ package goorm.humandelivery.domain.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import lombok.Setter;
-
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @AllArgsConstructor
@@ -15,8 +13,8 @@ import lombok.NoArgsConstructor;
 
 public class ErrorResponse {
 
-	private String code;
+    private String code;
 
-	private String message;
+    private String message;
 
 }

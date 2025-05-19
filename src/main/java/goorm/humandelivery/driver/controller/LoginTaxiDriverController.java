@@ -1,8 +1,8 @@
 package goorm.humandelivery.driver.controller;
 
-import goorm.humandelivery.common.dto.response.JwtResponse;
 import goorm.humandelivery.driver.application.port.in.LoginTaxiDriverUseCase;
 import goorm.humandelivery.driver.dto.request.LoginTaxiDriverRequest;
+import goorm.humandelivery.shared.auth.JwtResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

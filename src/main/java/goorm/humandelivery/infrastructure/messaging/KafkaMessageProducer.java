@@ -1,20 +1,19 @@
 package goorm.humandelivery.infrastructure.messaging;
 
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.stereotype.Component;
-
 import goorm.humandelivery.domain.model.internal.QueueMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class KafkaMessageProducer {
 
-	private final KafkaTemplate<String, QueueMessage> kafkaTemplate;
-	private final String topicName = "taxi-call-queue";
+    private final KafkaTemplate<String, QueueMessage> kafkaTemplate;
+    private final String topicName = "taxi-call-queue";
 
-	public void send(QueueMessage message) {
-		kafkaTemplate.send(topicName, message);
-	}
+    public void send(QueueMessage message) {
+        kafkaTemplate.send(topicName, message);
+    }
 
 }

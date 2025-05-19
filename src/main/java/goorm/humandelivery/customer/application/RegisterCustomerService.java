@@ -1,12 +1,12 @@
 package goorm.humandelivery.customer.application;
 
-import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
-import goorm.humandelivery.common.exception.DuplicateLoginIdException;
-import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
 import goorm.humandelivery.customer.application.port.in.RegisterCustomerUseCase;
+import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
 import goorm.humandelivery.customer.domain.Customer;
 import goorm.humandelivery.customer.dto.request.RegisterCustomerRequest;
 import goorm.humandelivery.customer.dto.response.RegisterCustomerResponse;
+import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
+import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

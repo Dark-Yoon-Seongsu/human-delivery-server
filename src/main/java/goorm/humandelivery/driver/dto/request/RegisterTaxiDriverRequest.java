@@ -10,24 +10,24 @@ import lombok.Setter;
 @Setter
 public class RegisterTaxiDriverRequest {
 
-	@Email
-	@NotBlank
-	private String loginId;
+    @Email
+    @NotBlank
+    private String loginId;
 
-	@NotBlank
-	private String password;
+    @NotBlank
+    private String password;
 
-	@NotBlank
-	private String name;
+    @NotBlank
+    private String name;
 
-	@NotBlank
-	private String licenseCode;
+    @NotBlank
+    private String licenseCode;
 
-	@NotBlank
-	private String phoneNumber;
+    @NotBlank
+    private String phoneNumber;
 
-	@Valid
-	private RegisterTaxiRequest taxi;
+    @Valid
+    private RegisterTaxiRequest taxi;
 
 
 }

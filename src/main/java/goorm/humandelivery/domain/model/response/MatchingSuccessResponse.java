@@ -12,8 +12,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class MatchingSuccessResponse {
 
-	private TaxiDriverStatus taxiDriverStatus;
-	private String taxiDriverLoginId;
+    private TaxiDriverStatus taxiDriverStatus;
+    private String taxiDriverLoginId;
 
 
 }

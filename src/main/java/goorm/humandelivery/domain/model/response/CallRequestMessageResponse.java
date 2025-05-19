@@ -6,15 +6,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CallRequestMessageResponse {
-	private String message;
-	// 성공 실패 여부 Enum으로 추가
+    private String message;
+    // 성공 실패 여부 Enum으로 추가
 
-	public CallRequestMessageResponse(String message) {
-		this.message = message;
-	}
+    public CallRequestMessageResponse(String message) {
+        this.message = message;
+    }
 
-	@Override
-	public String toString() {
-		return message;
-	}
+    @Override
+    public String toString() {
+        return message;
+    }
 }

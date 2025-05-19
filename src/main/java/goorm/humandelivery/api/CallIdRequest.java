@@ -9,5 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CallIdRequest {
 
-	private Long callId;
+    private Long callId;
 }

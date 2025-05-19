@@ -1,8 +1,8 @@
 package goorm.humandelivery.driver.application;
 
-import goorm.humandelivery.common.dto.response.JwtResponse;
-import goorm.humandelivery.common.exception.IncorrectPasswordException;
-import goorm.humandelivery.common.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.shared.auth.JwtResponse;
+import goorm.humandelivery.global.exception.IncorrectPasswordException;
+import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiDriverPort;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiPort;
 import goorm.humandelivery.driver.dto.request.LoginTaxiDriverRequest;

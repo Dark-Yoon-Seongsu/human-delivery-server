@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface LoadCustomerPort {
 
     Optional<Customer> findByLoginId(String loginId);
-    
+
 }

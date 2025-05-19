@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class UpdateDrivingLocationRequest {
 
-	@NotBlank
-	private String customerLoginId;
+    @NotBlank
+    private String customerLoginId;
 
-	@NotBlank
-	private Location location;
+    @NotBlank
+    private Location location;
 }
 
 

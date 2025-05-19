@@ -1,13 +1,13 @@
 package goorm.humandelivery.driver.application;
 
-import goorm.humandelivery.common.application.port.out.JwtTokenProviderPort;
-import goorm.humandelivery.common.exception.IncorrectPasswordException;
-import goorm.humandelivery.common.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.driver.application.port.in.LoginTaxiDriverUseCase;
 import goorm.humandelivery.driver.application.port.out.LoadTaxiDriverPort;
 import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.driver.dto.request.LoginTaxiDriverRequest;
-import goorm.humandelivery.common.dto.response.JwtResponse;
-import goorm.humandelivery.driver.application.port.in.LoginTaxiDriverUseCase;
+import goorm.humandelivery.global.exception.IncorrectPasswordException;
+import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.shared.auth.JwtResponse;
+import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

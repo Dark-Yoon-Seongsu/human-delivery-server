@@ -8,12 +8,12 @@ import lombok.Setter;
 @Setter
 public class LocationResponse {
 
-	private Location location;
+    private Location location;
 
-	public LocationResponse() {
-	}
+    public LocationResponse() {
+    }
 
-	public LocationResponse(Location location) {
-		this.location = location;
-	}
+    public LocationResponse(Location location) {
+        this.location = location;
+    }
 }

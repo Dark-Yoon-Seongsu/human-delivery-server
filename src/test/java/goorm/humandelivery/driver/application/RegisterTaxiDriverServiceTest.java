@@ -1,6 +1,6 @@
 package goorm.humandelivery.driver.application;
 
-import goorm.humandelivery.common.exception.DuplicateLoginIdException;
+import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiDriverPort;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiPort;
 import goorm.humandelivery.driver.dto.request.RegisterTaxiDriverRequest;

@@ -13,11 +13,11 @@ import lombok.Setter;
 @Setter
 public class CallMessage extends QueueMessage {
 
-	private Long callId;
-	private String customerLoginId;
-	private Location expectedOrigin;
-	private Location expectedDestination;
-	private TaxiType taxiType;
-	private Integer retryCount;
+    private Long callId;
+    private String customerLoginId;
+    private Location expectedOrigin;
+    private Location expectedDestination;
+    private TaxiType taxiType;
+    private Integer retryCount;
 
 }

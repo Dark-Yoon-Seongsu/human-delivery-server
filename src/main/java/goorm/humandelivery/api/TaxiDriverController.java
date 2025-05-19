@@ -1,11 +1,11 @@
 package goorm.humandelivery.api;
 
-import goorm.humandelivery.common.application.port.out.JwtTokenProviderPort;
 import goorm.humandelivery.domain.model.entity.Location;
 import goorm.humandelivery.domain.model.request.NearbyDriversRequest;
 import goorm.humandelivery.domain.model.response.TokenInfoResponse;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.infrastructure.redis.RedisService;
+import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

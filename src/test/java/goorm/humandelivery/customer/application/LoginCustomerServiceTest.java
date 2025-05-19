@@ -1,6 +1,6 @@
 package goorm.humandelivery.customer.application;
 
-import goorm.humandelivery.common.exception.IncorrectPasswordException;
+import goorm.humandelivery.global.exception.IncorrectPasswordException;
 import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
 import goorm.humandelivery.customer.dto.request.LoginCustomerRequest;
 import goorm.humandelivery.customer.dto.request.RegisterCustomerRequest;

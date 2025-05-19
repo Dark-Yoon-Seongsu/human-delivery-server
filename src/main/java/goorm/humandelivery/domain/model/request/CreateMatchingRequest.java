@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateMatchingRequest {
-	private Long callId;
-	private Long taxiDriverId;
+    private Long callId;
+    private Long taxiDriverId;
 }
