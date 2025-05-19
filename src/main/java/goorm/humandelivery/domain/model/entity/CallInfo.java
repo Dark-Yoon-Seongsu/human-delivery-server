@@ -12,10 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,7 +44,24 @@ public class CallInfo extends BaseEntity {
 	private TaxiType taxiType;
 
 
+	@Column(nullable = false, columnDefinition = "TINYINT(1)")
+	private boolean expired = false;
 
 
+	@Builder
+	public CallInfo(Long id, Customer customer, Location expectedOrigin, Location expectedDestination, TaxiType taxiType) {
+		this.customer = customer;
+		this.expectedOrigin = expectedOrigin;
+		this.expectedDestination = expectedDestination;
+		this.taxiType = taxiType;
+	}
 
+	@Builder
+	public CallInfo(Customer customer, Location expectedOrigin, Location expectedDestination, TaxiType taxiType, boolean expired) {
+		this.customer = customer;
+		this.expectedOrigin = expectedOrigin;
+		this.expectedDestination = expectedDestination;
+		this.taxiType = taxiType;
+		this.expired = expired;
+	}
 }

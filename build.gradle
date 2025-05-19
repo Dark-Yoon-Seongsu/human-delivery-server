@@ -65,10 +65,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	testImplementation 'io.projectreactor:reactor-test'
 
+	testImplementation 'com.h2database:h2'
+	testImplementation 'org.mockito:mockito-inline:5.2.0'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
 
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+
+	testLogging {
+		events "passed", "failed", "skipped"
+		showStandardStreams = true
+		exceptionFormat = 'full'
+	}
 }
