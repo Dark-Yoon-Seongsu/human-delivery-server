@@ -13,8 +13,8 @@ import io.jsonwebtoken.security.SignatureException;
 
 import goorm.humandelivery.common.exception.IncorrectPasswordException;
 import jakarta.persistence.EntityExistsException;
-import goorm.humandelivery.common.exception.DuplicateLoginIdException;
-import goorm.humandelivery.common.exception.DuplicatePhoneNumberException;
+import goorm.humandelivery.customer.exception.DuplicateLoginIdException;
+import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
 import jakarta.persistence.EntityNotFoundException;
 import goorm.humandelivery.domain.model.response.ErrorResponse;
 

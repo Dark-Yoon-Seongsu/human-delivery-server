@@ -2,7 +2,7 @@ package goorm.humandelivery.application;
 
 import org.springframework.stereotype.Service;
 
-import goorm.humandelivery.domain.model.entity.Customer;
+import goorm.humandelivery.customer.domain.Customer;
 import goorm.humandelivery.domain.model.request.CallMessageRequest;
 import goorm.humandelivery.domain.repository.CallInfoRepository;
 import goorm.humandelivery.infrastructure.messaging.KafkaMessageQueueService;

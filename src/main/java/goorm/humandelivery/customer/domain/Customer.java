@@ -1,5 +1,6 @@
-package goorm.humandelivery.domain.model.entity;
+package goorm.humandelivery.customer.domain;
 
+import goorm.humandelivery.domain.model.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

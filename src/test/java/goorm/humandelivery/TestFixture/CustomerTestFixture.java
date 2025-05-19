@@ -1,10 +1,9 @@
 package goorm.humandelivery.TestFixture;
 
-import goorm.humandelivery.domain.model.entity.Customer;
-import goorm.humandelivery.domain.model.request.CreateCustomerRequest;
-import goorm.humandelivery.domain.model.request.LoginCustomerRequest;
-import goorm.humandelivery.domain.model.response.CreateCustomerResponse;
-import goorm.humandelivery.domain.model.response.LoginCustomerResponse;
+import goorm.humandelivery.customer.domain.Customer;
+import goorm.humandelivery.customer.dto.request.RegisterCustomerRequest;
+import goorm.humandelivery.customer.dto.request.LoginCustomerRequest;
+import goorm.humandelivery.customer.dto.response.LoginCustomerResponse;
 
 public class CustomerTestFixture {
 
@@ -17,8 +16,8 @@ public class CustomerTestFixture {
 			.build();
 	}
 
-	public static CreateCustomerRequest createCreateCustomerRequest(String loginId, String password, String name, String phoneNumber) {
-		return new CreateCustomerRequest(loginId, password, name, phoneNumber);
+	public static RegisterCustomerRequest createCreateCustomerRequest(String loginId, String password, String name, String phoneNumber) {
+		return new RegisterCustomerRequest(loginId, password, name, phoneNumber);
 	}
 	public static LoginCustomerRequest createLoginCustomerRequest(String loginId, String password) {
 		return new LoginCustomerRequest(loginId, password);

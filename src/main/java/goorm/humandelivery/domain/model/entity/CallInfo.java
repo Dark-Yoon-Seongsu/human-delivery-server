@@ -1,5 +1,6 @@
 package goorm.humandelivery.domain.model.entity;
 
+import goorm.humandelivery.customer.domain.Customer;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

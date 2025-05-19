@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.response;
+package goorm.humandelivery.customer.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

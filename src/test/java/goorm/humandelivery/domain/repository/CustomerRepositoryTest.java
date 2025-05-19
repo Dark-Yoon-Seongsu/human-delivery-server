@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;
 
+import goorm.humandelivery.customer.application.port.out.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import goorm.humandelivery.domain.model.entity.Customer;
+import goorm.humandelivery.customer.domain.Customer;
 
 @DataJpaTest
 public class CustomerRepositoryTest {
