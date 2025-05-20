@@ -1,9 +1,9 @@
 package goorm.humandelivery.application;
 
+import goorm.humandelivery.call.domain.Matching;
 import goorm.humandelivery.domain.model.entity.DrivingInfo;
 import goorm.humandelivery.domain.model.entity.DrivingStatus;
 import goorm.humandelivery.domain.model.entity.Location;
-import goorm.humandelivery.domain.model.entity.Matching;
 import goorm.humandelivery.domain.model.request.CreateDrivingInfoRequest;
 import goorm.humandelivery.domain.model.response.DrivingSummaryResponse;
 import goorm.humandelivery.domain.repository.DrivingInfoRepository;

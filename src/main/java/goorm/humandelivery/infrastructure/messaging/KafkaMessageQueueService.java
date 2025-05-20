@@ -1,11 +1,10 @@
 package goorm.humandelivery.infrastructure.messaging;
 
-import goorm.humandelivery.application.CallInfoService;
-import goorm.humandelivery.domain.model.entity.CallStatus;
+import goorm.humandelivery.call.application.port.in.DeleteCallInfoUseCase;
+import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.domain.model.internal.QueueMessage;
 import goorm.humandelivery.global.exception.NoAvailableTaxiException;
-import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class KafkaMessageQueueService implements MessageQueueService {
     private final KafkaMessageProducer kafkaMessageProducer;
     private final RedisService redisService;
     private final MessagingService messagingService;
-    private final CallInfoService callInfoService;
+    private final DeleteCallInfoUseCase deleteCallInfoUseCase;
 
     @Override
     public void enqueue(QueueMessage message) {
@@ -57,7 +56,7 @@ public class KafkaMessageQueueService implements MessageQueueService {
         if (availableTaxiDrivers.isEmpty()) {
             // 여겨시 택시 수가 0인경우 없다는 메세지를 고객에게 전달.
             log.info("범위 내에 유효한 택시가 없음");
-            callInfoService.deleteCallById(callMessage.getCallId());
+            deleteCallInfoUseCase.deleteCallById(callMessage.getCallId());
             messagingService.notifyDispatchFailedToCustomer(callMessage.getCustomerLoginId());
             throw new NoAvailableTaxiException();
         }

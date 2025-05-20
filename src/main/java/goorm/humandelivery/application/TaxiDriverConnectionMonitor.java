@@ -1,11 +1,11 @@
 package goorm.humandelivery.application;
 
+import goorm.humandelivery.call.application.LoadCallInfoService;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.infrastructure.messaging.MessagingService;
-import goorm.humandelivery.infrastructure.redis.RedisService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -20,25 +20,16 @@ import static goorm.humandelivery.driver.domain.TaxiDriverStatus.RESERVED;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class TaxiDriverConnectionMonitor {
 
     private final RedisService redisService;
     private final MatchingService matchingService;
     private final TaxiDriverService taxiDriverService;
     private final MessagingService messagingService;
-    private final CallInfoService callInfoService;
+    private final LoadCallInfoService loadCallInfoService;
 
     private static final long TIMEOUT_MILLIS = 10_000;
-
-    @Autowired
-    public TaxiDriverConnectionMonitor(RedisService redisService, MatchingService matchingService,
-                                       TaxiDriverService taxiDriverService, MessagingService messagingService, CallInfoService callInfoService) {
-        this.redisService = redisService;
-        this.matchingService = matchingService;
-        this.taxiDriverService = taxiDriverService;
-        this.messagingService = messagingService;
-        this.callInfoService = callInfoService;
-    }
 
     /**
      * Scheduled 규칙
@@ -89,7 +80,7 @@ public class TaxiDriverConnectionMonitor {
 
 
                 Long callId = Long.valueOf(callIdOptional.get());
-                String customerLoginId = callInfoService.findCustomerLoginIdById(callId);
+                String customerLoginId = loadCallInfoService.findCustomerLoginIdByCallId(callId);
 
                 // 매칭 엔티티 삭제
                 matchingService.deleteByCallId(callId);

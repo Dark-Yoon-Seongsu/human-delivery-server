@@ -2,17 +2,12 @@ package goorm.humandelivery.infrastructure.messaging;
 
 import goorm.humandelivery.domain.model.entity.Location;
 import goorm.humandelivery.domain.model.internal.CallMessage;
-import goorm.humandelivery.domain.model.request.LocationResponse;
-import goorm.humandelivery.domain.model.response.DrivingInfoResponse;
-import goorm.humandelivery.domain.model.response.DrivingSummaryResponse;
-import goorm.humandelivery.domain.model.response.ErrorResponse;
-import goorm.humandelivery.domain.model.response.MatchingSuccessResponse;
+import goorm.humandelivery.domain.model.response.*;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.global.exception.CustomerNotAssignedException;
 import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
 import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
-import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

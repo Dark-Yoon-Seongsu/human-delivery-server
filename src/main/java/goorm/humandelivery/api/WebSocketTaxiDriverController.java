@@ -1,25 +1,29 @@
 package goorm.humandelivery.api;
 
-import goorm.humandelivery.application.CallInfoService;
 import goorm.humandelivery.application.DrivingInfoService;
-import goorm.humandelivery.application.MatchingService;
 import goorm.humandelivery.application.TaxiDriverService;
+import goorm.humandelivery.call.application.LoadCallInfoService;
+import goorm.humandelivery.call.dto.request.CallAcceptRequest;
+import goorm.humandelivery.call.dto.request.CallIdRequest;
+import goorm.humandelivery.call.dto.request.CallRejectRequest;
+import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
+import goorm.humandelivery.call.dto.response.CallAcceptResponse;
+import goorm.humandelivery.call.dto.response.CallRejectResponse;
 import goorm.humandelivery.domain.model.entity.DrivingInfo;
 import goorm.humandelivery.domain.model.entity.Location;
-import goorm.humandelivery.domain.model.request.*;
-import goorm.humandelivery.domain.model.response.CallAcceptResponse;
+import goorm.humandelivery.domain.model.request.CreateDrivingInfoRequest;
+import goorm.humandelivery.domain.model.request.UpdateLocationRequest;
+import goorm.humandelivery.domain.model.request.UpdateTaxiDriverStatusRequest;
+import goorm.humandelivery.driver.dto.response.UpdateTaxiDriverStatusResponse;
 import goorm.humandelivery.domain.model.response.DrivingSummaryResponse;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
-import goorm.humandelivery.global.exception.AlreadyAssignedCallException;
 import goorm.humandelivery.global.exception.CallAlreadyCompletedException;
-import goorm.humandelivery.global.exception.IncorrectTaxiDriverStatusException;
 import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
 import goorm.humandelivery.infrastructure.messaging.MessagingService;
-import goorm.humandelivery.infrastructure.redis.RedisService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
@@ -30,26 +34,15 @@ import java.security.Principal;
 @Slf4j
 @Controller
 @MessageMapping("/taxi-driver")  // "/app/taxi-driver"
+@RequiredArgsConstructor
 public class WebSocketTaxiDriverController {
 
     private final RedisService redisService;
     private final TaxiDriverService taxiDriverService;
     private final MessagingService messagingService;
     private final MatchingService matchingService;
-    private final CallInfoService callInfoService;
+    private final LoadCallInfoService loadCallInfoService;
     private final DrivingInfoService drivingInfoService;
-
-    @Autowired
-    public WebSocketTaxiDriverController(RedisService redisService, TaxiDriverService taxiDriverService,
-                                         MessagingService messagingService, MatchingService matchingService, CallInfoService callInfoService,
-                                         DrivingInfoService drivingInfoService) {
-        this.redisService = redisService;
-        this.taxiDriverService = taxiDriverService;
-        this.messagingService = messagingService;
-        this.matchingService = matchingService;
-        this.callInfoService = callInfoService;
-        this.drivingInfoService = drivingInfoService;
-    }
 
     /**
      * 택시운전기사 상태 변경
@@ -123,41 +116,6 @@ public class WebSocketTaxiDriverController {
         Long callId = request.getCallId();
         log.info("[acceptTaxiCall 호출] callId : {}, taxiDriverId : {}", callId, taxiDriverLoginId);
 
-        TaxiDriverStatus driverStatus = redisService.getDriverStatus(taxiDriverLoginId);
-
-        // AVAILABLE 상태의 택시기사가 아닌 경우
-        if (driverStatus != TaxiDriverStatus.AVAILABLE) {
-            log.info("[acceptTaxiCall.CallAcceptResponse] AVAILABLE 상태의 택시기사가 아닙니다.. 택시기사 : {}, 콜ID : {}, 택시기사 상태 : {}",
-                    taxiDriverLoginId, callId, driverStatus.name());
-            throw new IncorrectTaxiDriverStatusException();
-        }
-
-
-        // 이미 콜이 할당된 택시기사인경우
-        if (redisService.hasAssignedCall(taxiDriverLoginId)) {
-            log.info("[acceptTaxiCall.CallAcceptResponse] 이미 콜이 할당된 택시기사입니다.. 택시기사 : {}, 콜ID : {}, 택시기사 상태 : {}",
-                    taxiDriverLoginId, callId, driverStatus.name());
-            throw new AlreadyAssignedCallException();
-        }
-
-
-        // 상태가 변하기 전에 요청을 보내는 경우 중복이 발생한다.
-
-/*		// 이미 배차가 완료된 경우..
-		if (callStatus != CallStatus.SENT) {
-			log.info("[acceptTaxiCall.CallAcceptResponse] 완료된 콜에 대한 배차 신청. 택시기사 : {}, 콜ID : {}",
-				taxiDriverLoginId, callId);
-			throw new CallAlreadyCompletedException();
-		}*/
-
-        // 배차 등록 시도
-/*		boolean isSuccess = redisService.tryAcceptCall(String.valueOf(callId), taxiDriverLoginId);
-		if (!isSuccess) {
-			log.info("[acceptTaxiCall.CallAcceptResponse] 완료된 콜에 대한 배차 신청. 택시기사 : {}, 콜ID : {}",
-				taxiDriverLoginId, callId);
-			throw new CallAlreadyCompletedException();
-		}*/
-
         // 배차 등록 시도
         boolean isSuccess = redisService.atomicAcceptCall(callId, taxiDriverLoginId);
         if (!isSuccess) {
@@ -181,9 +139,8 @@ public class WebSocketTaxiDriverController {
         redisService.handleTaxiDriverStatusInRedis(taxiDriverLoginId, taxiDriverStatus, taxiType);
 
         // CallAcceptResponse 응답하기.
-        CallAcceptResponse callAcceptResponse = callInfoService.getCallAcceptResponse(callId);
-        log.info("[acceptTaxiCall.WebSocketTaxiDriverController] 배차완료.  콜 ID : {}, 고객 ID : {}, 택시기사 ID : {}",
-                callId, callAcceptResponse.getCustomerLoginId(), taxiDriverId);
+        CallAcceptResponse callAcceptResponse = loadCallInfoService.getCallAcceptResponse(callId);
+        log.info("[acceptTaxiCall.WebSocketTaxiDriverController] 배차완료.  콜 ID : {}, 고객 ID : {}, 택시기사 ID : {}", callId, callAcceptResponse.getCustomerLoginId(), taxiDriverId);
 
         // 고객에게 배차되엇다고 상태 전달하기
         messagingService.notifyDispatchSuccessToCustomer(callAcceptResponse.getCustomerLoginId(), taxiDriverLoginId);
@@ -253,7 +210,7 @@ public class WebSocketTaxiDriverController {
         redisService.handleTaxiDriverStatusInRedis(taxiDriverLoginId, changedStatus, taxiType);
 
         // 운행 시작 메세지 전달
-        String customerLoginId = callInfoService.findCustomerLoginIdById(callId);
+        String customerLoginId = loadCallInfoService.findCustomerLoginIdByCallId(callId);
         boolean isDrivingStarted = savedDrivingInfo.isDrivingStarted();
 
         // 응답 반환.

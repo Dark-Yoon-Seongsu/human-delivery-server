@@ -1,6 +1,6 @@
 package goorm.humandelivery.domain.repository;
 
-import goorm.humandelivery.domain.model.entity.Matching;
+import goorm.humandelivery.call.domain.Matching;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

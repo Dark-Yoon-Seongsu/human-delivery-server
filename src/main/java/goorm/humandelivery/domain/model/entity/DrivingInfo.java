@@ -1,5 +1,6 @@
 package goorm.humandelivery.domain.model.entity;
 
+import goorm.humandelivery.call.domain.Matching;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

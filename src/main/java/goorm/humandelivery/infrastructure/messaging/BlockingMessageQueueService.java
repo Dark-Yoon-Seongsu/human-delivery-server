@@ -2,12 +2,11 @@ package goorm.humandelivery.infrastructure.messaging;
 
 import goorm.humandelivery.api.WebSocketCustomerController;
 import goorm.humandelivery.application.WebSocketCustomerService;
-import goorm.humandelivery.domain.model.entity.CallStatus;
+import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.domain.model.internal.QueueMessage;
 import goorm.humandelivery.domain.repository.TaxiDriverRepository;
 import goorm.humandelivery.global.exception.NoAvailableTaxiException;
-import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

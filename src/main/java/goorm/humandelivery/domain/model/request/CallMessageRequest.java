@@ -1,7 +1,7 @@
 package goorm.humandelivery.domain.model.request;
 
+import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.customer.domain.Customer;
-import goorm.humandelivery.domain.model.entity.CallInfo;
 import goorm.humandelivery.domain.model.entity.Location;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.driver.domain.TaxiType;
