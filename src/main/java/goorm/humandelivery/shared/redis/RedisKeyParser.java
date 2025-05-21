@@ -1,4 +1,4 @@
-package goorm.humandelivery.infrastructure.redis;
+package goorm.humandelivery.shared.redis;
 
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;

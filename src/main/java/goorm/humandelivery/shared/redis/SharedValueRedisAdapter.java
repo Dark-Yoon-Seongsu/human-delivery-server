@@ -1,4 +1,4 @@
-package goorm.humandelivery.shared.infrastructure.redis;
+package goorm.humandelivery.shared.redis;
 
 import goorm.humandelivery.shared.application.port.out.GetValuePort;
 import goorm.humandelivery.shared.application.port.out.SetValueWithTtlPort;

@@ -2,7 +2,7 @@ package goorm.humandelivery.call.infrastructure.redis;
 
 import goorm.humandelivery.call.application.port.out.AcceptCallRedisPort;
 import goorm.humandelivery.global.exception.CallAlreadyCompletedException;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;

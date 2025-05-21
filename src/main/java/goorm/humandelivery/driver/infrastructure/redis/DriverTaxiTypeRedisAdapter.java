@@ -4,7 +4,7 @@ import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypeRedisPor
 import goorm.humandelivery.driver.application.port.out.SetDriverTaxiTypeRedisPort;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.global.exception.RedisKeyNotFoundException;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

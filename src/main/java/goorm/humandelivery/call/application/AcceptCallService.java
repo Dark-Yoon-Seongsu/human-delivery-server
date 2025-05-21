@@ -5,9 +5,11 @@ import goorm.humandelivery.call.application.port.in.GetCallAcceptResponseUseCase
 import goorm.humandelivery.call.application.port.in.RegisterMatchingUseCase;
 import goorm.humandelivery.call.application.port.out.AcceptCallRedisPort;
 import goorm.humandelivery.call.application.port.out.LoadTaxiDriverPort;
+import goorm.humandelivery.call.application.port.out.NotifyDispatchSuccessToCustomerPort;
 import goorm.humandelivery.call.dto.request.CallAcceptRequest;
 import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
+import goorm.humandelivery.call.dto.response.MatchingSuccessResponse;
 import goorm.humandelivery.driver.application.port.in.ChangeTaxiDriverStatusUseCase;
 import goorm.humandelivery.driver.application.port.in.UpdateDriverStatusUseCase;
 import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypeRedisPort;
@@ -30,6 +32,7 @@ public class AcceptCallService implements AcceptCallUseCase {
     private final ChangeTaxiDriverStatusUseCase changeTaxiDriverStatusUseCase;
     private final UpdateDriverStatusUseCase updateDriverStatusUseCase;
     private final GetCallAcceptResponseUseCase getCallAcceptResponseUseCase;
+    private final NotifyDispatchSuccessToCustomerPort notifyDispatchSuccessToCustomerPort;
 
     @Override
     public CallAcceptResponse acceptCall(CallAcceptRequest callAcceptRequest, String taxiDriverLoginId) {
@@ -55,7 +58,7 @@ public class AcceptCallService implements AcceptCallUseCase {
         log.info("[acceptTaxiCall.WebSocketTaxiDriverController] 배차완료.  콜 ID : {}, 고객 ID : {}, 택시기사 ID : {}", callId, callAcceptResponse.getCustomerLoginId(), taxiDriverId);
 
         // 고객에게 배차되었다고 상태 전달하기
-        messagingService.notifyDispatchSuccessToCustomer(callAcceptResponse.getCustomerLoginId(), taxiDriverLoginId);
+        notifyDispatchSuccessToCustomerPort.sendToCustomer(callAcceptResponse.getCustomerLoginId(), new MatchingSuccessResponse(taxiDriverStatus, taxiDriverLoginId));
 
         log.info("[acceptTaxiCall 응답 보내기 전..... taxidriverId : {}]", taxiDriverLoginId);
 

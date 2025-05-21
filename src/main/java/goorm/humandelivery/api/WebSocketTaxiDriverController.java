@@ -3,21 +3,15 @@ package goorm.humandelivery.api;
 import goorm.humandelivery.application.DrivingInfoService;
 import goorm.humandelivery.application.TaxiDriverService;
 import goorm.humandelivery.call.application.LoadCallInfoService;
-import goorm.humandelivery.call.dto.request.CallAcceptRequest;
 import goorm.humandelivery.call.dto.request.CallIdRequest;
-import goorm.humandelivery.call.dto.request.CallRejectRequest;
-import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
-import goorm.humandelivery.call.dto.response.CallAcceptResponse;
-import goorm.humandelivery.call.dto.response.CallRejectResponse;
-import goorm.humandelivery.driving.domain.DrivingInfo;
-import goorm.humandelivery.driving.dto.request.CreateDrivingInfoRequest;
-import goorm.humandelivery.driver.dto.request.UpdateDriverLocationRequest;
-import goorm.humandelivery.driver.dto.request.UpdateTaxiDriverStatusRequest;
-import goorm.humandelivery.driving.dto.response.DrivingSummaryResponse;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
+import goorm.humandelivery.driver.dto.request.UpdateDriverLocationRequest;
+import goorm.humandelivery.driver.dto.request.UpdateTaxiDriverStatusRequest;
 import goorm.humandelivery.driver.dto.response.UpdateTaxiDriverStatusResponse;
-import goorm.humandelivery.global.exception.CallAlreadyCompletedException;
+import goorm.humandelivery.driving.domain.DrivingInfo;
+import goorm.humandelivery.driving.dto.request.CreateDrivingInfoRequest;
+import goorm.humandelivery.driving.dto.response.DrivingSummaryResponse;
 import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
 import goorm.humandelivery.shared.location.domain.Location;
 import jakarta.validation.Valid;
@@ -99,74 +93,6 @@ public class WebSocketTaxiDriverController {
 
         // 택시기사 위치정보 저장
         messagingService.sendLocation(taxiDriverLoginId, status, taxiType, customerLoginId, location);
-    }
-
-    /**
-     * 콜 요청 수락
-     *
-     * @param request
-     * @param principal
-     */
-    @MessageMapping("/accept-call")
-    @SendToUser("/queue/accept-call-result")
-    public CallAcceptResponse acceptTaxiCall(CallAcceptRequest request, Principal principal) {
-
-        String taxiDriverLoginId = principal.getName();
-        Long callId = request.getCallId();
-        log.info("[acceptTaxiCall 호출] callId : {}, taxiDriverId : {}", callId, taxiDriverLoginId);
-
-        // 배차 등록 시도
-        boolean isSuccess = redisService.atomicAcceptCall(callId, taxiDriverLoginId);
-        if (!isSuccess) {
-            log.info("[acceptTaxiCall.CallAcceptResponse] 완료된 콜에 대한 배차 신청. 택시기사 : {}, 콜ID : {}",
-                    taxiDriverLoginId, callId);
-            throw new CallAlreadyCompletedException();
-        }
-
-        // 엔티티 생성
-        Long taxiDriverId = taxiDriverService.findIdByLoginId(taxiDriverLoginId);
-        matchingService.create(new CreateMatchingRequest(callId, taxiDriverId));
-
-
-        TaxiType taxiType = redisService.getDriversTaxiType(taxiDriverLoginId);
-        TaxiDriverStatus taxiDriverStatus = taxiDriverService.changeStatus(taxiDriverLoginId,
-                TaxiDriverStatus.RESERVED);
-
-
-        // 상태 변경에 따른 redis 처리
-        // redisService.assignCallToDriver(callId, taxiDriverLoginId);
-        redisService.handleTaxiDriverStatusInRedis(taxiDriverLoginId, taxiDriverStatus, taxiType);
-
-        // CallAcceptResponse 응답하기.
-        CallAcceptResponse callAcceptResponse = loadCallInfoService.getCallAcceptResponse(callId);
-        log.info("[acceptTaxiCall.WebSocketTaxiDriverController] 배차완료.  콜 ID : {}, 고객 ID : {}, 택시기사 ID : {}", callId, callAcceptResponse.getCustomerLoginId(), taxiDriverId);
-
-        // 고객에게 배차되엇다고 상태 전달하기
-        messagingService.notifyDispatchSuccessToCustomer(callAcceptResponse.getCustomerLoginId(), taxiDriverLoginId);
-
-
-        log.info("[acceptTaxiCall 응답 보내기 전..... taxidriverId : {}]", principal.getName());
-
-
-        return callAcceptResponse;
-    }
-
-    /**
-     * 콜 요청 거절
-     *
-     * @param request
-     * @param principal
-     * @return
-     */
-    @MessageMapping("/reject-call")
-    @SendToUser("/queue/reject-call-result")
-    public CallRejectResponse rejectTaxiCall(CallRejectRequest request, Principal principal) {
-        log.info("[rejectTaxiCall.WebSocketTaxiDriverController] 콜 거절.  콜 ID : {}, 택시기사 ID : {}",
-                request.getCallId(), principal.getName());
-
-        // 해당 콜을 거절한 택시기사 집합에 추가
-        redisService.addRejectedDriverToCall(request.getCallId(), principal.getName());
-        return new CallRejectResponse(request.getCallId());
     }
 
     /**

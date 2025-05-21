@@ -6,7 +6,7 @@ import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.global.exception.CustomerNotAssignedException;
 import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import goorm.humandelivery.shared.application.port.out.SetValueWithTtlPort;
 import goorm.humandelivery.shared.location.application.port.out.SetLocationRedisPort;
 import goorm.humandelivery.shared.location.domain.Location;

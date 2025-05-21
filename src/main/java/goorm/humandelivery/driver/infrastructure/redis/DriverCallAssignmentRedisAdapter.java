@@ -2,7 +2,7 @@ package goorm.humandelivery.driver.infrastructure.redis;
 
 import goorm.humandelivery.driver.application.port.out.DeleteAssignedCallRedisPort;
 import goorm.humandelivery.driver.application.port.out.GetAssignedCallRedisPort;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

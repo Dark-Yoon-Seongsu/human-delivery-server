@@ -1,7 +1,7 @@
 package goorm.humandelivery.call.infrastructure.redis;
 
 import goorm.humandelivery.call.application.port.out.AddRejectedDriverToCallRedisPort;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

@@ -3,7 +3,7 @@ package goorm.humandelivery.shared.location.infrastructure.redis;
 import goorm.humandelivery.call.application.port.out.CheckDriverRejectedForCallRedisPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import goorm.humandelivery.shared.location.application.port.out.FindNearbyAvailableDriversRedisPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.*;
