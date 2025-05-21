@@ -4,7 +4,6 @@ import goorm.humandelivery.call.application.port.in.AcceptCallUseCase;
 import goorm.humandelivery.call.application.port.in.GetCallAcceptResponseUseCase;
 import goorm.humandelivery.call.application.port.in.RegisterMatchingUseCase;
 import goorm.humandelivery.call.application.port.out.AcceptCallRedisPort;
-import goorm.humandelivery.call.application.port.out.LoadCallInfoPort;
 import goorm.humandelivery.call.application.port.out.LoadTaxiDriverPort;
 import goorm.humandelivery.call.dto.request.CallAcceptRequest;
 import goorm.humandelivery.call.dto.request.CreateMatchingRequest;

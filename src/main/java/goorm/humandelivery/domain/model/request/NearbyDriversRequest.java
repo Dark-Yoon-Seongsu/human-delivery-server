@@ -1,7 +1,7 @@
 package goorm.humandelivery.domain.model.request;
 
-import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.driver.domain.TaxiType;
+import goorm.humandelivery.shared.location.domain.Location;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

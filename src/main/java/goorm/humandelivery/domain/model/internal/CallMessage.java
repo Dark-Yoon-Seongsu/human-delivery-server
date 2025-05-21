@@ -1,7 +1,7 @@
 package goorm.humandelivery.domain.model.internal;
 
-import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.driver.domain.TaxiType;
+import goorm.humandelivery.shared.location.domain.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

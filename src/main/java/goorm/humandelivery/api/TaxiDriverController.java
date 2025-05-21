@@ -1,9 +1,9 @@
 package goorm.humandelivery.api;
 
-import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.domain.model.request.NearbyDriversRequest;
-import goorm.humandelivery.shared.dto.response.TokenInfoResponse;
 import goorm.humandelivery.driver.domain.TaxiType;
+import goorm.humandelivery.shared.dto.response.TokenInfoResponse;
+import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

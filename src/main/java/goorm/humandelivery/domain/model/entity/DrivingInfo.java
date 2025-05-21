@@ -1,8 +1,8 @@
 package goorm.humandelivery.domain.model.entity;
 
 import goorm.humandelivery.call.domain.Matching;
-import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.shared.domain.BaseEntity;
+import goorm.humandelivery.shared.location.domain.Location;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

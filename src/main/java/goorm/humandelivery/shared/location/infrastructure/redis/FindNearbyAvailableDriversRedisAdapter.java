@@ -28,14 +28,14 @@ public class FindNearbyAvailableDriversRedisAdapter implements FindNearbyAvailab
 
         GeoOperations<String, String> geoOps = redisTemplate.opsForGeo();
         GeoResults<RedisGeoCommands.GeoLocation<String>> results =
-            geoOps.radius(key, new Circle(new Point(longitude, latitude), new Distance(radiusInKm, Metrics.KILOMETERS)));
+                geoOps.radius(key, new Circle(new Point(longitude, latitude), new Distance(radiusInKm, Metrics.KILOMETERS)));
 
         if (results == null) return List.of();
 
         return results.getContent().stream()
-            .map(GeoResult::getContent)
-            .map(GeoLocation::getName)
-            .filter(id -> !checkDriverRejectedForCallRedisPort.isDriverRejected(callId, id))
-            .toList();
+                .map(GeoResult::getContent)
+                .map(GeoLocation::getName)
+                .filter(id -> !checkDriverRejectedForCallRedisPort.isDriverRejected(callId, id))
+                .toList();
     }
 }

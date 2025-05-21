@@ -1,9 +1,9 @@
 package goorm.humandelivery.call.domain;
 
 import goorm.humandelivery.customer.domain.Customer;
+import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.domain.BaseEntity;
 import goorm.humandelivery.shared.location.domain.Location;
-import goorm.humandelivery.driver.domain.TaxiType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

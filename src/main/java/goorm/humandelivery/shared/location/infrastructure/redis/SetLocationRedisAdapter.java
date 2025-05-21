@@ -1,8 +1,7 @@
-
 package goorm.humandelivery.shared.location.infrastructure.redis;
 
-import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.shared.location.application.port.out.SetLocationRedisPort;
+import goorm.humandelivery.shared.location.domain.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.core.StringRedisTemplate;

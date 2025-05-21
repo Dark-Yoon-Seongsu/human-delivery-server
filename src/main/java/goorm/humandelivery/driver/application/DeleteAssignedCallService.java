@@ -1,5 +1,6 @@
 package goorm.humandelivery.driver.application;
 
+import goorm.humandelivery.call.application.port.out.DeleteCallKeyDirectlyRedisPort;
 import goorm.humandelivery.call.application.port.out.DeleteCallStatusRedisPort;
 import goorm.humandelivery.call.application.port.out.RemoveRejectedDriversForCallRedisPort;
 import goorm.humandelivery.driver.application.port.in.DeleteAssignedCallUseCase;
@@ -17,10 +18,10 @@ import java.util.Optional;
 public class DeleteAssignedCallService implements DeleteAssignedCallUseCase {
 
     private final GetAssignedCallRedisPort getAssignedCallRedisPort;
-    private final DeleteCallStatusRedisPort deleteCallStatusPort;
+    private final DeleteCallStatusRedisPort deleteCallStatusRedisPort;
     private final DeleteAssignedCallRedisPort deleteAssignedCallRedisPort;
     private final RemoveRejectedDriversForCallRedisPort removeRejectedDriversForCallPort;
-    private final DeleteCallKeyDirectlyPort deleteCallKeyDirectlyPort; // 아래에서 따로 설명
+    private final DeleteCallKeyDirectlyRedisPort deleteCallKeyDirectlyRedisPort; // 아래에서 따로 설명
 
     @Override
     public void deleteCallBy(String taxiDriverLoginId) {
@@ -34,9 +35,9 @@ public class DeleteAssignedCallService implements DeleteAssignedCallUseCase {
 
         Long callId = Long.parseLong(callIdStr.get());
 
-        deleteCallStatusPort.deleteCallStatus(callId);
+        deleteCallStatusRedisPort.deleteCallStatus(callId);
         deleteAssignedCallRedisPort.deleteAssignedCallOf(taxiDriverLoginId);
-        deleteCallKeyDirectlyPort.deleteCallKey(callId); // callId 자체를 key로 삭제
+        deleteCallKeyDirectlyRedisPort.deleteCallKey(callId); // callId 자체를 key로 삭제
         removeRejectedDriversForCallPort.removeRejectedDrivers(callId);
     }
 }

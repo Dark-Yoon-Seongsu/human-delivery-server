@@ -1,6 +1,5 @@
 package goorm.humandelivery.shared.location.application;
 
-import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.driver.application.port.out.GetDriverStatusRedisPort;
 import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypeRedisPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
@@ -8,6 +7,7 @@ import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
 import goorm.humandelivery.shared.location.application.port.in.GetDriverLocationUseCase;
 import goorm.humandelivery.shared.location.application.port.out.GetLocationRedisPort;
+import goorm.humandelivery.shared.location.domain.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
