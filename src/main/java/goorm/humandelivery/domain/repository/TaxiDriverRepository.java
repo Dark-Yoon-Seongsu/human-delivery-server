@@ -1,6 +1,6 @@
 package goorm.humandelivery.domain.repository;
 
-import goorm.humandelivery.domain.model.response.TaxiTypeResponse;
+import goorm.humandelivery.driver.dto.response.TaxiTypeResponse;
 import goorm.humandelivery.driver.domain.Taxi;
 import goorm.humandelivery.driver.domain.TaxiDriver;
 import jakarta.validation.constraints.Email;

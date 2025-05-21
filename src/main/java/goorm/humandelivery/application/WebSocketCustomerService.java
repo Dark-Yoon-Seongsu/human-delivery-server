@@ -1,8 +1,7 @@
 package goorm.humandelivery.application;
 
 import goorm.humandelivery.customer.domain.Customer;
-import goorm.humandelivery.domain.model.request.CallMessageRequest;
-import goorm.humandelivery.domain.repository.CallInfoRepository;
+import goorm.humandelivery.call.dto.request.CallMessageRequest;
 import goorm.humandelivery.infrastructure.messaging.KafkaMessageQueueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

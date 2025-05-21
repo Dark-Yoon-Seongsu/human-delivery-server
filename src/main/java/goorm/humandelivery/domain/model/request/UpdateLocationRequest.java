@@ -1,6 +1,6 @@
 package goorm.humandelivery.domain.model.request;
 
-import goorm.humandelivery.domain.model.entity.Location;
+import goorm.humandelivery.shared.location.domain.Location;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

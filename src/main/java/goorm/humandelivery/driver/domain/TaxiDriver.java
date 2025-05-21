@@ -1,6 +1,6 @@
 package goorm.humandelivery.driver.domain;
 
-import goorm.humandelivery.domain.model.entity.BaseEntity;
+import goorm.humandelivery.shared.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

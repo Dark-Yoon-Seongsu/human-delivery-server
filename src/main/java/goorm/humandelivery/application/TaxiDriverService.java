@@ -1,6 +1,6 @@
 package goorm.humandelivery.application;
 
-import goorm.humandelivery.domain.model.response.TaxiTypeResponse;
+import goorm.humandelivery.driver.dto.response.TaxiTypeResponse;
 import goorm.humandelivery.domain.repository.TaxiDriverRepository;
 import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;

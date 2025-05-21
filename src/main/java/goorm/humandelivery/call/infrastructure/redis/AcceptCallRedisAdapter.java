@@ -26,6 +26,8 @@ public class AcceptCallRedisAdapter implements AcceptCallRedisPort {
 
         String lockKey = String.valueOf(callId);
 
+        List<String> keys = List.of(callStatusKey, driverCallKey, driverStatusKey, lockKey);
+        List<String> args = List.of("SENT", "AVAILABLE", driverLoginId, "DONE", String.valueOf(callId), "RESERVED");
         String lua = """
                       local callStatus = redis.call('GET', KEYS[1])
                       local driverCall = redis.call('EXISTS', KEYS[2])
@@ -50,17 +52,14 @@ public class AcceptCallRedisAdapter implements AcceptCallRedisPort {
                 
                       -- 여기서 상태 변화까지 시켜야 한다.
                     redis.call('SET', KEYS[1], ARGV[4]) -- callStatus = DONE
-                	redis.call('SET', KEYS[3], ARGV[5]) -- driverStatus = RESERVED
-                	redis.call('SET', KEYS[2], ARGV[6]) -- driverCall = callId
+                	redis.call('SET', KEYS[2], ARGV[5]) -- driverCall = callId
+                	redis.call('SET', KEYS[3], ARGV[6]) -- driverStatus = RESERVED
                       return 0;
                 """;
 
         DefaultRedisScript<Long> script = new DefaultRedisScript<>();
         script.setScriptText(lua);
         script.setResultType(Long.class);
-
-        List<String> keys = List.of(callStatusKey, driverCallKey, driverStatusKey, lockKey);
-        List<String> args = List.of("SENT", "AVAILABLE", driverLoginId, "DONE", "RESERVED", String.valueOf(callId));
 
         Long result = redisTemplate.execute(script, keys, args.toArray());
 

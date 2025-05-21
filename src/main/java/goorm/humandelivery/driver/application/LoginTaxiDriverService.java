@@ -6,7 +6,7 @@ import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.driver.dto.request.LoginTaxiDriverRequest;
 import goorm.humandelivery.global.exception.IncorrectPasswordException;
 import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
-import goorm.humandelivery.shared.auth.JwtResponse;
+import goorm.humandelivery.shared.dto.response.JwtResponse;
 import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

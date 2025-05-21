@@ -1,6 +1,6 @@
 package goorm.humandelivery.shared.security.port.out;
 
-import goorm.humandelivery.domain.model.response.TokenInfoResponse;
+import goorm.humandelivery.shared.dto.response.TokenInfoResponse;
 import org.springframework.security.core.Authentication;
 
 public interface JwtTokenProviderPort {

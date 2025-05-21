@@ -10,7 +10,7 @@ import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import goorm.humandelivery.call.dto.response.CallRejectResponse;
 import goorm.humandelivery.domain.model.entity.DrivingInfo;
-import goorm.humandelivery.domain.model.entity.Location;
+import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.domain.model.request.CreateDrivingInfoRequest;
 import goorm.humandelivery.domain.model.request.UpdateLocationRequest;
 import goorm.humandelivery.domain.model.request.UpdateTaxiDriverStatusRequest;

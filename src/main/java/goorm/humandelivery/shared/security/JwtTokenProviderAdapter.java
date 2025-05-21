@@ -1,6 +1,6 @@
 package goorm.humandelivery.shared.security;
 
-import goorm.humandelivery.domain.model.response.TokenInfoResponse;
+import goorm.humandelivery.shared.dto.response.TokenInfoResponse;
 import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

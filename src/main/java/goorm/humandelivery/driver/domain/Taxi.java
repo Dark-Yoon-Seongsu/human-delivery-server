@@ -1,6 +1,6 @@
 package goorm.humandelivery.driver.domain;
 
-import goorm.humandelivery.domain.model.entity.BaseEntity;
+import goorm.humandelivery.shared.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package goorm.humandelivery.domain.model.response;
 
-import goorm.humandelivery.domain.model.entity.Location;
+import goorm.humandelivery.shared.location.domain.Location;
 import lombok.Getter;
 import lombok.Setter;
 

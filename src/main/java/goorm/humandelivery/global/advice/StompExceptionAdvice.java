@@ -1,6 +1,6 @@
 package goorm.humandelivery.global.advice;
 
-import goorm.humandelivery.domain.model.response.ErrorResponse;
+import goorm.humandelivery.shared.dto.response.ErrorResponse;
 import goorm.humandelivery.global.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
