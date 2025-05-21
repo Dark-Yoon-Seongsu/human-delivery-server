@@ -1,8 +1,8 @@
 package goorm.humandelivery.domain.repository;
 
 import goorm.humandelivery.call.domain.Matching;
-import goorm.humandelivery.domain.model.entity.DrivingInfo;
-import goorm.humandelivery.domain.model.response.DrivingSummaryResponse;
+import goorm.humandelivery.driving.domain.DrivingInfo;
+import goorm.humandelivery.driving.dto.response.DrivingSummaryResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

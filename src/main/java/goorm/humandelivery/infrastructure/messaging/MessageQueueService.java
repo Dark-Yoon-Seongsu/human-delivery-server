@@ -1,6 +1,6 @@
 package goorm.humandelivery.infrastructure.messaging;
 
-import goorm.humandelivery.domain.model.internal.QueueMessage;
+import goorm.humandelivery.shared.messaging.QueueMessage;
 
 public interface MessageQueueService {
 

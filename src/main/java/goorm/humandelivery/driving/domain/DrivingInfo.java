@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.entity;
+package goorm.humandelivery.driving.domain;
 
 import goorm.humandelivery.call.domain.Matching;
 import goorm.humandelivery.shared.domain.BaseEntity;

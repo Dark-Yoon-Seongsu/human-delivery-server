@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.response;
+package goorm.humandelivery.driving.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

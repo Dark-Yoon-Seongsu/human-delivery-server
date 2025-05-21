@@ -1,6 +1,6 @@
-package goorm.humandelivery.domain.model.response;
+package goorm.humandelivery.driving.dto.response;
 
-import goorm.humandelivery.domain.model.entity.DrivingStatus;
+import goorm.humandelivery.driving.domain.DrivingStatus;
 import goorm.humandelivery.shared.location.domain.Location;
 import lombok.Getter;
 import lombok.Setter;

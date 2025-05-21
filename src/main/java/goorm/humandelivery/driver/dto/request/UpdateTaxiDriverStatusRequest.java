@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.request;
+package goorm.humandelivery.driver.dto.request;
 
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.shared.annotation.ValidEnum;

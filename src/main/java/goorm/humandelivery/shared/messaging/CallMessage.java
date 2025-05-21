@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.internal;
+package goorm.humandelivery.shared.messaging;
 
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.location.domain.Location;

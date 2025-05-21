@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.entity;
+package goorm.humandelivery.driving.domain;
 
 public enum DrivingStatus {
     ON_DRIVING("손님탑승완료"),

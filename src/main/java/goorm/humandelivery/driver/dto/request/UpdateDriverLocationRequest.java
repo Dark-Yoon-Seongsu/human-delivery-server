@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.request;
+package goorm.humandelivery.driver.dto.request;
 
 import goorm.humandelivery.shared.location.domain.Location;
 import jakarta.validation.Valid;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UpdateLocationRequest {
+public class UpdateDriverLocationRequest {
 
     private String customerLoginId;
 

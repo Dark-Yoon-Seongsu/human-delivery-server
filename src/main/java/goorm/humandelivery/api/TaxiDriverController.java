@@ -1,6 +1,6 @@
 package goorm.humandelivery.api;
 
-import goorm.humandelivery.domain.model.request.NearbyDriversRequest;
+import goorm.humandelivery.driver.dto.request.NearbyDriversRequest;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.dto.response.TokenInfoResponse;
 import goorm.humandelivery.shared.location.domain.Location;

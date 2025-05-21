@@ -1,10 +1,10 @@
 package goorm.humandelivery.application;
 
 import goorm.humandelivery.call.domain.Matching;
-import goorm.humandelivery.domain.model.entity.DrivingInfo;
-import goorm.humandelivery.domain.model.entity.DrivingStatus;
-import goorm.humandelivery.domain.model.request.CreateDrivingInfoRequest;
-import goorm.humandelivery.domain.model.response.DrivingSummaryResponse;
+import goorm.humandelivery.driving.domain.DrivingInfo;
+import goorm.humandelivery.driving.domain.DrivingStatus;
+import goorm.humandelivery.driving.dto.request.CreateDrivingInfoRequest;
+import goorm.humandelivery.driving.dto.response.DrivingSummaryResponse;
 import goorm.humandelivery.domain.repository.DrivingInfoRepository;
 import goorm.humandelivery.global.exception.DrivingInfoEntityNotFoundException;
 import goorm.humandelivery.global.exception.MatchingEntityNotFoundException;

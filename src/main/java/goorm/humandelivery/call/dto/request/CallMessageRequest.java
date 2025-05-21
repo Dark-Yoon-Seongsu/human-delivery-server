@@ -2,7 +2,7 @@ package goorm.humandelivery.call.dto.request;
 
 import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.customer.domain.Customer;
-import goorm.humandelivery.domain.model.internal.CallMessage;
+import goorm.humandelivery.shared.messaging.CallMessage;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.location.domain.Location;
 import jakarta.validation.constraints.NotBlank;

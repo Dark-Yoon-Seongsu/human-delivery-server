@@ -1,6 +1,6 @@
 package goorm.humandelivery.infrastructure.messaging;
 
-import goorm.humandelivery.domain.model.internal.QueueMessage;
+import goorm.humandelivery.shared.messaging.QueueMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;

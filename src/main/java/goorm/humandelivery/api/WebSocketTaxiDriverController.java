@@ -9,17 +9,16 @@ import goorm.humandelivery.call.dto.request.CallRejectRequest;
 import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import goorm.humandelivery.call.dto.response.CallRejectResponse;
-import goorm.humandelivery.domain.model.entity.DrivingInfo;
-import goorm.humandelivery.domain.model.request.CreateDrivingInfoRequest;
-import goorm.humandelivery.domain.model.request.UpdateLocationRequest;
-import goorm.humandelivery.domain.model.request.UpdateTaxiDriverStatusRequest;
-import goorm.humandelivery.domain.model.response.DrivingSummaryResponse;
+import goorm.humandelivery.driving.domain.DrivingInfo;
+import goorm.humandelivery.driving.dto.request.CreateDrivingInfoRequest;
+import goorm.humandelivery.driver.dto.request.UpdateDriverLocationRequest;
+import goorm.humandelivery.driver.dto.request.UpdateTaxiDriverStatusRequest;
+import goorm.humandelivery.driving.dto.response.DrivingSummaryResponse;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.driver.dto.response.UpdateTaxiDriverStatusResponse;
 import goorm.humandelivery.global.exception.CallAlreadyCompletedException;
 import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
-import goorm.humandelivery.infrastructure.messaging.MessagingService;
 import goorm.humandelivery.shared.location.domain.Location;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -79,7 +78,7 @@ public class WebSocketTaxiDriverController {
      * @return UpdateLocationResponse
      */
     @MessageMapping("/update-location")
-    public void updateLocation(UpdateLocationRequest request, Principal principal) {
+    public void updateLocation(UpdateDriverLocationRequest request, Principal principal) {
         String taxiDriverLoginId = principal.getName();
         String customerLoginId = request.getCustomerLoginId();
         Location location = request.getLocation();

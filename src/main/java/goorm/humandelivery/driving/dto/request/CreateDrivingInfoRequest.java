@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.request;
+package goorm.humandelivery.driving.dto.request;
 
 import goorm.humandelivery.shared.location.domain.Location;
 import lombok.Getter;

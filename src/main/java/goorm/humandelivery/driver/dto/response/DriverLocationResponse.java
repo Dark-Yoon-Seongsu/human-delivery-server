@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.response;
+package goorm.humandelivery.driver.dto.response;
 
 import goorm.humandelivery.shared.location.domain.Location;
 import lombok.Getter;
@@ -6,14 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LocationResponse {
+public class DriverLocationResponse {
 
     private Location location;
 
-    public LocationResponse() {
+    public DriverLocationResponse() {
     }
 
-    public LocationResponse(Location location) {
+    public DriverLocationResponse(Location location) {
         this.location = location;
     }
 }
