@@ -1,6 +1,6 @@
 package goorm.humandelivery.driver.application;
 
-import goorm.humandelivery.driver.application.port.in.SendDriverLocationUseCase;
+import goorm.humandelivery.driver.application.port.in.SendDriverLocationToCustomerUseCase;
 import goorm.humandelivery.driver.application.port.out.SendDriverLocationToCustomerPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
@@ -20,7 +20,7 @@ import java.time.Duration;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SendDriverLocationService implements SendDriverLocationUseCase {
+public class SendDriverLocationToCustomerService implements SendDriverLocationToCustomerUseCase {
 
     private final SetLocationRedisPort setLocationRedisPort;
     private final SetValueWithTtlPort setValueWithTtlPort;

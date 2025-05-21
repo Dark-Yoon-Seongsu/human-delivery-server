@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface LoadMatchingPort {
 
+    Optional<Matching> findById(Long matchingId);
+
     Optional<Matching> findMatchingByCallInfoId(Long callId);
 
     Optional<Long> findMatchingIdByCallInfoId(Long callId);

@@ -11,7 +11,7 @@ import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import goorm.humandelivery.call.dto.response.MatchingSuccessResponse;
 import goorm.humandelivery.driver.application.port.in.ChangeTaxiDriverStatusUseCase;
-import goorm.humandelivery.driver.application.port.in.UpdateDriverStatusUseCase;
+import goorm.humandelivery.driver.application.port.in.HandleDriverStatusUseCase;
 import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypeRedisPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
@@ -30,7 +30,7 @@ public class AcceptCallService implements AcceptCallUseCase {
     private final RegisterMatchingUseCase registerMatchingUseCase;
     private final GetDriverTaxiTypeRedisPort getDriverTaxiTypeRedisPort;
     private final ChangeTaxiDriverStatusUseCase changeTaxiDriverStatusUseCase;
-    private final UpdateDriverStatusUseCase updateDriverStatusUseCase;
+    private final HandleDriverStatusUseCase handleDriverStatusUseCase;
     private final GetCallAcceptResponseUseCase getCallAcceptResponseUseCase;
     private final NotifyDispatchSuccessToCustomerPort notifyDispatchSuccessToCustomerPort;
 
@@ -50,7 +50,7 @@ public class AcceptCallService implements AcceptCallUseCase {
         TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(taxiDriverLoginId, TaxiDriverStatus.RESERVED);
 
         // 상태 변경에 따른 redis 처리
-        updateDriverStatusUseCase.updateStatus(taxiDriverLoginId, taxiDriverStatus, taxiType);
+        handleDriverStatusUseCase.handleTaxiDriverStatusInRedis(taxiDriverLoginId, taxiDriverStatus, taxiType);
 
         // CallAcceptResponse 응답하기
         CallAcceptResponse callAcceptResponse = getCallAcceptResponseUseCase.getCallAcceptResponse(callId);

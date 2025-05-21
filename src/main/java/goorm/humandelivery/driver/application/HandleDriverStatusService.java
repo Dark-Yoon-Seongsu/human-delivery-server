@@ -1,8 +1,8 @@
-package goorm.humandelivery.driver.infrastructure.redis;
+package goorm.humandelivery.driver.application;
 
 import goorm.humandelivery.call.application.port.out.RemoveRejectedDriversForCallRedisPort;
 import goorm.humandelivery.driver.application.port.in.DeleteAssignedCallUseCase;
-import goorm.humandelivery.driver.application.port.in.UpdateDriverStatusUseCase;
+import goorm.humandelivery.driver.application.port.in.HandleDriverStatusUseCase;
 import goorm.humandelivery.driver.application.port.out.*;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class UpdateDriverStatusService implements UpdateDriverStatusUseCase {
+public class HandleDriverStatusService implements HandleDriverStatusUseCase {
 
     private final SetDriverStatusRedisPort setDriverStatusRedisPort;
     private final SetDriverTaxiTypeRedisPort setDriverTaxiTypeRedisPort;
@@ -32,7 +32,7 @@ public class UpdateDriverStatusService implements UpdateDriverStatusUseCase {
     private final SetActiveDriverRedisPort setActiveDriverRedisPort;
 
     @Override
-    public UpdateTaxiDriverStatusResponse updateStatus(String taxiDriverLoginId, TaxiDriverStatus changedStatus, TaxiType type) {
+    public UpdateTaxiDriverStatusResponse handleTaxiDriverStatusInRedis(String taxiDriverLoginId, TaxiDriverStatus changedStatus, TaxiType type) {
 
         log.info("[updateStatus : redis 택시기사 상태 저장] taxiDriverId : {}, 상태 : {}, ", taxiDriverLoginId, changedStatus);
         setDriverStatusRedisPort.setDriverStatus(taxiDriverLoginId, changedStatus);

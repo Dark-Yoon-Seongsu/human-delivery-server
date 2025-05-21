@@ -1,26 +1,17 @@
 package goorm.humandelivery.api;
 
-import goorm.humandelivery.application.DrivingInfoService;
-import goorm.humandelivery.application.TaxiDriverService;
 import goorm.humandelivery.call.application.LoadCallInfoService;
 import goorm.humandelivery.call.dto.request.CallIdRequest;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
-import goorm.humandelivery.driver.dto.request.UpdateDriverLocationRequest;
-import goorm.humandelivery.driver.dto.request.UpdateTaxiDriverStatusRequest;
-import goorm.humandelivery.driver.dto.response.UpdateTaxiDriverStatusResponse;
 import goorm.humandelivery.driving.domain.DrivingInfo;
 import goorm.humandelivery.driving.dto.request.CreateDrivingInfoRequest;
 import goorm.humandelivery.driving.dto.response.DrivingSummaryResponse;
-import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
 import goorm.humandelivery.shared.location.domain.Location;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 
@@ -36,64 +27,6 @@ public class WebSocketTaxiDriverController {
     private final MatchingService matchingService;
     private final LoadCallInfoService loadCallInfoService;
     private final DrivingInfoService drivingInfoService;
-
-    /**
-     * 택시운전기사 상태 변경
-     *
-     * @param request
-     * @param principal
-     * @return UpdateTaxiDriverStatusResponse
-     */
-    @MessageMapping("/update-status")
-    @SendToUser("/queue/taxi-driver-status")
-    public UpdateTaxiDriverStatusResponse updateStatus(@Valid @RequestBody UpdateTaxiDriverStatusRequest request,
-                                                       Principal principal) {
-
-        String taxiDriverLoginId = principal.getName();
-        String statusTobe = request.getStatus();
-        log.info("[updateStatus 호출] taxiDriverId : {}, 상태 : {} 으로 변경요청", taxiDriverLoginId, statusTobe);
-
-        // 1. DB에 상태 업데이트
-        TaxiDriverStatus changedStatus = taxiDriverService.changeStatus(taxiDriverLoginId,
-                TaxiDriverStatus.valueOf(statusTobe));
-
-        // 2. 택시타입 조회
-        TaxiType taxiType = taxiDriverService.findTaxiDriverTaxiType(taxiDriverLoginId).getTaxiType();
-
-        // 3. redis 에 상태 업데이트
-        return redisService.handleTaxiDriverStatusInRedis(taxiDriverLoginId, changedStatus, taxiType);
-    }
-
-    /**
-     * 택시운전기사 위치정보 업데이트
-     *
-     * @param request
-     * @param principal
-     * @return UpdateLocationResponse
-     */
-    @MessageMapping("/update-location")
-    public void updateLocation(UpdateDriverLocationRequest request, Principal principal) {
-        String taxiDriverLoginId = principal.getName();
-        String customerLoginId = request.getCustomerLoginId();
-        Location location = request.getLocation();
-        log.info("[updateLocation 호출] taxiDriverId : {}, 위도 : {}, 경도 : {}",
-                principal.getName(),
-                location.getLatitude(),
-                location.getLongitude());
-
-        // redis 에서 택시기사 상태조회 -> 없으면 DB 조회 -> redis 저장 -> 반환
-        TaxiDriverStatus status = taxiDriverService.getCurrentTaxiDriverStatus(taxiDriverLoginId);
-
-        // redis 에서 택시종류조회 -> 없으면 DB 조회 -> redis 저장 -> 반환
-        TaxiType taxiType = taxiDriverService.getCurrentTaxiType(taxiDriverLoginId);
-
-        if (status == TaxiDriverStatus.OFF_DUTY) {
-            throw new OffDutyLocationUpdateException();
-        }
-
-        // 택시기사 위치정보 저장
-        messagingService.sendLocation(taxiDriverLoginId, status, taxiType, customerLoginId, location);
-    }
 
     /**
      * 승객 승차 완료 요청 처리

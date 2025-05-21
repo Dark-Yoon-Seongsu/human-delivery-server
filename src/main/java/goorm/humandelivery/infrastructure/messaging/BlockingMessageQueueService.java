@@ -5,7 +5,6 @@ import goorm.humandelivery.application.WebSocketCustomerService;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.shared.messaging.CallMessage;
 import goorm.humandelivery.shared.messaging.QueueMessage;
-import goorm.humandelivery.domain.repository.TaxiDriverRepository;
 import goorm.humandelivery.global.exception.NoAvailableTaxiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CustomerService {
 
-    private final LoadCustomerPort customerRepository;
+    private final LoadCustomerPort loadCustomerPort;
 
     @Transactional(readOnly = true)
     public Customer findCustomerByLoginId(String loginId) {
-        return customerRepository.findByLoginId(loginId).orElseThrow(CustomerNotFoundException::new);
+        return loadCustomerPort.findByLoginId(loginId).orElseThrow(CustomerNotFoundException::new);
     }
 
 }

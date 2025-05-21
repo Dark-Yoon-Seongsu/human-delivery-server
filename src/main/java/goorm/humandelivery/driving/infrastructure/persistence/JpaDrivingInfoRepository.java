@@ -1,21 +1,27 @@
-package goorm.humandelivery.domain.repository;
+package goorm.humandelivery.driving.infrastructure.persistence;
 
 import goorm.humandelivery.call.domain.Matching;
+import goorm.humandelivery.driving.application.port.out.LoadDrivingInfoPort;
+import goorm.humandelivery.driving.application.port.out.LoadDrivingSummaryPort;
+import goorm.humandelivery.driving.application.port.out.SaveDrivingInfoPort;
 import goorm.humandelivery.driving.domain.DrivingInfo;
 import goorm.humandelivery.driving.dto.response.DrivingSummaryResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public interface DrivingInfoRepository extends JpaRepository<DrivingInfo, Long> {
+public interface JpaDrivingInfoRepository extends
+        JpaRepository<DrivingInfo, Long>,
+        SaveDrivingInfoPort,
+        LoadDrivingInfoPort,
+        LoadDrivingSummaryPort {
+
     Optional<DrivingInfo> findDrivingInfoByMatching(Matching matching);
 
     @Query("""
-                select new goorm.humandelivery.domain.model.response.DrivingSummaryResponse(
+                select new goorm.humandelivery.driving.dto.response.DrivingSummaryResponse(
                     ci.id, 
                     cs.loginId, 
                     td.loginId, 

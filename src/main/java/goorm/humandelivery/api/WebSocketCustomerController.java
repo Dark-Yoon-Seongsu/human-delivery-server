@@ -31,17 +31,9 @@ public class WebSocketCustomerController {
         return new CallRequestMessageResponse("콜이 성공적으로 요청되었습니다.");
     }
 
-    public void cancelCall() {
-
-    }
-
     public void sendCallMessageToTaxiDriver(String driverLoginId, CallMessage callMessage) {
         String destination = "/queue/call";
-        messagingTemplate.convertAndSendToUser(
-                driverLoginId,                        // 사용자 이름(Principal name)
-                destination,                        // 목적지
-                callMessage);                        // 전송할 메세지
-
+        messagingTemplate.convertAndSendToUser(driverLoginId, destination, callMessage);
     }
 
 }
