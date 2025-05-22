@@ -2,6 +2,7 @@ package goorm.humandelivery.call.infrastructure.persistence;
 
 import goorm.humandelivery.call.application.port.out.DeleteCallInfoPort;
 import goorm.humandelivery.call.application.port.out.LoadCallInfoPort;
+import goorm.humandelivery.call.application.port.out.SaveCallInfoPort;
 import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,8 @@ import java.util.Optional;
 public interface JpaCallInfoRepository extends
         JpaRepository<CallInfo, Long>,
         LoadCallInfoPort,
-        DeleteCallInfoPort {
+        DeleteCallInfoPort,
+        SaveCallInfoPort {
     @Query(
             "select new goorm.humandelivery.call.dto.response.CallAcceptResponse("
                     + "c.id, "

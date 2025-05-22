@@ -6,6 +6,7 @@ import goorm.humandelivery.shared.dto.response.TokenInfoResponse;
 import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +16,9 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/taxi-driver")
+@RequiredArgsConstructor
 public class TaxiDriverController {
     private final JwtTokenProviderPort jwtTokenProviderPort;
-    private final RedisService redisService;
-
-    public TaxiDriverController(JwtTokenProviderPort jwtTokenProviderPort, RedisService redisService) {
-        this.jwtTokenProviderPort = jwtTokenProviderPort;
-        this.redisService = redisService;
-    }
 
     // 토큰 확인
     @GetMapping("/token-info")
