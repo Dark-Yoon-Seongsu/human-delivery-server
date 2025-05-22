@@ -1,23 +1,26 @@
-package goorm.humandelivery.service;
+package goorm.humandelivery.customer.service;
 
 import goorm.humandelivery.domain.model.entity.CallInfo;
 import goorm.humandelivery.domain.repository.CallInfoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class CallSaveService {
 
     private final CallInfoRepository callInfoRepository;
 
-    public CallSaveService(CallInfoRepository callInfoRepository) {
-        this.callInfoRepository = callInfoRepository;
-    }
-
     public CallInfo saveCallInfo(CallInfo callInfo) {
         validateCallInfo(callInfo);
         return callInfoRepository.save(callInfo);
+    }
+
+    public Long saveCallAndGetCallId(CallInfo callInfo) {
+        CallInfo saved = saveCallInfo(callInfo);
+        return saved.getId(); // 저장된 엔티티의 ID 반환
     }
 
     private void validateCallInfo(CallInfo callInfo) {

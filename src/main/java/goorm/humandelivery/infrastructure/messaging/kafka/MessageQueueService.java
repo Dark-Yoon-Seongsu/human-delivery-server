@@ -1,4 +1,4 @@
-package goorm.humandelivery.infrastructure.messaging;
+package goorm.humandelivery.infrastructure.messaging.kafka;
 
 import goorm.humandelivery.domain.model.internal.QueueMessage;
 

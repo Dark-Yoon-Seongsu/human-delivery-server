@@ -1,7 +1,8 @@
-package goorm.humandelivery.api;
+package goorm.humandelivery.driver;
 
 import java.security.Principal;
 
+import goorm.humandelivery.api.CallIdRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -11,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import goorm.humandelivery.application.CallInfoService;
 import goorm.humandelivery.application.DrivingInfoService;
 import goorm.humandelivery.application.MatchingService;
-import goorm.humandelivery.application.TaxiDriverService;
 import goorm.humandelivery.common.exception.AlreadyAssignedCallException;
 import goorm.humandelivery.common.exception.CallAlreadyCompletedException;
 import goorm.humandelivery.common.exception.IncorrectTaxiDriverStatusException;
 import goorm.humandelivery.common.exception.OffDutyLocationUpdateException;
-import goorm.humandelivery.domain.model.entity.CallStatus;
 import goorm.humandelivery.domain.model.entity.DrivingInfo;
 import goorm.humandelivery.domain.model.entity.Location;
 import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;

@@ -3,6 +3,8 @@ package goorm.humandelivery.infrastructure.messaging;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.domain.model.internal.QueueMessage;
 import goorm.humandelivery.infrastructure.messaging.handler.CallMessageHandler;
+import goorm.humandelivery.infrastructure.messaging.kafka.KafkaMessageProducer;
+import goorm.humandelivery.infrastructure.messaging.kafka.KafkaMessageQueueService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

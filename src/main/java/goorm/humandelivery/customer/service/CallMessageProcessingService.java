@@ -1,11 +1,10 @@
-package goorm.humandelivery.application;
+package goorm.humandelivery.customer.service;
 
 import org.springframework.stereotype.Service;
 
 import goorm.humandelivery.domain.model.entity.Customer;
 import goorm.humandelivery.domain.model.request.CallMessageRequest;
-import goorm.humandelivery.domain.repository.CallInfoRepository;
-import goorm.humandelivery.infrastructure.messaging.KafkaMessageQueueService;
+import goorm.humandelivery.infrastructure.messaging.kafka.KafkaMessageQueueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,28 +12,22 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class WebSocketCustomerService {
+public class CallMessageProcessingService {
 
-	private final CallInfoRepository callRepository;
 	private final CustomerService customerService;
+	private final CallSaveService callSaveService;
 
 	// private final BlockingMessageQueueService messageQueueService;
 	private final KafkaMessageQueueService messageQueueService;
 
 	public void processMessage(CallMessageRequest request, String senderId) {
-		Long callId = saveCallAndGetCallId(request, senderId);
+
+		Customer customer = customerService.findCustomerByLoginId(senderId);
+		Long callId = callSaveService.saveCallAndGetCallId(request.toCallInfo(customer));
 		log.info("콜 내용 DB에 저장 완료");
+
 		messageQueueService.enqueue(request.toQueueMessage(callId, senderId));
 		log.info("콜 요청을 카프카 메시지 큐에 등록");
-	}
-
-	public Long saveCallAndGetCallId(CallMessageRequest request, String senderId) {
-		Customer customer = customerService.findCustomerByLoginId(senderId);
-		return callRepository.save(request.toCallInfo(customer)).getId();
-	}
-
-	public void deleteCallById(Long callId) {
-		callRepository.deleteById(callId);
 	}
 
 }

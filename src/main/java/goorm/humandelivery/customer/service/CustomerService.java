@@ -1,6 +1,4 @@
-package goorm.humandelivery.application;
-
-import java.util.Optional;
+package goorm.humandelivery.customer.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import goorm.humandelivery.domain.model.response.CreateCustomerResponse;
 import goorm.humandelivery.domain.model.response.LoginCustomerResponse;
 import goorm.humandelivery.domain.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional(readOnly = true)

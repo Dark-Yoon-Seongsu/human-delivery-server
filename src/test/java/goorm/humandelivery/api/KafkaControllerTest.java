@@ -1,13 +1,5 @@
 package goorm.humandelivery.api;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import goorm.humandelivery.domain.model.entity.Location;
-import goorm.humandelivery.domain.model.entity.TaxiType;
-import goorm.humandelivery.domain.model.internal.CallMessage;
-import goorm.humandelivery.infrastructure.messaging.KafkaMessageQueueService;
-
 public class KafkaControllerTest {
 	/*private final KafkaMessageQueueService messageQueueService;
 

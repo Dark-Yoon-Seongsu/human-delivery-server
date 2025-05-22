@@ -1,9 +1,9 @@
-package goorm.humandelivery.service;
+package goorm.humandelivery.customer.service;
 
 import goorm.humandelivery.domain.model.entity.CallStatus;
 import goorm.humandelivery.domain.model.internal.CallMessage;
-import goorm.humandelivery.infrastructure.redis.RedisService;
 import goorm.humandelivery.infrastructure.messaging.MessagingService;
+import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,19 +1,9 @@
-package goorm.humandelivery.infrastructure.messaging;
-
-import java.util.List;
+package goorm.humandelivery.infrastructure.messaging.kafka;
 
 import goorm.humandelivery.infrastructure.messaging.handler.CallMessageHandler;
-import goorm.humandelivery.service.CallRequestDispatchService;
-import goorm.humandelivery.service.CallSaveService;
-import goorm.humandelivery.service.NearTaxiSearchService;
 import org.springframework.stereotype.Service;
-
-import goorm.humandelivery.application.CallInfoService;
-import goorm.humandelivery.common.exception.NoAvailableTaxiException;
-import goorm.humandelivery.domain.model.entity.CallStatus;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.domain.model.internal.QueueMessage;
-import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

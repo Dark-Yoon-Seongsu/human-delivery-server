@@ -1,4 +1,4 @@
-package goorm.humandelivery.api;
+package goorm.humandelivery.driver;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import goorm.humandelivery.application.TaxiDriverService;
 import goorm.humandelivery.common.security.jwt.JwtUtil;
 import goorm.humandelivery.domain.model.entity.Location;
 import goorm.humandelivery.domain.model.entity.TaxiType;

@@ -1,4 +1,4 @@
-package goorm.humandelivery.application;
+package goorm.humandelivery.driver;
 
 import java.time.Duration;
 

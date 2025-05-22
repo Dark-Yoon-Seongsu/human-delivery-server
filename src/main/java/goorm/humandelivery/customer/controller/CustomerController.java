@@ -1,13 +1,12 @@
-package goorm.humandelivery.api;
+package goorm.humandelivery.customer.controller;
 
+import goorm.humandelivery.customer.service.CustomerService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import goorm.humandelivery.application.CustomerService;
 import goorm.humandelivery.domain.model.request.CreateCustomerRequest;
 import goorm.humandelivery.domain.model.response.CreateCustomerResponse;
 import goorm.humandelivery.domain.model.request.LoginCustomerRequest;

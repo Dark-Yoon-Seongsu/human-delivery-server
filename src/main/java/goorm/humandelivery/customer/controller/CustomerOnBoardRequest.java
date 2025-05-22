@@ -1,4 +1,4 @@
-package goorm.humandelivery.api;
+package goorm.humandelivery.customer.controller;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,18 +1,16 @@
-package goorm.humandelivery.api;
+package goorm.humandelivery.customer.controller;
 
 import java.security.Principal;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import goorm.humandelivery.customer.service.CallMessageProcessingService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
-import goorm.humandelivery.application.WebSocketCustomerService;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.domain.model.request.CallMessageRequest;
 import goorm.humandelivery.domain.model.response.CallRequestMessageResponse;
-import goorm.humandelivery.domain.model.response.CallTargetTaxiDriverDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WebSocketCustomerController {
 
-	private final WebSocketCustomerService webSocketCustomerService;
+	private final CallMessageProcessingService webSocketCustomerService;
 	private final SimpMessagingTemplate messagingTemplate;
 
 	@MessageMapping("/call/request")

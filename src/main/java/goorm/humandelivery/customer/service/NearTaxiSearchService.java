@@ -1,4 +1,4 @@
-package goorm.humandelivery.service;
+package goorm.humandelivery.customer.service;
 
 import goorm.humandelivery.domain.model.entity.Location;
 import goorm.humandelivery.domain.model.entity.TaxiType;
