@@ -1,13 +1,10 @@
-package goorm.humandelivery.infrastructure.messaging;
+package goorm.humandelivery.shared.application.port.out;
 
 import goorm.humandelivery.shared.messaging.QueueMessage;
 
-public interface MessageQueueService {
-
+public interface MessageQueuePort {
 
     void enqueue(QueueMessage message);
-
-    void processMessage();
 
     void processMessage(QueueMessage message);
 

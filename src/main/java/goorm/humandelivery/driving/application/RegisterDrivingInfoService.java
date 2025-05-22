@@ -2,7 +2,6 @@ package goorm.humandelivery.driving.application;
 
 import goorm.humandelivery.call.application.port.out.LoadMatchingPort;
 import goorm.humandelivery.call.domain.Matching;
-import goorm.humandelivery.domain.repository.DrivingInfoRepository;
 import goorm.humandelivery.driving.application.port.in.RegisterDrivingInfoUseCase;
 import goorm.humandelivery.driving.application.port.out.SaveDrivingInfoPort;
 import goorm.humandelivery.driving.domain.DrivingInfo;

@@ -1,4 +1,4 @@
-package goorm.humandelivery.infrastructure.messaging;
+package goorm.humandelivery.shared.messaging.kafka;
 
 import goorm.humandelivery.shared.messaging.QueueMessage;
 import lombok.RequiredArgsConstructor;
