@@ -14,7 +14,7 @@ public class RedisStatusService {
     private final RedisDeleteService redisDeleteService;
     private final RedisGetService redisGetService;
 
-    public UpdateTaxiDriverStatusResponse handleTaxiDriverStatus(String driverId, TaxiDriverStatus newStatus, TaxiType type) {
+    public UpdateTaxiDriverStatusResponse handleTaxiDriverStatusInRedis(String driverId, TaxiDriverStatus newStatus, TaxiType type) {
 
         redisSetService.setDriversStatus(driverId, newStatus);
         redisSetService.setDriversTaxiType(driverId, type);

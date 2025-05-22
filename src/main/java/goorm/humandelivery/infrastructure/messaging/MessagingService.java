@@ -17,7 +17,7 @@ import goorm.humandelivery.domain.model.response.DrivingInfoResponse;
 import goorm.humandelivery.domain.model.response.DrivingSummaryResponse;
 import goorm.humandelivery.domain.model.response.ErrorResponse;
 import goorm.humandelivery.domain.model.response.MatchingSuccessResponse;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.infrastructure.redis.key.RedisKeyParser;
 import goorm.humandelivery.infrastructure.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 

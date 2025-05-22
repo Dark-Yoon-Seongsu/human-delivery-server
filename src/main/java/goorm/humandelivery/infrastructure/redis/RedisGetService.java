@@ -5,6 +5,7 @@ import goorm.humandelivery.common.exception.RedisKeyNotFoundException;
 import goorm.humandelivery.domain.model.entity.CallStatus;
 import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
 import goorm.humandelivery.domain.model.entity.TaxiType;
+import goorm.humandelivery.infrastructure.redis.key.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.domain.geo.GeoLocation;

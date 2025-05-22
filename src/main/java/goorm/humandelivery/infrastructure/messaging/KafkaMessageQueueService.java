@@ -2,6 +2,10 @@ package goorm.humandelivery.infrastructure.messaging;
 
 import java.util.List;
 
+import goorm.humandelivery.infrastructure.messaging.handler.CallMessageHandler;
+import goorm.humandelivery.service.CallRequestDispatchService;
+import goorm.humandelivery.service.CallSaveService;
+import goorm.humandelivery.service.NearTaxiSearchService;
 import org.springframework.stereotype.Service;
 
 import goorm.humandelivery.application.CallInfoService;
@@ -19,55 +23,22 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaMessageQueueService implements MessageQueueService {
 
 	private final KafkaMessageProducer kafkaMessageProducer;
-	private final RedisService redisService;
-	private final MessagingService messagingService;
-	private final CallInfoService callInfoService;
+	private final CallMessageHandler callMessageHandler;
 
 	@Override
 	public void enqueue(QueueMessage message) {
 		kafkaMessageProducer.send(message);
 	}
 
-	;
-
 	@Override
-	public void processMessage() { // 카프카 쓸때는 안쓰는 메서드
+	public void processMessage() {
+		// Not used for Kafka
 	}
-
-	;
 
 	@Override
 	public void processMessage(QueueMessage message) {
-		// 메세지 처리
-		if (!(message instanceof CallMessage)) {
-			// 메세지가 콜 메세지가 아닌 경우 처리
-			return;
+		if (message instanceof CallMessage callMessage) {
+			callMessageHandler.handle(callMessage);
 		}
-
-		CallMessage callMessage = (CallMessage)message;
-
-		// 1. 출발 위치에서 10분 거리 내의 운행 가능한 택시 목록 찾기
-		int radiusInKm = 5 * callMessage.getRetryCount();
-
-		List<String> availableTaxiDrivers = redisService.findNearByAvailableDrivers(callMessage.getCallId(),
-			callMessage.getTaxiType(), callMessage.getExpectedOrigin().getLatitude(),
-			callMessage.getExpectedOrigin().getLongitude(), radiusInKm);
-
-		log.info("범위 내 유효한 택시의 수 : {}", availableTaxiDrivers.size());
-
-		if (availableTaxiDrivers.isEmpty()) {
-			// 여겨시 택시 수가 0인경우 없다는 메세지를 고객에게 전달.
-			log.info("범위 내에 유효한 택시가 없음");
-			callInfoService.deleteCallById(callMessage.getCallId());
-			messagingService.notifyDispatchFailedToCustomer(callMessage.getCustomerLoginId());
-			throw new NoAvailableTaxiException();
-		}
-
-		// 2. 해당 택시기사들에게 메세지 전송
-		redisService.setCallWith(callMessage.getCallId(), CallStatus.SENT);
-		for (String taxiDriverLonginId : availableTaxiDrivers) {
-			messagingService.sendCallMessageToTaxiDriver(taxiDriverLonginId, callMessage);
-		}
-		log.info("유효한 택시기사에게 콜 요청 전송 완료");
 	}
 }

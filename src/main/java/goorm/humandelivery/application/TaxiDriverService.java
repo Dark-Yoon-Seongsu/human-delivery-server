@@ -20,7 +20,7 @@ import goorm.humandelivery.domain.model.response.TaxiDriverResponse;
 import goorm.humandelivery.domain.model.response.TaxiTypeResponse;
 import goorm.humandelivery.domain.repository.TaxiDriverRepository;
 import goorm.humandelivery.domain.repository.TaxiRepository;
-import goorm.humandelivery.infrastructure.redis.RedisKeyParser;
+import goorm.humandelivery.infrastructure.redis.key.RedisKeyParser;
 import goorm.humandelivery.infrastructure.redis.RedisService;
 import jakarta.persistence.EntityExistsException;
 import lombok.extern.slf4j.Slf4j;

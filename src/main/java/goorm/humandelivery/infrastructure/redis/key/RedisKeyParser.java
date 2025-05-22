@@ -1,4 +1,4 @@
-package goorm.humandelivery.infrastructure.redis;
+package goorm.humandelivery.infrastructure.redis.key;
 
 import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
 import goorm.humandelivery.domain.model.entity.TaxiType;

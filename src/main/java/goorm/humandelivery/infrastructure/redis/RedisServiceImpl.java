@@ -21,6 +21,7 @@ public class RedisServiceImpl implements RedisService {
     private final RedisGetService redisGetService;
     private final RedisDeleteService redisDeleteService;
     private final RedisStatusService redisStatusService;
+    private final RedisAtomicCallService redisAtomicCallService;
 
     // SET
     @Override
@@ -167,7 +168,12 @@ public class RedisServiceImpl implements RedisService {
 
     // STATUS
     @Override
-    public UpdateTaxiDriverStatusResponse handleTaxiDriverStatus(String driverId, TaxiDriverStatus newStatus, TaxiType type) {
-        return redisStatusService.handleTaxiDriverStatus(driverId, newStatus, type);
+    public UpdateTaxiDriverStatusResponse handleTaxiDriverStatusInRedis(String driverId, TaxiDriverStatus newStatus, TaxiType type) {
+        return redisStatusService.handleTaxiDriverStatusInRedis(driverId, newStatus, type);
+    }
+
+    @Override
+    public boolean atomicAcceptCall(Long callId, String driverId) {
+        return redisAtomicCallService.atomicAcceptCall(callId, driverId);
     }
 }

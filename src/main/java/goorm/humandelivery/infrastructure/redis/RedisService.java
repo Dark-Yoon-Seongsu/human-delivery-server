@@ -48,5 +48,7 @@ public interface RedisService {
 	void deleteAllLocationDataInRedis(String driverId, TaxiType taxiType);
 
 	// STATUS
-	UpdateTaxiDriverStatusResponse handleTaxiDriverStatus(String driverId, TaxiDriverStatus newStatus, TaxiType type);
+	UpdateTaxiDriverStatusResponse handleTaxiDriverStatusInRedis(String driverId, TaxiDriverStatus newStatus, TaxiType type);
+
+	boolean atomicAcceptCall(Long callId, String driverId);
 }

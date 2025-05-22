@@ -2,6 +2,7 @@ package goorm.humandelivery.infrastructure.redis;
 
 import goorm.humandelivery.domain.model.entity.TaxiDriverStatus;
 import goorm.humandelivery.domain.model.entity.TaxiType;
+import goorm.humandelivery.infrastructure.redis.key.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
