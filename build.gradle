@@ -60,10 +60,10 @@ dependencies {
 
 
 	// rabbit mq + broker relay
-	testImplementation 'org.springframework.amqp:spring-rabbit-test'
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation 'io.projectreactor:reactor-test'
+//	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+//	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+//	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+//	testImplementation 'io.projectreactor:reactor-test'
 
 
 

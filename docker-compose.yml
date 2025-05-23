@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ZooKeeper 3노드
   zookeeper1:

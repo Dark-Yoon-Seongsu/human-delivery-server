@@ -51,20 +51,20 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
          * 	/queue : 관례상 일대일 메세지 전송에서 사용.
          */
 
-        //config.enableSimpleBroker("/topic", "/queue");
+        config.enableSimpleBroker("/topic", "/queue");
 
         /**
          * RabbitMQ 를 외부 메세지 브로커로 사용.
          */
-        config.enableStompBrokerRelay("/queue", "/topic")
-                .setRelayHost("localhost")
-                .setRelayPort(61613)
-                .setClientLogin("guest")
-                .setClientPasscode("guest")
-                .setSystemLogin("guest")
-                .setSystemPasscode("guest")
-                .setSystemHeartbeatSendInterval(10000)
-                .setSystemHeartbeatReceiveInterval(10000);
+//        config.enableStompBrokerRelay("/queue", "/topic")
+//                .setRelayHost("localhost")
+//                .setRelayPort(61613)
+//                .setClientLogin("guest")
+//                .setClientPasscode("guest")
+//                .setSystemLogin("guest")
+//                .setSystemPasscode("guest")
+//                .setSystemHeartbeatSendInterval(10000)
+//                .setSystemHeartbeatReceiveInterval(10000);
 
         config.setApplicationDestinationPrefixes("/app");
 

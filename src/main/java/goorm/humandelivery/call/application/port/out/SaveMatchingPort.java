@@ -4,6 +4,6 @@ import goorm.humandelivery.call.domain.Matching;
 
 public interface SaveMatchingPort {
 
-    void save(Matching matching);
+    Matching save(Matching matching);
 
 }
