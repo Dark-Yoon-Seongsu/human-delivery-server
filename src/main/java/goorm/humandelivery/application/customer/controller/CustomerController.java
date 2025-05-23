@@ -1,6 +1,6 @@
-package goorm.humandelivery.customer.controller;
+package goorm.humandelivery.application.customer.controller;
 
-import goorm.humandelivery.customer.service.CustomerService;
+import goorm.humandelivery.application.customer.service.CustomerLoadService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,13 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomerController {
 
-	private final CustomerService customerService;
+	private final CustomerLoadService customerLoadService;
 
 	// 회원가입
 	@PostMapping
 	public ResponseEntity<CreateCustomerResponse> register(@RequestBody @Valid CreateCustomerRequest createCustomerRequest) {
 		log.info("승객 회원가입 요청 수신");
-		CreateCustomerResponse response = customerService.register(createCustomerRequest);
+		CreateCustomerResponse response = customerLoadService.register(createCustomerRequest);
 		log.info("신규 승객 회원 DB 저장 완료");
 		return ResponseEntity.ok(response);
 	}
@@ -36,7 +36,7 @@ public class CustomerController {
 	@PostMapping("/auth-tokens")
 	public ResponseEntity<LoginCustomerResponse> login(@RequestBody @Valid LoginCustomerRequest loginCustomerRequest) {
 		log.info("승객 로그인 요청 수신");
-		LoginCustomerResponse response = customerService.authenticateAndGenerateToken(loginCustomerRequest);
+		LoginCustomerResponse response = customerLoadService.authenticateAndGenerateToken(loginCustomerRequest);
 		log.info("승객 토근 발급 완료");
 		return ResponseEntity.ok(response);
 	}

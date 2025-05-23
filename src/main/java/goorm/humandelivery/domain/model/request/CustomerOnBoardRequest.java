@@ -1,4 +1,4 @@
-package goorm.humandelivery.api;
+package goorm.humandelivery.domain.model.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CallIdRequest {
+public class CustomerOnBoardRequest {
 
 	private Long callId;
 }

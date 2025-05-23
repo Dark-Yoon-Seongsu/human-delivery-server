@@ -1,8 +1,8 @@
-package goorm.humandelivery.customer.controller;
+package goorm.humandelivery.application.customer.controller;
 
 import java.security.Principal;
 
-import goorm.humandelivery.customer.service.CallMessageProcessingService;
+import goorm.humandelivery.application.customer.service.CallMessageProcessingService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -18,16 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class WebSocketCustomerController {
+public class CustomerWebSocketCallController {
 
-	private final CallMessageProcessingService webSocketCustomerService;
+	private final CallMessageProcessingService callMessageProcessingService;
 	private final SimpMessagingTemplate messagingTemplate;
 
 	@MessageMapping("/call/request")
 	@SendToUser("/queue/call/response")
 	public CallRequestMessageResponse handleMessage(CallMessageRequest request, Principal principal) {
 		log.info("서버에서 승객의 콜 수신");
-		webSocketCustomerService.processMessage(request, principal.getName());
+		callMessageProcessingService.processMessage(request, principal.getName());
 
 		return new CallRequestMessageResponse("콜이 성공적으로 요청되었습니다.");
 	}

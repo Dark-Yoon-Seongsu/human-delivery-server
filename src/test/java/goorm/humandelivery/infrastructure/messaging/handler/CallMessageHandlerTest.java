@@ -4,8 +4,8 @@ import goorm.humandelivery.application.CallInfoService;
 import goorm.humandelivery.common.exception.NoAvailableTaxiException;
 import goorm.humandelivery.domain.model.internal.CallMessage;
 import goorm.humandelivery.infrastructure.messaging.MessagingService;
-import goorm.humandelivery.customer.service.CallRequestDispatchService;
-import goorm.humandelivery.customer.service.NearTaxiSearchService;
+import goorm.humandelivery.application.customer.service.CallRequestDispatchService;
+import goorm.humandelivery.application.customer.service.NearTaxiSearchService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

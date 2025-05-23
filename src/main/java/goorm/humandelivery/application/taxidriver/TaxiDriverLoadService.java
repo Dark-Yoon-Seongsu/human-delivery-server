@@ -1,4 +1,4 @@
-package goorm.humandelivery.driver;
+package goorm.humandelivery.application.taxidriver;
 
 import java.time.Duration;
 
@@ -28,15 +28,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @Transactional(readOnly = true)
-public class TaxiDriverService {
+public class TaxiDriverLoadService {
 
 	private final TaxiDriverRepository taxiDriverRepository;
 	private final TaxiRepository taxiRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final RedisService redisService;
 
-	public TaxiDriverService(TaxiDriverRepository taxiDriverRepository, TaxiRepository taxiRepository,
-		BCryptPasswordEncoder bCryptPasswordEncoder, RedisService redisService) {
+	public TaxiDriverLoadService(TaxiDriverRepository taxiDriverRepository, TaxiRepository taxiRepository,
+								 BCryptPasswordEncoder bCryptPasswordEncoder, RedisService redisService) {
 		this.taxiDriverRepository = taxiDriverRepository;
 		this.taxiRepository = taxiRepository;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;

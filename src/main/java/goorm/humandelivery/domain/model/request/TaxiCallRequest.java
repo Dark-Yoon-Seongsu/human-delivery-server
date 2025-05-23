@@ -1,4 +1,4 @@
-package goorm.humandelivery.api;
+package goorm.humandelivery.domain.model.request;
 
 import goorm.humandelivery.domain.model.entity.Location;
 import lombok.Getter;

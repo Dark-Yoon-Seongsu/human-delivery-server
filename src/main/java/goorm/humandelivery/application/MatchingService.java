@@ -1,5 +1,6 @@
 package goorm.humandelivery.application;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,20 +17,13 @@ import goorm.humandelivery.domain.repository.MatchingRepository;
 import goorm.humandelivery.domain.repository.TaxiDriverRepository;
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MatchingService {
 
 	private final MatchingRepository matchingRepository;
 	private final CallInfoRepository callRepository;
 	private final TaxiDriverRepository taxiDriverRepository;
-
-	@Autowired
-	public MatchingService(MatchingRepository matchingRepository, CallInfoRepository callRepository,
-		TaxiDriverRepository taxiDriverRepository) {
-		this.matchingRepository = matchingRepository;
-		this.callRepository = callRepository;
-		this.taxiDriverRepository = taxiDriverRepository;
-	}
 
 	@Transactional
 	public void create(CreateMatchingRequest request) {
@@ -48,13 +42,15 @@ public class MatchingService {
 		matchingRepository.save(matching);
 	}
 
+
 	@Transactional
-	public void deleteByCallId(Long callId) {
+	public void deleteMatchingByCallId(Long callId) {
 		Matching matching = matchingRepository.findMatchingByCallInfoId(callId).orElseThrow(
 			MatchingEntityNotFoundException::new
 		);
 		matchingRepository.delete(matching);
 	}
+
 
 	public Long findMatchingIdByCallId(Long callId) {
 		return matchingRepository.findMatchingIdByCallInfoId(callId).orElseThrow(

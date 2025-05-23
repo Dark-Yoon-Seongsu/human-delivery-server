@@ -1,4 +1,4 @@
-package goorm.humandelivery.domain.model.request;
+package goorm.humandelivery.domain.model.response;
 
 import lombok.Getter;
 import lombok.Setter;

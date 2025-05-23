@@ -1,6 +1,6 @@
 package goorm.humandelivery.service;
 
-import goorm.humandelivery.customer.service.CallRequestDispatchService;
+import goorm.humandelivery.application.customer.service.CallRequestDispatchService;
 import goorm.humandelivery.domain.model.entity.CallStatus;
 import goorm.humandelivery.domain.model.entity.Location;
 import goorm.humandelivery.domain.model.entity.TaxiType;

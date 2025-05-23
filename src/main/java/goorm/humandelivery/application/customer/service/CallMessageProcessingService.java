@@ -1,4 +1,4 @@
-package goorm.humandelivery.customer.service;
+package goorm.humandelivery.application.customer.service;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CallMessageProcessingService {
 
-	private final CustomerService customerService;
+	private final CustomerLoadService customerLoadService;
 	private final CallSaveService callSaveService;
 
 	// private final BlockingMessageQueueService messageQueueService;
@@ -22,7 +22,7 @@ public class CallMessageProcessingService {
 
 	public void processMessage(CallMessageRequest request, String senderId) {
 
-		Customer customer = customerService.findCustomerByLoginId(senderId);
+		Customer customer = customerLoadService.findCustomerByLoginId(senderId);
 		Long callId = callSaveService.saveCallAndGetCallId(request.toCallInfo(customer));
 		log.info("콜 내용 DB에 저장 완료");
 

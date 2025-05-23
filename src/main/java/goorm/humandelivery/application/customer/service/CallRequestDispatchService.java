@@ -1,4 +1,4 @@
-package goorm.humandelivery.customer.service;
+package goorm.humandelivery.application.customer.service;
 
 import goorm.humandelivery.domain.model.entity.CallStatus;
 import goorm.humandelivery.domain.model.internal.CallMessage;

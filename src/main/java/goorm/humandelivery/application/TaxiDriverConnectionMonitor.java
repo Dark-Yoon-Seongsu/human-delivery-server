@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import goorm.humandelivery.driver.TaxiDriverService;
+import goorm.humandelivery.application.taxidriver.TaxiDriverLoadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class TaxiDriverConnectionMonitor {
 
 	private final RedisService redisService;
 	private final MatchingService matchingService;
-	private final TaxiDriverService taxiDriverService;
+	private final TaxiDriverLoadService taxiDriverLoadService;
 	private final MessagingService messagingService;
 	private final CallInfoService callInfoService;
 
@@ -33,10 +33,10 @@ public class TaxiDriverConnectionMonitor {
 
 	@Autowired
 	public TaxiDriverConnectionMonitor(RedisService redisService, MatchingService matchingService,
-		TaxiDriverService taxiDriverService, MessagingService messagingService, CallInfoService callInfoService) {
+									   TaxiDriverLoadService taxiDriverLoadService, MessagingService messagingService, CallInfoService callInfoService) {
 		this.redisService = redisService;
 		this.matchingService = matchingService;
-		this.taxiDriverService = taxiDriverService;
+		this.taxiDriverLoadService = taxiDriverLoadService;
 		this.messagingService = messagingService;
 		this.callInfoService = callInfoService;
 	}
@@ -80,7 +80,7 @@ public class TaxiDriverConnectionMonitor {
 					TaxiType taxiType = redisService.getDriversTaxiType(driverLoginId);
 
 					// 택시기사 상태 변경에 따른 Redis 내부 처리 로직 수행
-					TaxiDriverStatus taxiDriverStatus = taxiDriverService.changeStatus(driverLoginId, OFF_DUTY);
+					TaxiDriverStatus taxiDriverStatus = taxiDriverLoadService.changeStatus(driverLoginId, OFF_DUTY);
 					redisService.handleTaxiDriverStatusInRedis(driverLoginId, taxiDriverStatus, taxiType);
 
 					log.info(
@@ -93,13 +93,13 @@ public class TaxiDriverConnectionMonitor {
 				String customerLoginId = callInfoService.findCustomerLoginIdById(callId);
 
 				// 매칭 엔티티 삭제
-				matchingService.deleteByCallId(callId);
+				matchingService.deleteMatchingByCallId(callId);
 
 				// 3. 해당 택시기사 상태 OFF_DUTY 로 DB 에서 변경..
 				TaxiType taxiType = redisService.getDriversTaxiType(driverLoginId);
 
 				// 4. 택시기사 상태 변경에 따른 Redis 내부 처리 로직 수행
-				TaxiDriverStatus taxiDriverStatus = taxiDriverService.changeStatus(driverLoginId, OFF_DUTY);
+				TaxiDriverStatus taxiDriverStatus = taxiDriverLoadService.changeStatus(driverLoginId, OFF_DUTY);
 				redisService.handleTaxiDriverStatusInRedis(driverLoginId, taxiDriverStatus, taxiType);
 
 				// 5. 고객 및 택시에게 예외 메세지 전송

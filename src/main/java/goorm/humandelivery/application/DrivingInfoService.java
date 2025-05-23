@@ -2,6 +2,7 @@ package goorm.humandelivery.application;
 
 import java.time.LocalDateTime;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,17 +21,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class DrivingInfoService {
 
 	private final DrivingInfoRepository drivingInfoRepository;
 	private final MatchingRepository matchingRepository;
-
-	@Autowired
-	public DrivingInfoService(DrivingInfoRepository drivingInfoRepository, MatchingRepository matchingRepository) {
-		this.drivingInfoRepository = drivingInfoRepository;
-		this.matchingRepository = matchingRepository;
-	}
 
 	@Transactional
 	public DrivingInfo create(CreateDrivingInfoRequest request) {

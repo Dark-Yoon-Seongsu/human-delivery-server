@@ -1,4 +1,4 @@
-package goorm.humandelivery.driver;
+package goorm.humandelivery.application.taxidriver;
 
 import java.util.List;
 import java.util.Map;
@@ -29,16 +29,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/taxi-driver")
-public class TaxiDriverController {
+public class TaxiDriverLoadController {
 
-	private final TaxiDriverService taxiDriverService;
+	private final TaxiDriverLoadService taxiDriverLoadService;
 	private final JwtUtil jwtUtil;
 	private final RedisService redisService;
 
-	public TaxiDriverController(JwtUtil jwtUtil, RedisService redisService, TaxiDriverService taxiDriverService) {
+	public TaxiDriverLoadController(JwtUtil jwtUtil, RedisService redisService, TaxiDriverLoadService taxiDriverLoadService) {
 		this.jwtUtil = jwtUtil;
 		this.redisService = redisService;
-		this.taxiDriverService = taxiDriverService;
+		this.taxiDriverLoadService = taxiDriverLoadService;
 	}
 
 	// 회원가입
@@ -56,7 +56,7 @@ public class TaxiDriverController {
 			return ResponseEntity.badRequest().body(Map.of("errors", fieldErrors));
 		}
 
-		TaxiDriverResponse response = taxiDriverService.register(taxiDriverRequest);
+		TaxiDriverResponse response = taxiDriverLoadService.register(taxiDriverRequest);
 		return ResponseEntity.ok(response);
 	}
 
@@ -65,7 +65,7 @@ public class TaxiDriverController {
 	public ResponseEntity<?> loginTaxiDriver(@RequestBody @Valid LoginTaxiDriverRequest loginTaxiDriverRequest) {
 		// 아이디 찾고.. 패스워드 암호화 후 일치하는 지 확인해야 함.. 서비스에서 해야겠네
 
-		taxiDriverService.validate(loginTaxiDriverRequest);
+		taxiDriverLoadService.validate(loginTaxiDriverRequest);
 
 		// 있으면? -> 토큰 만들어서 돌려줌
 		String token = jwtUtil.generateToken(loginTaxiDriverRequest.getLoginId());

@@ -1,4 +1,4 @@
-package goorm.humandelivery.customer.service;
+package goorm.humandelivery.application.customer.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CustomerService {
+public class CustomerLoadService {
 
 	private final CustomerRepository customerRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;

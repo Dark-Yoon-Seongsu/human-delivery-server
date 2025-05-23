@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
-import goorm.humandelivery.customer.service.CustomerService;
+import goorm.humandelivery.application.customer.service.CustomerLoadService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -31,13 +31,13 @@ import goorm.humandelivery.domain.model.response.LoginCustomerResponse;
 import goorm.humandelivery.domain.repository.CustomerRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class CustomerServiceTest {
+public class CustomerLoadServiceTest {
 
 	@Mock CustomerRepository customerRepository;
 	@Mock BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Mock JwtUtil jwtUtil;
 	@InjectMocks
-	CustomerService customerService;
+	CustomerLoadService customerLoadService;
 
 	CreateCustomerRequest newCustomerDTO;
 	LoginCustomerRequest loginCustomerRequest;
@@ -74,7 +74,7 @@ public class CustomerServiceTest {
 			when(bCryptPasswordEncoder.encode(anyString())).thenReturn("Encrypted password");
 
 			// when
-			CreateCustomerResponse createCustomerResponse = customerService.register(newCustomerDTO);
+			CreateCustomerResponse createCustomerResponse = customerLoadService.register(newCustomerDTO);
 
 			// then
 			assertThat(createCustomerResponse.getLoginId()).isEqualTo("registered_customer");
@@ -87,7 +87,7 @@ public class CustomerServiceTest {
 			when(customerRepository.existsByLoginId(anyString())).thenReturn(true);
 
 			// when & then
-			assertThrows(DuplicateLoginIdException.class, () -> customerService.register(newCustomerDTO));
+			assertThrows(DuplicateLoginIdException.class, () -> customerLoadService.register(newCustomerDTO));
 		}
 
 		@Test
@@ -97,7 +97,7 @@ public class CustomerServiceTest {
 			when(customerRepository.existsByPhoneNumber(anyString())).thenReturn(true);
 
 			// when & then
-			assertThrows(DuplicatePhoneNumberException.class, () -> customerService.register(newCustomerDTO));
+			assertThrows(DuplicatePhoneNumberException.class, () -> customerLoadService.register(newCustomerDTO));
 		}
 	}
 
@@ -114,7 +114,7 @@ public class CustomerServiceTest {
 
 			// when
 			LoginCustomerResponse loginCustomerResponse =
-				customerService.authenticateAndGenerateToken(
+				customerLoadService.authenticateAndGenerateToken(
 					new LoginCustomerRequest(
 						"registered_customer", "registered_customer_password_1234"
 					)
@@ -133,7 +133,7 @@ public class CustomerServiceTest {
 
 			// when & then
 			assertThrows(CustomerNotFoundException.class,
-				() -> customerService.authenticateAndGenerateToken(loginCustomerRequest));
+				() -> customerLoadService.authenticateAndGenerateToken(loginCustomerRequest));
 		}
 
 		@Test
@@ -146,7 +146,7 @@ public class CustomerServiceTest {
 
 			// when & then
 			assertThrows(IncorrectPasswordException.class,
-				() -> customerService.authenticateAndGenerateToken(loginCustomerRequest));
+				() -> customerLoadService.authenticateAndGenerateToken(loginCustomerRequest));
 		}
 	}
 }

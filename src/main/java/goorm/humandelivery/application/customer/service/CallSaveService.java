@@ -1,4 +1,4 @@
-package goorm.humandelivery.customer.service;
+package goorm.humandelivery.application.customer.service;
 
 import goorm.humandelivery.domain.model.entity.CallInfo;
 import goorm.humandelivery.domain.repository.CallInfoRepository;
@@ -18,10 +18,17 @@ public class CallSaveService {
         return callInfoRepository.save(callInfo);
     }
 
+
+
+
+
     public Long saveCallAndGetCallId(CallInfo callInfo) {
         CallInfo saved = saveCallInfo(callInfo);
         return saved.getId(); // 저장된 엔티티의 ID 반환
     }
+
+
+
 
     private void validateCallInfo(CallInfo callInfo) {
         if (callInfo.getCustomer() == null) {
