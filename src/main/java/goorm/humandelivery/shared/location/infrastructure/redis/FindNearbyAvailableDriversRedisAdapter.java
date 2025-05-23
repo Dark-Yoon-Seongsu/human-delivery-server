@@ -4,7 +4,7 @@ import goorm.humandelivery.call.application.port.out.CheckDriverRejectedForCallP
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
-import goorm.humandelivery.shared.location.application.port.out.FindNearbyAvailableDriversRedisPort;
+import goorm.humandelivery.shared.location.application.port.out.FindNearbyAvailableDriversPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class FindNearbyAvailableDriversRedisAdapter implements FindNearbyAvailableDriversRedisPort {
+public class FindNearbyAvailableDriversRedisAdapter implements FindNearbyAvailableDriversPort {
 
     private final StringRedisTemplate redisTemplate;
     private final CheckDriverRejectedForCallPort checkDriverRejectedForCallPort;

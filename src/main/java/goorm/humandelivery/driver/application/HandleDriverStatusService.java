@@ -8,8 +8,8 @@ import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.driver.dto.response.UpdateTaxiDriverStatusResponse;
 import goorm.humandelivery.global.exception.RedisKeyNotFoundException;
-import goorm.humandelivery.shared.location.application.port.out.DeleteAllDriverLocationRedisPort;
-import goorm.humandelivery.shared.location.application.port.out.RemoveFromLocationRedisPort;
+import goorm.humandelivery.shared.location.application.port.out.DeleteAllDriverLocationPort;
+import goorm.humandelivery.shared.location.application.port.out.RemoveFromLocationPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,9 +24,9 @@ public class HandleDriverStatusService implements HandleDriverStatusUseCase {
     private final SetDriverStatusPort setDriverStatusPort;
     private final SetDriverTaxiTypePort setDriverTaxiTypePort;
     private final DeleteActiveDriverPort deleteActiveDriverPort;
-    private final DeleteAllDriverLocationRedisPort deleteAllDriverLocationRedisPort;
+    private final DeleteAllDriverLocationPort deleteAllDriverLocationPort;
     private final DeleteAssignedCallUseCase deleteAssignedCallUseCase;
-    private final RemoveFromLocationRedisPort removeFromLocationRedisPort;
+    private final RemoveFromLocationPort removeFromLocationPort;
     private final GetAssignedCallPort getAssignedCallPort;
     private final RemoveRejectedDriversForCallPort removeRejectedDriversForCallPort;
     private final SetActiveDriverPort setActiveDriverPort;
@@ -46,7 +46,7 @@ public class HandleDriverStatusService implements HandleDriverStatusUseCase {
                 log.info("[updateStatus : 택시기사 비활성화. active 목록에서 제외] taxiDriverId : {}, 상태 : {}", taxiDriverLoginId, changedStatus);
                 deleteActiveDriverPort.setOffDuty(taxiDriverLoginId);
                 // 해당 기사의 위치정보 삭제
-                deleteAllDriverLocationRedisPort.deleteAllLocationData(taxiDriverLoginId, type);
+                deleteAllDriverLocationPort.deleteAllLocationData(taxiDriverLoginId, type);
                 // 해당 기사가 가지고 있던 콜 삭제
                 deleteAssignedCallUseCase.deleteCallBy(taxiDriverLoginId);
             }
@@ -54,8 +54,8 @@ public class HandleDriverStatusService implements HandleDriverStatusUseCase {
             case AVAILABLE -> {
                 deleteAssignedCallUseCase.deleteCallBy(taxiDriverLoginId);
                 // 위치정보도 삭제
-                removeFromLocationRedisPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.RESERVED);
-                removeFromLocationRedisPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.ON_DRIVING);
+                removeFromLocationPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.RESERVED);
+                removeFromLocationPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.ON_DRIVING);
                 log.info("[updateStatus : redis 택시기사 active set 저장] taxiDriverId : {}, 상태 : {}, ", taxiDriverLoginId, changedStatus);
 
                 // active driver set 에 없으면 추가
@@ -64,8 +64,8 @@ public class HandleDriverStatusService implements HandleDriverStatusUseCase {
 
             case RESERVED -> {
                 // 위치정보 삭제
-                removeFromLocationRedisPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.AVAILABLE);
-                removeFromLocationRedisPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.ON_DRIVING);
+                removeFromLocationPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.AVAILABLE);
+                removeFromLocationPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.ON_DRIVING);
 
                 // redis 에 저장된 콜 상태 변경  SENT -> DONE
                 Optional<String> callIdOptional = getAssignedCallPort.getCallIdByDriverId(taxiDriverLoginId);
@@ -90,8 +90,8 @@ public class HandleDriverStatusService implements HandleDriverStatusUseCase {
 
                 callIdOptional.map(Long::valueOf).ifPresent(callId -> {
                     // 위치정보 삭제
-                    removeFromLocationRedisPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.AVAILABLE);
-                    removeFromLocationRedisPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.RESERVED);
+                    removeFromLocationPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.AVAILABLE);
+                    removeFromLocationPort.removeFromLocation(taxiDriverLoginId, type, TaxiDriverStatus.RESERVED);
                     // 콜에 대한 거부 택시 기사목록 삭제
                     removeRejectedDriversForCallPort.removeRejectedDrivers(callId);
                 });

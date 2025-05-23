@@ -8,7 +8,7 @@ import goorm.humandelivery.global.exception.CustomerNotAssignedException;
 import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
 import goorm.humandelivery.shared.application.port.out.SetValueWithTtlPort;
-import goorm.humandelivery.shared.location.application.port.out.SetLocationRedisPort;
+import goorm.humandelivery.shared.location.application.port.out.SetLocationPort;
 import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.driver.dto.response.DriverLocationResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.time.Duration;
 @RequiredArgsConstructor
 public class SendDriverLocationToCustomerService implements SendDriverLocationToCustomerUseCase {
 
-    private final SetLocationRedisPort setLocationRedisPort;
+    private final SetLocationPort setLocationPort;
     private final SetValueWithTtlPort setValueWithTtlPort;
     private final SendDriverLocationToCustomerPort sendToCustomerPort;
 
@@ -39,7 +39,7 @@ public class SendDriverLocationToCustomerService implements SendDriverLocationTo
         }
 
         String locationKey = RedisKeyParser.getTaxiDriverLocationKeyBy(status, taxiType);
-        setLocationRedisPort.setLocation(locationKey, taxiDriverLoginId, location);
+        setLocationPort.setLocation(locationKey, taxiDriverLoginId, location);
         log.info("[MessagingService sendMessage : 위치정보 저장] 택시기사아이디 : {}, 레디스 키 : {} ", taxiDriverLoginId, locationKey);
 
         String currentTime = String.valueOf(System.currentTimeMillis());

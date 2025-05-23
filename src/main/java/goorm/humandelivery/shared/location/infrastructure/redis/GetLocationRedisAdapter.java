@@ -1,7 +1,7 @@
 package goorm.humandelivery.shared.location.infrastructure.redis;
 
 import goorm.humandelivery.global.exception.LocationNotInRedisException;
-import goorm.humandelivery.shared.location.application.port.out.GetLocationRedisPort;
+import goorm.humandelivery.shared.location.application.port.out.GetLocationPort;
 import goorm.humandelivery.shared.location.domain.Location;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.Point;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class GetLocationRedisAdapter implements GetLocationRedisPort {
+public class GetLocationRedisAdapter implements GetLocationPort {
 
     private final StringRedisTemplate redisTemplate;
 

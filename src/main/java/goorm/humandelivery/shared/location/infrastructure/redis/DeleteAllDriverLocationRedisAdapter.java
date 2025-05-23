@@ -2,21 +2,21 @@ package goorm.humandelivery.shared.location.infrastructure.redis;
 
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
-import goorm.humandelivery.shared.location.application.port.out.DeleteAllDriverLocationRedisPort;
-import goorm.humandelivery.shared.location.application.port.out.RemoveFromLocationRedisPort;
+import goorm.humandelivery.shared.location.application.port.out.DeleteAllDriverLocationPort;
+import goorm.humandelivery.shared.location.application.port.out.RemoveFromLocationPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class DeleteAllDriverLocationRedisAdapter implements DeleteAllDriverLocationRedisPort {
+public class DeleteAllDriverLocationRedisAdapter implements DeleteAllDriverLocationPort {
 
-    private final RemoveFromLocationRedisPort removeFromLocationRedisPort;
+    private final RemoveFromLocationPort removeFromLocationPort;
 
     @Override
     public void deleteAllLocationData(String driverLoginId, TaxiType taxiType) {
-        removeFromLocationRedisPort.removeFromLocation(driverLoginId, taxiType, TaxiDriverStatus.AVAILABLE);
-        removeFromLocationRedisPort.removeFromLocation(driverLoginId, taxiType, TaxiDriverStatus.RESERVED);
-        removeFromLocationRedisPort.removeFromLocation(driverLoginId, taxiType, TaxiDriverStatus.ON_DRIVING);
+        removeFromLocationPort.removeFromLocation(driverLoginId, taxiType, TaxiDriverStatus.AVAILABLE);
+        removeFromLocationPort.removeFromLocation(driverLoginId, taxiType, TaxiDriverStatus.RESERVED);
+        removeFromLocationPort.removeFromLocation(driverLoginId, taxiType, TaxiDriverStatus.ON_DRIVING);
     }
 }

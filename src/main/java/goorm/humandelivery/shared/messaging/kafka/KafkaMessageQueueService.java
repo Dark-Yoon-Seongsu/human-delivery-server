@@ -7,7 +7,7 @@ import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.shared.application.port.out.MessageQueuePort;
 import goorm.humandelivery.shared.dto.response.ErrorResponse;
-import goorm.humandelivery.shared.location.application.port.out.FindNearbyAvailableDriversRedisPort;
+import goorm.humandelivery.shared.location.application.port.out.FindNearbyAvailableDriversPort;
 import goorm.humandelivery.shared.messaging.CallMessage;
 import goorm.humandelivery.shared.messaging.QueueMessage;
 import goorm.humandelivery.global.exception.NoAvailableTaxiException;
@@ -23,7 +23,7 @@ import java.util.List;
 public class KafkaMessageQueueService implements MessageQueuePort {
 
     private final KafkaMessageProducer kafkaMessageProducer;
-    private final FindNearbyAvailableDriversRedisPort findNearbyAvailableDriversRedisPort;
+    private final FindNearbyAvailableDriversPort findNearbyAvailableDriversPort;
     private final NotifyDispatchFailedToCustomerPort notifyDispatchFailedToCustomerPort;
     private final SetCallWithPort setCallWithPort;
     private final SendCallRequestToDriverPort sendCallRequestToDriverPort;
@@ -47,7 +47,7 @@ public class KafkaMessageQueueService implements MessageQueuePort {
         // 1. 출발 위치에서 10분 거리 내의 운행 가능한 택시 목록 찾기
         int radiusInKm = 5 * callMessage.getRetryCount();
 
-        List<String> availableTaxiDrivers = findNearbyAvailableDriversRedisPort.findNearByAvailableDrivers(callMessage.getCallId(), callMessage.getTaxiType(), callMessage.getExpectedOrigin().getLatitude(), callMessage.getExpectedOrigin().getLongitude(), radiusInKm);
+        List<String> availableTaxiDrivers = findNearbyAvailableDriversPort.findNearByAvailableDrivers(callMessage.getCallId(), callMessage.getTaxiType(), callMessage.getExpectedOrigin().getLatitude(), callMessage.getExpectedOrigin().getLongitude(), radiusInKm);
 
         log.info("범위 내 유효한 택시의 수 : {}", availableTaxiDrivers.size());
 
