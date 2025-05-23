@@ -22,15 +22,15 @@ public class RequestCallService implements RequestCallUseCase {
     private final MessageQueuePort messageQueuePort;
 
     @Override
-    public void requestCall(CallMessageRequest request, String senderId) {
-        Long callId = saveCallAndGetCallId(request, senderId);
+    public void requestCall(CallMessageRequest request, String customerLoginId) {
+        Long callId = saveCallAndGetCallId(request, customerLoginId);
         log.info("콜 내용 DB에 저장 완료");
-        messageQueuePort.enqueue(request.toQueueMessage(callId, senderId));
+        messageQueuePort.enqueue(request.toQueueMessage(callId, customerLoginId));
         log.info("콜 요청을 카프카 메시지 큐에 등록");
     }
 
-    private Long saveCallAndGetCallId(CallMessageRequest request, String senderId) {
-        Customer customer = loadCustomerPort.findByLoginId(senderId)
+    private Long saveCallAndGetCallId(CallMessageRequest request, String customerLoginId) {
+        Customer customer = loadCustomerPort.findByLoginId(customerLoginId)
                 .orElseThrow(CustomerNotFoundException::new);
         return saveCallInfoPort.save(request.toCallInfo(customer)).getId();
     }
