@@ -1,6 +1,6 @@
 package goorm.humandelivery.driver.application.port.out;
 
-public interface DeleteAssignedCallRedisPort {
+public interface DeleteAssignedCallPort {
 
     void deleteAssignedCallOf(String driverLoginId);
 

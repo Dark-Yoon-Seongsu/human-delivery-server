@@ -1,6 +1,6 @@
 package goorm.humandelivery.call.application.port.out;
 
-public interface RemoveRejectedDriversForCallRedisPort {
+public interface RemoveRejectedDriversForCallPort {
 
     void removeRejectedDrivers(Long callId);
 

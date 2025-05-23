@@ -2,8 +2,8 @@ package goorm.humandelivery.driver.application.port.out;
 
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 
-public interface GetDriverStatusRedisPort {
+public interface SetDriverStatusPort {
 
-    TaxiDriverStatus getDriverStatus(String driverId);
+    void setDriverStatus(String driverLoginId, TaxiDriverStatus status);
 
 }

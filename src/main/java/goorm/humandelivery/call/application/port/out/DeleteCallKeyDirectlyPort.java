@@ -1,6 +1,6 @@
 package goorm.humandelivery.call.application.port.out;
 
-public interface DeleteCallKeyDirectlyRedisPort {
+public interface DeleteCallKeyDirectlyPort {
 
     void deleteCallKey(Long callId);
 

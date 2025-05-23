@@ -1,8 +1,8 @@
 package goorm.humandelivery.driver.infrastructure.redis;
 
-import goorm.humandelivery.driver.application.port.out.DeleteActiveDriverRedisPort;
-import goorm.humandelivery.driver.application.port.out.GetActiveDriversRedisPort;
-import goorm.humandelivery.driver.application.port.out.SetActiveDriverRedisPort;
+import goorm.humandelivery.driver.application.port.out.DeleteActiveDriverPort;
+import goorm.humandelivery.driver.application.port.out.GetActiveDriversPort;
+import goorm.humandelivery.driver.application.port.out.SetActiveDriverPort;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
-public class DriverActiveRedisAdapter implements SetActiveDriverRedisPort, GetActiveDriversRedisPort, DeleteActiveDriverRedisPort {
+public class DriverActiveRedisAdapter implements SetActiveDriverPort, GetActiveDriversPort, DeleteActiveDriverPort {
 
     private final StringRedisTemplate redisTemplate;
 

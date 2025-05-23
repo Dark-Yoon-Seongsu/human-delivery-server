@@ -1,7 +1,7 @@
 package goorm.humandelivery.driver.infrastructure.redis;
 
-import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypeRedisPort;
-import goorm.humandelivery.driver.application.port.out.SetDriverTaxiTypeRedisPort;
+import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypePort;
+import goorm.humandelivery.driver.application.port.out.SetDriverTaxiTypePort;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.global.exception.RedisKeyNotFoundException;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
@@ -13,7 +13,7 @@ import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
-public class DriverTaxiTypeRedisAdapter implements SetDriverTaxiTypeRedisPort, GetDriverTaxiTypeRedisPort {
+public class DriverTaxiTypeRedisAdapter implements SetDriverTaxiTypePort, GetDriverTaxiTypePort {
 
     private final StringRedisTemplate redisTemplate;
 

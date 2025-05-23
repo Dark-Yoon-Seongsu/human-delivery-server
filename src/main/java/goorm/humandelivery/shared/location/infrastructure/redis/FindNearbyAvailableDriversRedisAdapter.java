@@ -1,6 +1,6 @@
 package goorm.humandelivery.shared.location.infrastructure.redis;
 
-import goorm.humandelivery.call.application.port.out.CheckDriverRejectedForCallRedisPort;
+import goorm.humandelivery.call.application.port.out.CheckDriverRejectedForCallPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
@@ -20,7 +20,7 @@ import java.util.List;
 public class FindNearbyAvailableDriversRedisAdapter implements FindNearbyAvailableDriversRedisPort {
 
     private final StringRedisTemplate redisTemplate;
-    private final CheckDriverRejectedForCallRedisPort checkDriverRejectedForCallRedisPort;
+    private final CheckDriverRejectedForCallPort checkDriverRejectedForCallPort;
 
     @Override
     public List<String> findNearByAvailableDrivers(Long callId, TaxiType taxiType, double latitude, double longitude, double radiusInKm) {
@@ -35,7 +35,7 @@ public class FindNearbyAvailableDriversRedisAdapter implements FindNearbyAvailab
         return results.getContent().stream()
                 .map(GeoResult::getContent)
                 .map(GeoLocation::getName)
-                .filter(id -> !checkDriverRejectedForCallRedisPort.isDriverRejected(callId, id))
+                .filter(id -> !checkDriverRejectedForCallPort.isDriverRejected(callId, id))
                 .toList();
     }
 }

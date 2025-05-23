@@ -29,11 +29,11 @@ import static goorm.humandelivery.driver.domain.TaxiDriverStatus.RESERVED;
 @RequiredArgsConstructor
 public class TaxiDriverConnectionMonitor {
 
-    private final GetActiveDriversRedisPort getActiveDriversRedisPort;
-    private final GetDriverStatusRedisPort getDriverStatusRedisPort;
-    private final GetDriverLastUpdateRedisPort getDriverLastUpdateRedisPort;
-    private final GetAssignedCallRedisPort getAssignedCallRedisPort;
-    private final GetDriverTaxiTypeRedisPort getDriverTaxiTypeRedisPort;
+    private final GetActiveDriversPort getActiveDriversPort;
+    private final GetDriverStatusPort getDriverStatusPort;
+    private final GetDriverLastUpdatePort getDriverLastUpdatePort;
+    private final GetAssignedCallPort getAssignedCallPort;
+    private final GetDriverTaxiTypePort getDriverTaxiTypePort;
     private final ChangeTaxiDriverStatusUseCase changeTaxiDriverStatusUseCase;
     private final HandleDriverStatusUseCase handleDriverStatusUseCase;
     private final DeleteMatchingUseCase deleteMatchingUseCase;
@@ -57,26 +57,26 @@ public class TaxiDriverConnectionMonitor {
         log.info("[monitorReservedTaxiDrivers.TaxiDriverConnectionMonitor] start monitoring at : {}", Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDateTime());
 
         // 1. 운행중인 기사목록 조회
-        Set<String> activeDrivers = getActiveDriversRedisPort.getActiveDrivers();
+        Set<String> activeDrivers = getActiveDriversPort.getActiveDrivers();
 
         // 2. 기사들 중 RESERVED 상태인 기사만 조회
         List<String> reservedDrivers = activeDrivers.stream()
-                .filter(driverId -> getDriverStatusRedisPort.getDriverStatus(driverId) == RESERVED)
+                .filter(driverId -> getDriverStatusPort.getDriverStatus(driverId) == RESERVED)
                 .toList();
 
         // 3. reservedDrivers 의 마지막 위치정보 시간 조회
         for (String driverLoginId : reservedDrivers) {
-            String lastUpdateStr = getDriverLastUpdateRedisPort.getLastUpdate(driverLoginId);
+            String lastUpdateStr = getDriverLastUpdatePort.getLastUpdate(driverLoginId);
 
             if (lastUpdateStr == null || now - Long.parseLong(lastUpdateStr) > TIMEOUT_MILLIS) {
                 log.warn("[{}] 위치 갱신 시간 초과.", driverLoginId);
 
                 // 1. call Id 조회
-                Optional<String> callIdOptional = getAssignedCallRedisPort.getCallIdByDriverId(driverLoginId);
+                Optional<String> callIdOptional = getAssignedCallPort.getCallIdByDriverId(driverLoginId);
 
                 if (callIdOptional.isEmpty()) {
                     // 해당 택시기사 상태 OFF_DUTY 로 DB 에서 변경..
-                    TaxiType taxiType = getDriverTaxiTypeRedisPort.getDriverTaxiType(driverLoginId);
+                    TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(driverLoginId);
 
                     // 택시기사 상태 변경에 따른 Redis 내부 처리 로직 수행
                     TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(driverLoginId, OFF_DUTY);
@@ -94,7 +94,7 @@ public class TaxiDriverConnectionMonitor {
                 deleteMatchingUseCase.deleteByCallId(callId);
 
                 // 3. 해당 택시기사 상태 OFF_DUTY 로 DB 에서 변경..
-                TaxiType taxiType = getDriverTaxiTypeRedisPort.getDriverTaxiType(driverLoginId);
+                TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(driverLoginId);
 
                 // 4. 택시기사 상태 변경에 따른 Redis 내부 처리 로직 수행
                 TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(driverLoginId, OFF_DUTY);

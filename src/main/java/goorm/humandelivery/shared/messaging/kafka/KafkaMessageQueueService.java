@@ -3,7 +3,7 @@ package goorm.humandelivery.shared.messaging.kafka;
 import goorm.humandelivery.call.application.port.in.DeleteCallInfoUseCase;
 import goorm.humandelivery.call.application.port.out.NotifyDispatchFailedToCustomerPort;
 import goorm.humandelivery.call.application.port.out.SendCallRequestToDriverPort;
-import goorm.humandelivery.call.application.port.out.SetCallWithRedisPort;
+import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.shared.application.port.out.MessageQueuePort;
 import goorm.humandelivery.shared.dto.response.ErrorResponse;
@@ -25,7 +25,7 @@ public class KafkaMessageQueueService implements MessageQueuePort {
     private final KafkaMessageProducer kafkaMessageProducer;
     private final FindNearbyAvailableDriversRedisPort findNearbyAvailableDriversRedisPort;
     private final NotifyDispatchFailedToCustomerPort notifyDispatchFailedToCustomerPort;
-    private final SetCallWithRedisPort setCallWithRedisPort;
+    private final SetCallWithPort setCallWithPort;
     private final SendCallRequestToDriverPort sendCallRequestToDriverPort;
     private final DeleteCallInfoUseCase deleteCallInfoUseCase;
 
@@ -60,7 +60,7 @@ public class KafkaMessageQueueService implements MessageQueuePort {
         }
 
         // 2. 해당 택시기사들에게 메세지 전송
-        setCallWithRedisPort.setCallWith(callMessage.getCallId(), CallStatus.SENT);
+        setCallWithPort.setCallWith(callMessage.getCallId(), CallStatus.SENT);
         for (String taxiDriverLonginId : availableTaxiDrivers) {
             sendCallRequestToDriverPort.sendToDriver(taxiDriverLonginId, callMessage);
         }

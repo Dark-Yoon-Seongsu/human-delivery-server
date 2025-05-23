@@ -1,6 +1,6 @@
 package goorm.humandelivery.call.infrastructure.redis;
 
-import goorm.humandelivery.call.application.port.out.SetCallWithRedisPort;
+import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.time.Duration;
 
 @RequiredArgsConstructor
 @Component
-public class SetCallWithRedisAdapter implements SetCallWithRedisPort {
+public class SetCallWithRedisAdapter implements SetCallWithPort {
 
     private final StringRedisTemplate redisTemplate;
 

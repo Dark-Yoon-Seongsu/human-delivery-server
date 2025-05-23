@@ -1,7 +1,7 @@
 package goorm.humandelivery.driver.infrastructure.redis;
 
-import goorm.humandelivery.driver.application.port.out.GetDriverStatusRedisPort;
-import goorm.humandelivery.driver.application.port.out.SetDriverStatusRedisPort;
+import goorm.humandelivery.driver.application.port.out.GetDriverStatusPort;
+import goorm.humandelivery.driver.application.port.out.SetDriverStatusPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,8 @@ import java.time.Duration;
 @Component
 @RequiredArgsConstructor
 public class DriverStatusRedisAdapter implements
-        SetDriverStatusRedisPort,
-        GetDriverStatusRedisPort {
+        SetDriverStatusPort,
+        GetDriverStatusPort {
 
     private final StringRedisTemplate redisTemplate;
 

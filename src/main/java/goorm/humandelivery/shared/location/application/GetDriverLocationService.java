@@ -1,7 +1,7 @@
 package goorm.humandelivery.shared.location.application;
 
-import goorm.humandelivery.driver.application.port.out.GetDriverStatusRedisPort;
-import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypeRedisPort;
+import goorm.humandelivery.driver.application.port.out.GetDriverStatusPort;
+import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypePort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetDriverLocationService implements GetDriverLocationUseCase {
 
-    private final GetDriverStatusRedisPort getDriverStatusRedisPort;
-    private final GetDriverTaxiTypeRedisPort getDriverTaxiTypeRedisPort;
+    private final GetDriverStatusPort getDriverStatusPort;
+    private final GetDriverTaxiTypePort getDriverTaxiTypePort;
     private final GetLocationRedisPort getLocationRedisPort;
 
     @Override
     public Location getDriverLocation(String driverLoginId) {
-        TaxiDriverStatus taxiDriverStatus = getDriverStatusRedisPort.getDriverStatus(driverLoginId);
-        TaxiType taxiType = getDriverTaxiTypeRedisPort.getDriverTaxiType(driverLoginId);
+        TaxiDriverStatus taxiDriverStatus = getDriverStatusPort.getDriverStatus(driverLoginId);
+        TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(driverLoginId);
         String key = RedisKeyParser.getTaxiDriverLocationKeyBy(taxiDriverStatus, taxiType);
         return getLocationRedisPort.getLocation(key, driverLoginId);
     }

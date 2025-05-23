@@ -1,6 +1,6 @@
 package goorm.humandelivery.driver.application.port.out;
 
-public interface GetDriverLastUpdateRedisPort {
+public interface GetDriverLastUpdatePort {
 
     String getLastUpdate(String driverLoginId);
 

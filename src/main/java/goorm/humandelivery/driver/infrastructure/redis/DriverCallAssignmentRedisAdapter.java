@@ -1,7 +1,7 @@
 package goorm.humandelivery.driver.infrastructure.redis;
 
-import goorm.humandelivery.driver.application.port.out.DeleteAssignedCallRedisPort;
-import goorm.humandelivery.driver.application.port.out.GetAssignedCallRedisPort;
+import goorm.humandelivery.driver.application.port.out.DeleteAssignedCallPort;
+import goorm.humandelivery.driver.application.port.out.GetAssignedCallPort;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class DriverCallAssignmentRedisAdapter implements GetAssignedCallRedisPort, DeleteAssignedCallRedisPort {
+public class DriverCallAssignmentRedisAdapter implements GetAssignedCallPort, DeleteAssignedCallPort {
 
     private final StringRedisTemplate redisTemplate;
 

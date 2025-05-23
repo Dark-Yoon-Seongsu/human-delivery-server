@@ -1,6 +1,6 @@
 package goorm.humandelivery.call.infrastructure.redis;
 
-import goorm.humandelivery.call.application.port.out.AcceptCallRedisPort;
+import goorm.humandelivery.call.application.port.out.AcceptCallPort;
 import goorm.humandelivery.global.exception.CallAlreadyCompletedException;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class AcceptCallRedisAdapter implements AcceptCallRedisPort {
+public class AcceptCallRedisAdapter implements AcceptCallPort {
 
     private final StringRedisTemplate redisTemplate;
 
