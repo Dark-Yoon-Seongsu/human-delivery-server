@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface JpaTaxiDriverRepository extends
         JpaRepository<TaxiDriver, Long>,
         SaveTaxiDriverPort,
-        goorm.humandelivery.call.application.port.out.LoadTaxiDriverPort,
         goorm.humandelivery.driver.application.port.out.LoadTaxiDriverPort,
         LoadTaxiDriverTypePort {
 

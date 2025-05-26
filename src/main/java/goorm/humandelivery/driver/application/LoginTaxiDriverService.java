@@ -26,7 +26,7 @@ public class LoginTaxiDriverService implements LoginTaxiDriverUseCase {
 
     @Override
     public JwtResponse login(LoginTaxiDriverRequest loginTaxiDriverRequest) {
-        TaxiDriver taxiDriver = loadTaxiDriverPort.findByLoginId(loginTaxiDriverRequest.getLoginId())
+        TaxiDriver taxiDriver = loadTaxiDriverPort.findTaxiDriverByLoginId(loginTaxiDriverRequest.getLoginId())
                 .orElseThrow(TaxiDriverEntityNotFoundException::new);
 
         // 패스워드 검증

@@ -6,5 +6,9 @@ import java.util.Optional;
 
 public interface LoadTaxiDriverPort {
 
-    Optional<TaxiDriver> findByLoginId(String loginId);
+    Optional<TaxiDriver> findById(Long id);
+
+    Optional<TaxiDriver> findTaxiDriverByLoginId(String taxiDriverLoginId);
+
+    Optional<Long> findIdByLoginId(String taxiDriverLoginId);
 }

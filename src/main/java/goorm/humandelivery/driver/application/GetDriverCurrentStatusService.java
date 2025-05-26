@@ -30,7 +30,7 @@ public class GetDriverCurrentStatusService implements GetDriverCurrentStatusUseC
             return TaxiDriverStatus.valueOf(status);
         }
 
-        TaxiDriverStatus dbStatus = loadTaxiDriverPort.findByLoginId(driverLoginId)
+        TaxiDriverStatus dbStatus = loadTaxiDriverPort.findTaxiDriverByLoginId(driverLoginId)
                 .orElseThrow(TaxiDriverEntityNotFoundException::new)
                 .getStatus();
 
