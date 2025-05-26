@@ -11,8 +11,8 @@ import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import goorm.humandelivery.call.dto.response.MatchingSuccessResponse;
 import goorm.humandelivery.driver.application.port.in.ChangeTaxiDriverStatusUseCase;
+import goorm.humandelivery.driver.application.port.in.GetDriverCurrentTaxiTypeUseCase;
 import goorm.humandelivery.driver.application.port.in.HandleDriverStatusUseCase;
-import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypePort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
@@ -28,7 +28,7 @@ public class AcceptCallService implements AcceptCallUseCase {
     private final AcceptCallPort acceptCallPort;
     private final LoadTaxiDriverPort loadTaxiDriverPort;
     private final RegisterMatchingUseCase registerMatchingUseCase;
-    private final GetDriverTaxiTypePort getDriverTaxiTypePort;
+    private final GetDriverCurrentTaxiTypeUseCase getDriverCurrentTaxiTypeUseCase;
     private final ChangeTaxiDriverStatusUseCase changeTaxiDriverStatusUseCase;
     private final HandleDriverStatusUseCase handleDriverStatusUseCase;
     private final GetCallAcceptResponseUseCase getCallAcceptResponseUseCase;
@@ -46,7 +46,7 @@ public class AcceptCallService implements AcceptCallUseCase {
                 .orElseThrow(TaxiDriverEntityNotFoundException::new);
         registerMatchingUseCase.create(new CreateMatchingRequest(callId, taxiDriverId));
 
-        TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(taxiDriverLoginId);
+        TaxiType taxiType = getDriverCurrentTaxiTypeUseCase.getCurrentTaxiType(taxiDriverLoginId);
         TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(taxiDriverLoginId, TaxiDriverStatus.RESERVED);
 
         // 상태 변경에 따른 redis 처리
