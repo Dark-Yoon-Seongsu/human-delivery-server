@@ -47,6 +47,7 @@ class RejectCallServiceTest {
     void tearDown() {
         jpaCallInfoRepository.deleteAllInBatch();
         jpaTaxiDriverRepository.deleteAllInBatch();
+        stringRedisTemplate.getConnectionFactory().getConnection().serverCommands().flushAll();
     }
 
     @Test
@@ -69,8 +70,6 @@ class RejectCallServiceTest {
 
         assertThat(rejectedDrivers).contains(testDriverLoginId);
         assertThat(response.getCallId()).isEqualTo(testCallId);
-
-        stringRedisTemplate.delete(key);
     }
 
     @Test
