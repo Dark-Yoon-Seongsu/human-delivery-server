@@ -4,10 +4,12 @@ import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.shared.location.domain.Location;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@NoArgsConstructor
 public class CallAcceptResponse {
 
     private Long callId;

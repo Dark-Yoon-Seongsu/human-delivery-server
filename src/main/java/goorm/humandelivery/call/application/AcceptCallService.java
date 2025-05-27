@@ -43,9 +43,12 @@ public class AcceptCallService implements AcceptCallUseCase {
 
         Long taxiDriverId = getTaxiDriverUseCase.findIdByLoginId(taxiDriverLoginId);
         registerMatchingUseCase.create(new CreateMatchingRequest(callId, taxiDriverId));
+        log.info("[registerMatchingUseCase.create] 완료");
 
         TaxiType taxiType = getDriverCurrentTaxiTypeUseCase.getCurrentTaxiType(taxiDriverLoginId);
+        log.info("taxiType: {}", taxiType);
         TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(taxiDriverLoginId, TaxiDriverStatus.RESERVED);
+        log.info("taxiDriverStatus: {}", taxiDriverStatus);
 
         // 상태 변경에 따른 redis 처리
         handleDriverStatusUseCase.handleTaxiDriverStatusInRedis(taxiDriverLoginId, taxiDriverStatus, taxiType);

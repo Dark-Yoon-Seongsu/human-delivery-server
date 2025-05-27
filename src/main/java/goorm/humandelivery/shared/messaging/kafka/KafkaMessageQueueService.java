@@ -48,7 +48,7 @@ public class KafkaMessageQueueService implements MessageQueuePort {
         int radiusInKm = 5 * callMessage.getRetryCount();
 
         List<String> availableTaxiDrivers = findNearbyAvailableDriversPort.findNearByAvailableDrivers(callMessage.getCallId(), callMessage.getTaxiType(), callMessage.getExpectedOrigin().getLatitude(), callMessage.getExpectedOrigin().getLongitude(), radiusInKm);
-
+        log.info("callId = {}, origin = {}, radius = {}, found drivers = {}", callMessage.getCallId(), callMessage.getExpectedOrigin(), radiusInKm, availableTaxiDrivers);
         log.info("범위 내 유효한 택시의 수 : {}", availableTaxiDrivers.size());
 
         if (availableTaxiDrivers.isEmpty()) {
