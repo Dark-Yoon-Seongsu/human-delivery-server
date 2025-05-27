@@ -1,6 +1,6 @@
 package goorm.humandelivery.call.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class CallRejectRequest {
 
-    @NotBlank
+    @NotNull
     private Long callId;
 
 }
