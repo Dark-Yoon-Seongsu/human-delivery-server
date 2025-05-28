@@ -1,5 +1,6 @@
 package goorm.humandelivery.global.advice;
 
+import goorm.humandelivery.customer.exception.CustomerNotFoundException;
 import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
 import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import goorm.humandelivery.global.exception.IncorrectPasswordException;
@@ -43,6 +44,14 @@ public class ApiExceptionAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFound(EntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "message", e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<?> handleCustomerNotFound(CustomerNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
                         "message", e.getMessage()
