@@ -19,4 +19,8 @@ public class UpdateDriverLocationRequest {
     private Location location;
 
 
+    public UpdateDriverLocationRequest(String customerLoginId, Location location) {
+        this.customerLoginId = customerLoginId;
+        this.location = location;
+    }
 }

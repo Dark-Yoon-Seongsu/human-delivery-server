@@ -1,124 +1,127 @@
 package goorm.humandelivery.driver.application;
 
-import goorm.humandelivery.shared.dto.response.JwtResponse;
-import goorm.humandelivery.global.exception.IncorrectPasswordException;
-import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
-import goorm.humandelivery.driver.application.port.out.SaveTaxiDriverPort;
-import goorm.humandelivery.driver.application.port.out.SaveTaxiPort;
+import goorm.humandelivery.driver.application.port.out.LoadTaxiDriverPort;
+import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.driver.dto.request.LoginTaxiDriverRequest;
-import goorm.humandelivery.driver.dto.request.RegisterTaxiDriverRequest;
-import goorm.humandelivery.driver.dto.request.RegisterTaxiRequest;
-import org.junit.jupiter.api.AfterEach;
+import goorm.humandelivery.global.exception.IncorrectPasswordException;
+import goorm.humandelivery.global.exception.JwtTokenGenerationException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
+import goorm.humandelivery.shared.dto.response.JwtResponse;
+import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import java.util.Optional;
 
-@SpringBootTest
-public class LoginTaxiDriverServiceTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.given;
 
-    @Autowired
-    private LoginTaxiDriverService loginTaxiDriverService;
+//./gradlew test --tests "goorm.humandelivery.driver.application.LoginTaxiDriverServiceTest"
+@ExtendWith(MockitoExtension.class)
+class LoginTaxiDriverServiceTest {
 
-    @Autowired
-    private RegisterTaxiDriverService registerTaxiDriverService;
+    @Mock
+    LoadTaxiDriverPort loadTaxiDriverPort = mock(LoadTaxiDriverPort.class);
+    @Mock
+    JwtTokenProviderPort jwtTokenProviderPort = mock(JwtTokenProviderPort.class);
+    @Mock
+    BCryptPasswordEncoder bCryptPasswordEncoder = mock(BCryptPasswordEncoder.class);
 
-    @Autowired
-    private SaveTaxiDriverPort saveTaxiDriverPort;
+    @InjectMocks
+    LoginTaxiDriverService loginTaxiDriverService;
 
-    @Autowired
-    private SaveTaxiPort saveTaxiPort;
+    @Test
+    @DisplayName("로그인 성공")
+    void login_success_returnsJwtResponse() {
+        // 요청에 맞춘 loginId와 password
+        String loginId = "driver1";
+        String rawPassword = "password";
 
-    @AfterEach
-    void tearDown() {
-        saveTaxiDriverPort.deleteAllInBatch();
-        saveTaxiPort.deleteAllInBatch();
+        LoginTaxiDriverRequest validRequest = LoginTaxiDriverRequest.builder()
+                .loginId(loginId)
+                .password(rawPassword)
+                .build();
+
+        TaxiDriver taxiDriver = TaxiDriver.builder()
+                .loginId(loginId)
+                .password("encodedPassword")  // DB에 저장된 암호화된 비밀번호
+                .build();
+
+        // given
+        when(loadTaxiDriverPort.findByLoginId(loginId)).thenReturn(Optional.of(taxiDriver));
+        when(bCryptPasswordEncoder.matches(rawPassword, taxiDriver.getPassword())).thenReturn(true);
+        when(jwtTokenProviderPort.generateToken(loginId)).thenReturn("dummy-jwt-token");
+
+        // when
+        JwtResponse response = loginTaxiDriverService.login(validRequest);
+
+        // then
+        assertNotNull(response);
+        assertEquals("dummy-jwt-token", response.getToken());
+        verify(loadTaxiDriverPort).findByLoginId(loginId);
+        verify(bCryptPasswordEncoder).matches(rawPassword, taxiDriver.getPassword());
+        verify(jwtTokenProviderPort).generateToken(loginId);
     }
 
-    @Nested
-    @DisplayName("로그인 테스트")
-    class LoginTest {
 
-        @Test
-        @DisplayName("로그인에 성공하면 JWT 토큰이 반환된다.")
-        void loginSuccess() {
-            // Given
-            RegisterTaxiRequest registerTaxiRequest = new RegisterTaxiRequest();
-            registerTaxiRequest.setModel("Sonata");
-            registerTaxiRequest.setTaxiType("NORMAL");
-            registerTaxiRequest.setFuelType("GASOLINE");
-            registerTaxiRequest.setPlateNumber("12가1234");
+    @Test
+    @DisplayName("로그인 ID가 null이면 IllegalArgumentException 발생")
+    void login_throwsException_whenLoginIdIsNull() {
+        LoginTaxiDriverRequest request = LoginTaxiDriverRequest.builder().loginId(null).password("password").build();
+        assertThrows(IllegalArgumentException.class, () -> loginTaxiDriverService.login(request));
+    }
 
-            RegisterTaxiDriverRequest request = new RegisterTaxiDriverRequest();
-            request.setLoginId("driver1@email.com");
-            request.setPassword("1234");
-            request.setName("홍길동");
-            request.setPhoneNumber("010-1234-5678");
-            request.setLicenseCode("LIC123456");
-            request.setTaxi(registerTaxiRequest);
+    @Test
+    @DisplayName("비밀번호가 null이면 IllegalArgumentException 발생")
+    void login_throwsException_whenPasswordIsNull() {
+        LoginTaxiDriverRequest request = LoginTaxiDriverRequest.builder().loginId("driver1").password(null).build();
+        assertThrows(IllegalArgumentException.class, () -> loginTaxiDriverService.login(request));
+    }
 
-            registerTaxiDriverService.register(request);
+    @Test
+    @DisplayName("존재하지 않는 ID로 로그인하면 TaxiDriverEntityNotFoundException 발생")
+    void login_throwsException_whenTaxiDriverNotFound() {
+        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.empty());
+        LoginTaxiDriverRequest request = LoginTaxiDriverRequest.builder().loginId("driver1").password("password").build();
 
-            LoginTaxiDriverRequest loginRequest = new LoginTaxiDriverRequest();
-            loginRequest.setLoginId("driver1@email.com");
-            loginRequest.setPassword("1234");
+        assertThrows(DriverEntityNotFoundException.class, () -> loginTaxiDriverService.login(request));
+    }
 
-            // When
-            JwtResponse response = loginTaxiDriverService.login(loginRequest);
+    @Test
+    @DisplayName("비밀번호 불일치 시 IncorrectPasswordException 발생")
+    void login_throwsException_whenPasswordDoesNotMatch() {
+        TaxiDriver found = TaxiDriver.builder()
+                .loginId("driver1")
+                .password("hashedPassword")
+                .build();
+        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.of(found));
+        given(bCryptPasswordEncoder.matches("wrongPassword", "hashedPassword")).willReturn(false);
 
-            // Then
-            assertThat(response.getToken()).isNotNull();
-            assertThat(response.getToken()).isNotBlank();
-        }
+        LoginTaxiDriverRequest request = LoginTaxiDriverRequest.builder().loginId("driver1").password("wrongPassword").build();
 
-        @Test
-        @DisplayName("존재하지 않는 아이디로 로그인하면 예외가 발생한다.")
-        void loginWithInvalidLoginId() {
-            // Given
-            LoginTaxiDriverRequest loginRequest = new LoginTaxiDriverRequest();
-            loginRequest.setLoginId("driver1@email.com");
-            loginRequest.setPassword("1234");
 
-            // When
-            // Then
-            assertThatThrownBy(() -> loginTaxiDriverService.login(loginRequest))
-                    .isInstanceOf(TaxiDriverEntityNotFoundException.class)
-                    .hasMessage("아이디에 해당하는 TaxiDriver 엔티티가 존재하지 않습니다.");
-        }
+        assertThrows(IncorrectPasswordException.class, () -> loginTaxiDriverService.login(request));
+    }
 
-        @Test
-        @DisplayName("비밀번호가 틀린 경우 예외가 발생한다.")
-        void loginWithIncorrectPassword() {
-            // Given
-            RegisterTaxiRequest registerTaxiRequest = new RegisterTaxiRequest();
-            registerTaxiRequest.setModel("Sonata");
-            registerTaxiRequest.setTaxiType("NORMAL");
-            registerTaxiRequest.setFuelType("GASOLINE");
-            registerTaxiRequest.setPlateNumber("12가1234");
+    @Test
+    @DisplayName("JWT 발급 중 예외가 발생하면 JwtTokenGenerationException 발생")
+    void login_throwsException_whenJwtTokenGenerationFails() {
+        TaxiDriver found = TaxiDriver.builder()
+                .loginId("driver1")
+                .password("hashedPassword")
+                .build();
+        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.of(found));
+        given(bCryptPasswordEncoder.matches("password", "hashedPassword")).willReturn(true);
+        given(jwtTokenProviderPort.generateToken("driver1")).willThrow(new RuntimeException("JWT 실패"));
 
-            RegisterTaxiDriverRequest request = new RegisterTaxiDriverRequest();
-            request.setLoginId("driver1@email.com");
-            request.setPassword("1234");
-            request.setName("홍길동");
-            request.setPhoneNumber("010-1234-5678");
-            request.setLicenseCode("LIC123456");
-            request.setTaxi(registerTaxiRequest);
+        LoginTaxiDriverRequest request = LoginTaxiDriverRequest.builder().loginId("driver1").password("password").build();
 
-            registerTaxiDriverService.register(request);
-
-            LoginTaxiDriverRequest loginRequest = new LoginTaxiDriverRequest();
-            loginRequest.setLoginId("driver1@email.com");
-            loginRequest.setPassword("0000");
-
-            // When
-            // Then
-            assertThatThrownBy(() -> loginTaxiDriverService.login(loginRequest))
-                    .isInstanceOf(IncorrectPasswordException.class)
-                    .hasMessage("패스워드가 일치하지 않습니다.");
-        }
+        assertThrows(JwtTokenGenerationException.class, () -> loginTaxiDriverService.login(request));
     }
 }
