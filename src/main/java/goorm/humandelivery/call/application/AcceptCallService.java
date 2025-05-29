@@ -15,7 +15,7 @@ import goorm.humandelivery.driver.application.port.in.HandleDriverStatusUseCase;
 import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypePort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
-import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class AcceptCallService implements AcceptCallUseCase {
         acceptCallPort.atomicAcceptCall(callId, taxiDriverLoginId);
 
         Long taxiDriverId = loadTaxiDriverPort.findIdByLoginId(taxiDriverLoginId)
-                .orElseThrow(TaxiDriverEntityNotFoundException::new);
+                .orElseThrow(DriverEntityNotFoundException::new);
         registerMatchingUseCase.create(new CreateMatchingRequest(callId, taxiDriverId));
 
         TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(taxiDriverLoginId);

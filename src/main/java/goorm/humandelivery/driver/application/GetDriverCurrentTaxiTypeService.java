@@ -4,7 +4,7 @@ import goorm.humandelivery.driver.application.port.in.GetDriverCurrentTaxiTypeUs
 import goorm.humandelivery.driver.application.port.out.LoadTaxiDriverTypePort;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.driver.dto.response.TaxiTypeResponse;
-import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import goorm.humandelivery.shared.application.port.out.GetValuePort;
 import goorm.humandelivery.shared.application.port.out.SetValueWithTtlPort;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
@@ -31,7 +31,7 @@ public class GetDriverCurrentTaxiTypeService implements GetDriverCurrentTaxiType
         }
 
         TaxiTypeResponse taxiTypeResponse = loadTaxiDriverTypePort.findTaxiDriversTaxiTypeByLoginId(driverLoginId)
-                .orElseThrow(TaxiDriverEntityNotFoundException::new);
+                .orElseThrow(DriverEntityNotFoundException::new);
         TaxiType taxiType = taxiTypeResponse.getTaxiType();
 
         setValueWithTtlPort.setValueWithTTL(key, taxiType.name(), Duration.ofDays(1));
