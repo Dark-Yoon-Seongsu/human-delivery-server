@@ -1,7 +1,10 @@
 package goorm.humandelivery.call.controller;
 
 import goorm.humandelivery.call.application.port.in.RequestCallUseCase;
+import goorm.humandelivery.call.application.port.out.SaveCallInfoPort;
+import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallInfo;
+import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.call.dto.request.CallAcceptRequest;
 import goorm.humandelivery.call.dto.request.CallMessageRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
@@ -65,6 +68,9 @@ class WebSocketAcceptCallControllerTest {
     SaveCustomerPort saveCustomerPort;
 
     @Autowired
+    SaveCallInfoPort saveCallInfoPort;
+
+    @Autowired
     RequestCallUseCase requestCallUseCase;
 
     @Autowired
@@ -95,6 +101,8 @@ class WebSocketAcceptCallControllerTest {
     StringRedisTemplate stringRedisTemplate;
 
     WebSocketStompClient webSocketStompClient;
+    @Autowired
+    private SetCallWithPort setCallWithPort;
 
     @AfterEach
     void tearDown() {
@@ -179,11 +187,11 @@ class WebSocketAcceptCallControllerTest {
         Customer savedCustomer = saveCustomerPort.save(new Customer("test", "test", "test", "test"));
         Location expectedOrigin = new Location(38.2, 11.1);
         Location expectedDestination = new Location(39.3, 12.2);
-        requestCallUseCase.requestCall(new CallMessageRequest(expectedOrigin, expectedDestination, TaxiType.NORMAL, 1), savedCustomer.getLoginId());
+        CallInfo callInfo = new CallInfo(null, savedCustomer, expectedOrigin, expectedDestination, TaxiType.NORMAL);
+        CallInfo savedCallInfo = saveCallInfoPort.save(callInfo);
+        setCallWithPort.setCallWith(savedCallInfo.getId(), CallStatus.SENT);
 
-        List<CallInfo> callInfos = jpaCallInfoRepository.findAll();
-        CallInfo callInfo = callInfos.getFirst();
-        Long target = callInfo.getId();
+        Long target = savedCallInfo.getId();
         CallAcceptRequest callAcceptRequest = new CallAcceptRequest();
         callAcceptRequest.setCallId(target);
 
