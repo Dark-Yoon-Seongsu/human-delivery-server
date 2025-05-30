@@ -5,12 +5,12 @@ import goorm.humandelivery.call.application.port.out.NotifyDispatchFailedToCusto
 import goorm.humandelivery.call.application.port.out.SendCallRequestToDriverPort;
 import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallStatus;
+import goorm.humandelivery.global.exception.NoAvailableTaxiException;
 import goorm.humandelivery.shared.application.port.out.MessageQueuePort;
 import goorm.humandelivery.shared.dto.response.ErrorResponse;
 import goorm.humandelivery.shared.location.application.port.out.FindNearbyAvailableDriversPort;
 import goorm.humandelivery.shared.messaging.CallMessage;
 import goorm.humandelivery.shared.messaging.QueueMessage;
-import goorm.humandelivery.global.exception.NoAvailableTaxiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package goorm.humandelivery.driver.infrastructure.messaging;
 
-import goorm.humandelivery.driver.dto.response.DriverLocationResponse;
 import goorm.humandelivery.driver.application.port.out.SendDriverLocationToCustomerPort;
+import goorm.humandelivery.driver.dto.response.DriverLocationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;

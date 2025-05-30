@@ -3,6 +3,7 @@ package goorm.humandelivery.call.controller;
 import goorm.humandelivery.call.application.port.in.RejectCallUseCase;
 import goorm.humandelivery.call.dto.request.CallRejectRequest;
 import goorm.humandelivery.call.dto.response.CallRejectResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -20,7 +21,7 @@ public class WebSocketRejectCallController {
     // 콜 요청 거절
     @MessageMapping("/reject-call")
     @SendToUser("/queue/reject-call-result")
-    public CallRejectResponse rejectTaxiCall(CallRejectRequest request, Principal principal) {
+    public CallRejectResponse rejectTaxiCall(@Valid CallRejectRequest request, Principal principal) {
         return rejectCallUseCase.addRejectedDriverToCall(request.getCallId(), principal.getName());
     }
 }

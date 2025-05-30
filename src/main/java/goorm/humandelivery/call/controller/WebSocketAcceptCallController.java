@@ -3,6 +3,7 @@ package goorm.humandelivery.call.controller;
 import goorm.humandelivery.call.application.port.in.AcceptCallUseCase;
 import goorm.humandelivery.call.dto.request.CallAcceptRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -20,7 +21,7 @@ public class WebSocketAcceptCallController {
     // 콜 요청 수락
     @MessageMapping("/accept-call")
     @SendToUser("/queue/accept-call-result")
-    public CallAcceptResponse acceptTaxiCall(CallAcceptRequest request, Principal principal) {
+    public CallAcceptResponse acceptTaxiCall(@Valid CallAcceptRequest request, Principal principal) {
         return acceptCallUseCase.acceptCall(request, principal.getName());
     }
 
