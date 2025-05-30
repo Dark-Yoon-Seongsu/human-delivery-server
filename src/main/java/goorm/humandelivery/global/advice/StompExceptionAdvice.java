@@ -47,9 +47,9 @@ public class StompExceptionAdvice {
         return new ErrorResponse("CallInfoEntityNotFoundException", ex.getMessage());
     }
 
-    @MessageExceptionHandler(TaxiDriverEntityNotFoundException.class)
+    @MessageExceptionHandler(DriverEntityNotFoundException.class)
     @SendToUser("/queue/errors") // /user/queue/errors
-    public ErrorResponse handleTaxiDriverEntityNotFoundException(TaxiDriverEntityNotFoundException ex) {
+    public ErrorResponse handleTaxiDriverEntityNotFoundException(DriverEntityNotFoundException ex) {
         log.error("exception: {}", ex.getClass());
         return new ErrorResponse("TaxiDriverEntityNotFoundException", ex.getMessage());
     }

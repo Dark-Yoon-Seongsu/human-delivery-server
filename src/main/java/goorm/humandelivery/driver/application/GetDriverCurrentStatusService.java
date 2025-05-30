@@ -3,7 +3,7 @@ package goorm.humandelivery.driver.application;
 import goorm.humandelivery.driver.application.port.in.GetDriverCurrentStatusUseCase;
 import goorm.humandelivery.driver.application.port.out.LoadTaxiDriverPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
-import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import goorm.humandelivery.shared.application.port.out.GetValuePort;
 import goorm.humandelivery.shared.application.port.out.SetValueWithTtlPort;
 import goorm.humandelivery.shared.redis.RedisKeyParser;
@@ -30,8 +30,8 @@ public class GetDriverCurrentStatusService implements GetDriverCurrentStatusUseC
             return TaxiDriverStatus.valueOf(status);
         }
 
-        TaxiDriverStatus dbStatus = loadTaxiDriverPort.findTaxiDriverByLoginId(driverLoginId)
-                .orElseThrow(TaxiDriverEntityNotFoundException::new)
+        TaxiDriverStatus dbStatus = loadTaxiDriverPort.findByLoginId(driverLoginId)
+                .orElseThrow(DriverEntityNotFoundException::new)
                 .getStatus();
 
         setValueWithTtlPort.setValueWithTTL(key, dbStatus.name(), Duration.ofHours(1));

@@ -21,7 +21,7 @@ public class WebSocketUpdateDriverStatusController {
 
     @MessageMapping("/update-status")
     @SendToUser("/queue/taxi-driver-status")
-    public UpdateTaxiDriverStatusResponse updateStatus(@RequestBody @Valid UpdateTaxiDriverStatusRequest request, Principal principal) {
+    public UpdateTaxiDriverStatusResponse updateStatus(UpdateTaxiDriverStatusRequest request, Principal principal) {
         return updateDriverStatusUseCase.updateStatus(request, principal.getName());
     }
 }

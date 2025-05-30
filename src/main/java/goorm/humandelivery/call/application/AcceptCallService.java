@@ -42,6 +42,7 @@ public class AcceptCallService implements AcceptCallUseCase {
         acceptCallPort.atomicAcceptCall(callId, taxiDriverLoginId);
 
         Long taxiDriverId = getTaxiDriverUseCase.findIdByLoginId(taxiDriverLoginId);
+      
         registerMatchingUseCase.create(new CreateMatchingRequest(callId, taxiDriverId));
         log.info("[registerMatchingUseCase.create] 완료");
 

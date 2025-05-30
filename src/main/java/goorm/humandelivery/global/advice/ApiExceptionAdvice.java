@@ -1,6 +1,7 @@
 package goorm.humandelivery.global.advice;
 
 import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import goorm.humandelivery.global.exception.IncorrectPasswordException;
 import goorm.humandelivery.shared.dto.response.ErrorResponse;
@@ -35,7 +36,7 @@ public class ApiExceptionAdvice {
 
     @ExceptionHandler(IncorrectPasswordException.class)
     public ResponseEntity<?> handleIncorrectPassword(IncorrectPasswordException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of(
                         "message", e.getMessage()
                 ));
@@ -43,6 +44,14 @@ public class ApiExceptionAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<?> handleEntityNotFound(EntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "message", e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(DriverEntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFound(DriverEntityNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of(
                         "message", e.getMessage()
