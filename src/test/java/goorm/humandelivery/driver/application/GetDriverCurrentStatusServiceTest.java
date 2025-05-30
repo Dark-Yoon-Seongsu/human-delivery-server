@@ -43,7 +43,7 @@ class GetDriverCurrentStatusServiceTest {
         TaxiDriverStatus status = service.getCurrentStatus("driver1");
 
         assertEquals(TaxiDriverStatus.ON_DRIVING, status);
-        verify(loadTaxiDriverPort, never()).findByLoginId(any());
+        verify(loadTaxiDriverPort, never()).findTaxiDriverByLoginId(any());
         verify(setValueWithTtlPort, never()).setValueWithTTL(any(), any(), any());
     }
 
@@ -54,7 +54,7 @@ class GetDriverCurrentStatusServiceTest {
 
         TaxiDriver mockDriver = mock(TaxiDriver.class);
         when(mockDriver.getStatus()).thenReturn(TaxiDriverStatus.AVAILABLE);
-        when(loadTaxiDriverPort.findByLoginId("driver1")).thenReturn(Optional.of(mockDriver));
+        when(loadTaxiDriverPort.findTaxiDriverByLoginId("driver1")).thenReturn(Optional.of(mockDriver));
 
         TaxiDriverStatus status = service.getCurrentStatus("driver1");
 
@@ -67,7 +67,7 @@ class GetDriverCurrentStatusServiceTest {
     @DisplayName("Redis에도 없고 DB에도 기사 정보가 없으면 예외 발생")
     void getCurrentStatus_notFound() {
         when(getValuePort.getValue("taxidriver:driver1:status")).thenReturn(null);
-        when(loadTaxiDriverPort.findByLoginId("driver1")).thenReturn(Optional.empty());
+        when(loadTaxiDriverPort.findTaxiDriverByLoginId("driver1")).thenReturn(Optional.empty());
 
         assertThrows(DriverEntityNotFoundException.class, () -> service.getCurrentStatus("driver1"));
     }

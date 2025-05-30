@@ -30,15 +30,15 @@ public class LoginTaxiDriverService implements LoginTaxiDriverUseCase {
         String loginId = loginTaxiDriverRequest.getLoginId();
         String password = loginTaxiDriverRequest.getPassword();
 
-//         if (loginId == null || loginId.trim().isEmpty()) {
-//             throw new IllegalArgumentException("로그인 ID는 필수입니다.");
-//         }
+         if (loginId == null || loginId.trim().isEmpty()) {
+             throw new IllegalArgumentException("로그인 ID는 필수입니다.");
+         }
 
-//         if (password == null || password.trim().isEmpty()) {
-//             throw new IllegalArgumentException("비밀번호는 필수입니다.");
-//         }
+         if (password == null || password.trim().isEmpty()) {
+             throw new IllegalArgumentException("비밀번호는 필수입니다.");
+         }
 
-        TaxiDriver taxiDriver = loadTaxiDriverPort.findByLoginId(loginId)
+        TaxiDriver taxiDriver = loadTaxiDriverPort.findTaxiDriverByLoginId(loginId)
                 .orElseThrow(DriverEntityNotFoundException::new);
 
 

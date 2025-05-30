@@ -10,7 +10,7 @@ import goorm.humandelivery.driver.application.port.out.SaveTaxiDriverPort;
 import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.driver.infrastructure.persistence.JpaTaxiDriverRepository;
 import goorm.humandelivery.global.exception.CallInfoEntityNotFoundException;
-import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -103,8 +103,8 @@ class RegisterMatchingServiceTest {
             // When
             // Then
             assertThatThrownBy(() -> registerMatchingService.create(createMatchingRequest))
-                    .isInstanceOf(TaxiDriverEntityNotFoundException.class)
-                    .hasMessage("아이디에 해당하는 TaxiDriver 엔티티가 존재하지 않습니다.");
+                    .isInstanceOf(DriverEntityNotFoundException.class)
+                    .hasMessage("아이디에 해당하는 엔티티가 존재하지 않습니다.");
         }
     }
 

@@ -42,7 +42,7 @@ class ChangeTaxiDriverStatusServiceTest {
     @DisplayName("상태 변경 성공")
     void changeStatus_success() {
         // given
-        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.of(taxiDriver));
+        given(loadTaxiDriverPort.findTaxiDriverByLoginId("driver1")).willReturn(Optional.of(taxiDriver));
 
         // when
         TaxiDriverStatus result = changeTaxiDriverStatusService.changeStatus("driver1", TaxiDriverStatus.ON_DRIVING);
@@ -55,7 +55,7 @@ class ChangeTaxiDriverStatusServiceTest {
     @DisplayName("존재하지 않는 loginId로 조회 시 TaxiDriverEntityNotFoundException 발생")
     void changeStatus_driverNotFound() {
         // given
-        given(loadTaxiDriverPort.findByLoginId("invalidDriver")).willReturn(Optional.empty());
+        given(loadTaxiDriverPort.findTaxiDriverByLoginId("invalidDriver")).willReturn(Optional.empty());
 
         // when & then
         assertThrows(DriverEntityNotFoundException.class, () -> {
@@ -67,7 +67,7 @@ class ChangeTaxiDriverStatusServiceTest {
     @DisplayName("변경할 상태가 null이면 IllegalArgumentException 발생")
     void changeStatus_nullStatus() {
         // given
-        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.of(taxiDriver));
+        given(loadTaxiDriverPort.findTaxiDriverByLoginId("driver1")).willReturn(Optional.of(taxiDriver));
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> {

@@ -54,7 +54,7 @@ class LoginTaxiDriverServiceTest {
                 .build();
 
         // given
-        when(loadTaxiDriverPort.findByLoginId(loginId)).thenReturn(Optional.of(taxiDriver));
+        when(loadTaxiDriverPort.findTaxiDriverByLoginId(loginId)).thenReturn(Optional.of(taxiDriver));
         when(bCryptPasswordEncoder.matches(rawPassword, taxiDriver.getPassword())).thenReturn(true);
         when(jwtTokenProviderPort.generateToken(loginId)).thenReturn("dummy-jwt-token");
 
@@ -64,7 +64,7 @@ class LoginTaxiDriverServiceTest {
         // then
         assertNotNull(response);
         assertEquals("dummy-jwt-token", response.getToken());
-        verify(loadTaxiDriverPort).findByLoginId(loginId);
+        verify(loadTaxiDriverPort).findTaxiDriverByLoginId(loginId);
         verify(bCryptPasswordEncoder).matches(rawPassword, taxiDriver.getPassword());
         verify(jwtTokenProviderPort).generateToken(loginId);
     }
@@ -87,7 +87,7 @@ class LoginTaxiDriverServiceTest {
     @Test
     @DisplayName("존재하지 않는 ID로 로그인하면 TaxiDriverEntityNotFoundException 발생")
     void login_throwsException_whenTaxiDriverNotFound() {
-        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.empty());
+        given(loadTaxiDriverPort.findTaxiDriverByLoginId("driver1")).willReturn(Optional.empty());
         LoginTaxiDriverRequest request = LoginTaxiDriverRequest.builder().loginId("driver1").password("password").build();
 
         assertThrows(DriverEntityNotFoundException.class, () -> loginTaxiDriverService.login(request));
@@ -100,7 +100,7 @@ class LoginTaxiDriverServiceTest {
                 .loginId("driver1")
                 .password("hashedPassword")
                 .build();
-        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.of(found));
+        given(loadTaxiDriverPort.findTaxiDriverByLoginId("driver1")).willReturn(Optional.of(found));
         given(bCryptPasswordEncoder.matches("wrongPassword", "hashedPassword")).willReturn(false);
 
         LoginTaxiDriverRequest request = LoginTaxiDriverRequest.builder().loginId("driver1").password("wrongPassword").build();
@@ -116,7 +116,7 @@ class LoginTaxiDriverServiceTest {
                 .loginId("driver1")
                 .password("hashedPassword")
                 .build();
-        given(loadTaxiDriverPort.findByLoginId("driver1")).willReturn(Optional.of(found));
+        given(loadTaxiDriverPort.findTaxiDriverByLoginId("driver1")).willReturn(Optional.of(found));
         given(bCryptPasswordEncoder.matches("password", "hashedPassword")).willReturn(true);
         given(jwtTokenProviderPort.generateToken("driver1")).willThrow(new RuntimeException("JWT 실패"));
 
