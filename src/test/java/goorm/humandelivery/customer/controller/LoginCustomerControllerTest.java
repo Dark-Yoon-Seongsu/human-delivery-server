@@ -81,8 +81,8 @@ public class LoginCustomerControllerTest {
         }
 
         @Test
-        @DisplayName("잘못된 비밀번호로 로그인하면 400 에러가 발생한다.")
-        void login_WrongPassword_ReturnsBadRequest() throws Exception {
+        @DisplayName("잘못된 비밀번호로 로그인하면 401 에러가 발생한다.")
+        void login_WrongPassword_ReturnsUnauthorized() throws Exception {
             // Given - 회원가입 먼저 진행
             RegisterCustomerRequest registerRequest = new RegisterCustomerRequest(
                 "testuser", "password123", "홍길동", "010-1234-5678"
@@ -96,7 +96,7 @@ public class LoginCustomerControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(loginRequest)))
                     .andDo(print())
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isUnauthorized());
         }
 
         @Test
