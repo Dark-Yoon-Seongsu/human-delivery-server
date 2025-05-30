@@ -52,6 +52,7 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
          */
 
         config.enableSimpleBroker("/topic", "/queue");
+        config.setUserDestinationPrefix("/user");
 
         /**
          * RabbitMQ 를 외부 메세지 브로커로 사용.

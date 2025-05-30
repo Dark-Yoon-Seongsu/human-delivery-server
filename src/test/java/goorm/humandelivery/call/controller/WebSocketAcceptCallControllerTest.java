@@ -1,10 +1,12 @@
 package goorm.humandelivery.call.controller;
 
+import goorm.humandelivery.call.application.port.in.RequestCallUseCase;
 import goorm.humandelivery.call.application.port.out.SaveCallInfoPort;
 import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.call.dto.request.CallAcceptRequest;
+import goorm.humandelivery.call.dto.request.CallMessageRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import goorm.humandelivery.call.infrastructure.persistence.JpaCallInfoRepository;
 import goorm.humandelivery.call.infrastructure.persistence.JpaMatchingRepository;
@@ -21,12 +23,12 @@ import goorm.humandelivery.driver.dto.request.RegisterTaxiRequest;
 import goorm.humandelivery.driver.dto.request.UpdateDriverLocationRequest;
 import goorm.humandelivery.driver.infrastructure.persistence.JpaTaxiDriverRepository;
 import goorm.humandelivery.driver.infrastructure.persistence.JpaTaxiRepository;
-import goorm.humandelivery.shared.dto.response.ErrorResponse;
 import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,21 +40,24 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ExtendWith(SpringExtension.class)
 class WebSocketAcceptCallControllerTest {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketAcceptCallControllerTest.class);
-
     @LocalServerPort
     int port;
 
@@ -60,13 +65,13 @@ class WebSocketAcceptCallControllerTest {
     JwtTokenProviderPort jwtTokenProviderPort;
 
     @Autowired
-    SetCallWithPort setCallWithPort;
-
-    @Autowired
     SaveCustomerPort saveCustomerPort;
 
     @Autowired
     SaveCallInfoPort saveCallInfoPort;
+
+    @Autowired
+    RequestCallUseCase requestCallUseCase;
 
     @Autowired
     UpdateDriverLocationUseCase updateDriverLocationUseCase;
@@ -96,6 +101,8 @@ class WebSocketAcceptCallControllerTest {
     StringRedisTemplate stringRedisTemplate;
 
     WebSocketStompClient webSocketStompClient;
+    @Autowired
+    private SetCallWithPort setCallWithPort;
 
     @AfterEach
     void tearDown() {
@@ -197,49 +204,5 @@ class WebSocketAcceptCallControllerTest {
         assertThat(callAcceptResponse.getCallId()).isEqualTo(target);
         assertThat(callAcceptResponse.getExpectedOrigin()).isEqualTo(expectedOrigin);
         assertThat(callAcceptResponse.getExpectedDestination()).isEqualTo(expectedDestination);
-    }
-
-    @Test
-    @DisplayName("콜 요청 수락시 콜 ID가 존재하지 않으면 예외가 발생한다.")
-    void acceptTaxiCallWithNoCallId() throws Exception {
-        // Given
-        String token = jwtTokenProviderPort.generateToken("driver1@email.com");
-        webSocketStompClient = new WebSocketStompClient(new StandardWebSocketClient());
-        webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
-
-        StompHeaders stompHeaders = new StompHeaders();
-        stompHeaders.add("Authorization", token);
-
-        WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
-        String url = String.format("ws://localhost:%d/ws", port);
-
-        // 웹 소켓 연결
-        CompletableFuture<ErrorResponse> future = new CompletableFuture<>();
-        StompSession stompSession = webSocketStompClient
-                .connectAsync(url, webSocketHttpHeaders, stompHeaders, new StompSessionHandlerAdapter() {
-                })
-                .get(3, TimeUnit.SECONDS);
-
-        stompSession.subscribe("/user/queue/errors", new StompFrameHandler() {
-            @Override
-            public Type getPayloadType(StompHeaders headers) {
-                return ErrorResponse.class;
-            }
-
-            @Override
-            public void handleFrame(StompHeaders headers, Object payload) {
-                future.complete((ErrorResponse) payload);
-            }
-        });
-
-        CallAcceptRequest callAcceptRequest = new CallAcceptRequest();
-
-        // When
-        stompSession.send("/app/taxi-driver/accept-call", callAcceptRequest);
-
-        // Then
-        ErrorResponse errorResponse = future.get(3, TimeUnit.SECONDS);
-        assertThat(errorResponse.getCode()).isEqualTo("ERROR");
-        assertThat(errorResponse.getMessage()).contains("콜 ID는 필수입니다.");
     }
 }

@@ -6,6 +6,7 @@ import goorm.humandelivery.call.application.port.out.RemoveRejectedDriversForCal
 import goorm.humandelivery.driver.application.port.in.DeleteAssignedCallUseCase;
 import goorm.humandelivery.driver.application.port.out.DeleteAssignedCallPort;
 import goorm.humandelivery.driver.application.port.out.GetAssignedCallPort;
+import goorm.humandelivery.global.exception.InvalidCallIdFormatException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,15 +30,26 @@ public class DeleteAssignedCallService implements DeleteAssignedCallUseCase {
         Optional<String> callIdStr = getAssignedCallPort.getCallIdByDriverId(taxiDriverLoginId);
 
         if (callIdStr.isEmpty()) {
-            log.info("[DeleteAssignedCallUseCase.deleteCallBy 호출] 해당 기사가 가진 콜 정보가 없습니다. taxiDriverId : {}", taxiDriverLoginId);
+            log.info("[DeleteAssignedCallUseCase.deleteCallBy] 해당 기사가 가진 콜 정보가 없습니다. taxiDriverId : {}", taxiDriverLoginId);
             return;
         }
 
-        Long callId = Long.parseLong(callIdStr.get());
+        String callIdRaw = callIdStr.get();
+
+        if (!isNumeric(callIdRaw)) {
+            log.info("[DeleteAssignedCallUseCase.deleteCallBy] callId가 잘못된 형식입니다. 입력값: {}", callIdRaw);
+            throw new InvalidCallIdFormatException(callIdRaw);
+        }
+
+        Long callId = Long.parseLong(callIdRaw);
 
         deleteCallStatusPort.deleteCallStatus(callId);
         deleteAssignedCallPort.deleteAssignedCallOf(taxiDriverLoginId);
-        deleteCallKeyDirectlyPort.deleteCallKey(callId); // callId 자체를 key로 삭제
+        deleteCallKeyDirectlyPort.deleteCallKey(callId);
         removeRejectedDriversForCallPort.removeRejectedDrivers(callId);
+    }
+
+    private boolean isNumeric(String str) {
+        return str != null && str.matches("\\d+");
     }
 }

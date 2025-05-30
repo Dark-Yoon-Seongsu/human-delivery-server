@@ -24,8 +24,9 @@ public class RegisterMatchingService implements RegisterMatchingUseCase {
 
     @Override
     public void create(CreateMatchingRequest createMatchingRequest) {
-        CallInfo call = loadCallInfoPort.findCallInfoById(createMatchingRequest.getCallId())
+        CallInfo call = loadCallInfoPort.findById(createMatchingRequest.getCallId())
                 .orElseThrow(CallInfoEntityNotFoundException::new);
+
         TaxiDriver driver = getTaxiDriverUseCase.findById(createMatchingRequest.getTaxiDriverId());
 
         Matching matching = Matching.builder()

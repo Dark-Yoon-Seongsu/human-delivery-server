@@ -23,19 +23,21 @@ repositories {
 	mavenCentral()
 }
 
+configurations.all {
+	exclude group: 'org.slf4j', module: 'slf4j-simple'
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.kafka:spring-kafka'
-	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	runtimeOnly 'com.h2database:h2'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 
 	// spring security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -65,10 +67,26 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 //	testImplementation 'io.projectreactor:reactor-test'
 
-
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'com.h2database:h2'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+	testImplementation("org.mockito:mockito-inline:5.2.0") {
+		exclude group: "org.mockito", module: "mockito-core"
+	}
+	testImplementation 'it.ozimov:embedded-redis:0.7.3'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 }
 
+
 tasks.named('test') {
 	useJUnitPlatform()
+
+	testLogging {
+		events "passed", "failed", "skipped"
+		showStandardStreams = true
+		exceptionFormat = 'full'
+	}
 }

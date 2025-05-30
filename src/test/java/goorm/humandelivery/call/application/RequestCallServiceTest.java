@@ -10,6 +10,7 @@ import goorm.humandelivery.customer.infrastructure.persistence.JpaCustomerReposi
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.shared.application.port.out.MessageQueuePort;
 import goorm.humandelivery.shared.location.domain.Location;
+import goorm.humandelivery.shared.messaging.CallMessage;
 import goorm.humandelivery.shared.messaging.QueueMessage;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;

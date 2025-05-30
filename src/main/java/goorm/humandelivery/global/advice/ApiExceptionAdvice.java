@@ -1,6 +1,8 @@
 package goorm.humandelivery.global.advice;
 
+import goorm.humandelivery.customer.exception.CustomerNotFoundException;
 import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import goorm.humandelivery.global.exception.IncorrectPasswordException;
 import goorm.humandelivery.shared.dto.response.ErrorResponse;
@@ -35,7 +37,7 @@ public class ApiExceptionAdvice {
 
     @ExceptionHandler(IncorrectPasswordException.class)
     public ResponseEntity<?> handleIncorrectPassword(IncorrectPasswordException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of(
                         "message", e.getMessage()
                 ));
@@ -48,6 +50,20 @@ public class ApiExceptionAdvice {
                         "message", e.getMessage()
                 ));
     }
+
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<?> handleCustomerNotFound(CustomerNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", e.getMessage()));
+}
+
+    @ExceptionHandler(DriverEntityNotFoundException.class)
+    public ResponseEntity<?> handleDriverNotFound(DriverEntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", e.getMessage()));
+}
+
 
     /**
      * GET : /api/v1/taxi-driver/token-info
