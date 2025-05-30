@@ -33,6 +33,8 @@ public class SecurityConfig {
                                 "/api/v1/customer",
                                 "/api/v1/customer/auth-tokens",
                                 "/ws/**",
+                                "/topic/**",           // 🔥 추가: 브로커 구독 경로
+                                "/app/**",
                                 "/actuator/**"
                         ).permitAll()
                         .anyRequest().authenticated()

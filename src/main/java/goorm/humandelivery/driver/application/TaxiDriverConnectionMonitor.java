@@ -66,45 +66,82 @@ public class TaxiDriverConnectionMonitor {
 
         // 3. reservedDrivers 의 마지막 위치정보 시간 조회
         for (String driverLoginId : reservedDrivers) {
+            try {
             String lastUpdateStr = getDriverLastUpdatePort.getLastUpdate(driverLoginId);
 
-            if (lastUpdateStr == null || now - Long.parseLong(lastUpdateStr) > TIMEOUT_MILLIS) {
+
+            long lastUpdated;
+            try {
+                lastUpdated = Long.parseLong(lastUpdateStr);
+            } catch (NumberFormatException e) {
+                log.error("[monitorReservedTaxiDrivers.TaxiDriverConnectionMonitor] 잘못된 lastUpdate 값: {}, driverId: {}", lastUpdateStr, driverLoginId, e);
+                continue; // 다음 드라이버로 계속
+            }
+
+
+
+            if (lastUpdateStr == null || now - lastUpdated > TIMEOUT_MILLIS) {
                 log.warn("[{}] 위치 갱신 시간 초과.", driverLoginId);
 
                 // 1. call Id 조회
                 Optional<String> callIdOptional = getAssignedCallPort.getCallIdByDriverId(driverLoginId);
 
-                if (callIdOptional.isEmpty()) {
-                    // 해당 택시기사 상태 OFF_DUTY 로 DB 에서 변경..
-                    TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(driverLoginId);
+                TaxiType taxiType;
+                try {
+                    taxiType = getDriverTaxiTypePort.getDriverTaxiType(driverLoginId);
+                    if (taxiType == null) {
+                        log.error("[monitorReservedTaxiDrivers] taxiType is null for driverId: {}", driverLoginId);
+                        continue;
+                    }
+                } catch (Exception e) {
+                    log.error("[monitorReservedTaxiDrivers] taxiType 조회 실패 driverId: {}", driverLoginId, e);
+                    continue;
+                }
 
-                    // 택시기사 상태 변경에 따른 Redis 내부 처리 로직 수행
+
+                if (callIdOptional.isEmpty()) {
                     TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(driverLoginId, OFF_DUTY);
                     handleDriverStatusUseCase.handleTaxiDriverStatusInRedis(driverLoginId, taxiDriverStatus, taxiType);
-
                     log.info("[monitorReservedTaxiDrivers.TaxiDriverConnectionMonitor] 배차 실패. 택시기사 ID : {}", driverLoginId);
                     continue;
                 }
 
                 Long callId = Long.valueOf(callIdOptional.get());
-                String customerLoginId = loadCallInfoPort.findCustomerLoginIdByCallId(callId)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 callId의 고객 정보가 없습니다."));
+                String customerLoginId;
+                try {
+                    customerLoginId = loadCallInfoPort.findCustomerLoginIdByCallId(callId)
+                            .orElseThrow(() -> new IllegalArgumentException("해당 callId의 고객 정보가 없습니다."));
+                } catch (Exception e) {
+                    log.error("[monitorReservedTaxiDrivers] 고객 정보 조회 실패 callId: {}, driverId: {}", callId, driverLoginId, e);
+                    continue;
+                }
 
-                // 매칭 엔티티 삭제
-                deleteMatchingUseCase.deleteByCallId(callId);
+                try {
+                    deleteMatchingUseCase.deleteByCallId(callId);
+                } catch (Exception e) {
+                    log.error("[monitorReservedTaxiDrivers] 매칭 삭제 실패 callId: {}", callId, e);
+                    // Fail-safe: 계속 진행
+                }
 
-                // 3. 해당 택시기사 상태 OFF_DUTY 로 DB 에서 변경..
-                TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(driverLoginId);
-
-                // 4. 택시기사 상태 변경에 따른 Redis 내부 처리 로직 수행
                 TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(driverLoginId, OFF_DUTY);
                 handleDriverStatusUseCase.handleTaxiDriverStatusInRedis(driverLoginId, taxiDriverStatus, taxiType);
 
-                // 5. 고객 및 택시에게 예외 메세지 전송
-                log.info("[monitorReservedTaxiDrivers.TaxiDriverConnectionMonitor] 배차 실패. 예외 메세지 전송. 콜 ID : {}, 유저 ID : {}, 택시기사 ID : {}", callId, customerLoginId, driverLoginId);
-                sendDispatchFailToCustomerPort.sendToCustomer(customerLoginId, new ErrorResponse("배차실패", "택시와 연결이 끊어졌습니다. 다시 배차를 시도합니다."));
-                sendDispatchFailToDriverPort.sendToDriver(driverLoginId, new ErrorResponse("배차취소", "위치 미전송으로 인해 배차가 취소되었습니다."));
 
+                try {
+                    sendDispatchFailToCustomerPort.sendToCustomer(customerLoginId, new ErrorResponse("배차실패", "택시와 연결이 끊어졌습니다. 다시 배차를 시도합니다."));
+                } catch (Exception e) {
+                    log.error("[monitorReservedTaxiDrivers] 고객 메시지 전송 실패. userId: {}", customerLoginId, e);
+                }
+
+                try {
+                    sendDispatchFailToDriverPort.sendToDriver(driverLoginId, new ErrorResponse("배차취소", "위치 미전송으로 인해 배차가 취소되었습니다."));
+                } catch (Exception e) {
+                    log.error("[monitorReservedTaxiDrivers] 드라이버 메시지 전송 실패. driverId: {}", driverLoginId, e);
+                }
+            }
+
+            } catch (Exception e) {
+                log.error("[monitorReservedTaxiDrivers] 처리 중 예외 발생. driverId: {}", driverLoginId, e);
             }
 
         }

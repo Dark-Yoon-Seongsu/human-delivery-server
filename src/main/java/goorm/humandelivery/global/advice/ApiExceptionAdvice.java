@@ -51,6 +51,7 @@ public class ApiExceptionAdvice {
                 ));
     }
 
+
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<?> handleCustomerNotFound(CustomerNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -62,6 +63,7 @@ public class ApiExceptionAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", e.getMessage()));
 }
+
 
     /**
      * GET : /api/v1/taxi-driver/token-info

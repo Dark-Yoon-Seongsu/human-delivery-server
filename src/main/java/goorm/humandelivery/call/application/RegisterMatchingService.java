@@ -9,7 +9,7 @@ import goorm.humandelivery.call.domain.Matching;
 import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
 import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.global.exception.CallInfoEntityNotFoundException;
-import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class RegisterMatchingService implements RegisterMatchingUseCase {
         CallInfo call = loadCallInfoPort.findById(createMatchingRequest.getCallId())
                 .orElseThrow(CallInfoEntityNotFoundException::new);
         TaxiDriver driver = loadTaxiDriverPort.findById(createMatchingRequest.getTaxiDriverId())
-                .orElseThrow(TaxiDriverEntityNotFoundException::new);
+                .orElseThrow(DriverEntityNotFoundException::new);
 
         Matching matching = Matching.builder()
                 .callInfo(call)

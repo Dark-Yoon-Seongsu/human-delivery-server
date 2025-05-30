@@ -5,7 +5,8 @@ import goorm.humandelivery.driver.application.port.out.LoadTaxiDriverPort;
 import goorm.humandelivery.driver.domain.TaxiDriver;
 import goorm.humandelivery.driver.dto.request.LoginTaxiDriverRequest;
 import goorm.humandelivery.global.exception.IncorrectPasswordException;
-import goorm.humandelivery.global.exception.TaxiDriverEntityNotFoundException;
+import goorm.humandelivery.global.exception.JwtTokenGenerationException;
+import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import goorm.humandelivery.shared.dto.response.JwtResponse;
 import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +27,31 @@ public class LoginTaxiDriverService implements LoginTaxiDriverUseCase {
 
     @Override
     public JwtResponse login(LoginTaxiDriverRequest loginTaxiDriverRequest) {
-        TaxiDriver taxiDriver = loadTaxiDriverPort.findByLoginId(loginTaxiDriverRequest.getLoginId())
-                .orElseThrow(TaxiDriverEntityNotFoundException::new);
+        String loginId = loginTaxiDriverRequest.getLoginId();
+        String password = loginTaxiDriverRequest.getPassword();
 
-        // 패스워드 검증
-        if (!bCryptPasswordEncoder.matches(loginTaxiDriverRequest.getPassword(), taxiDriver.getPassword())) {
+        if (loginId == null || loginId.trim().isEmpty()) {
+            throw new IllegalArgumentException("로그인 ID는 필수입니다.");
+        }
+
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("비밀번호는 필수입니다.");
+        }
+
+        TaxiDriver taxiDriver = loadTaxiDriverPort.findByLoginId(loginId)
+                .orElseThrow(DriverEntityNotFoundException::new);
+
+
+
+        if (!bCryptPasswordEncoder.matches(password, taxiDriver.getPassword())) {
             throw new IncorrectPasswordException();
         }
 
-        String token = jwtTokenProviderPort.generateToken(loginTaxiDriverRequest.getLoginId());
-
-        return new JwtResponse(token);
+        try {
+            String token = jwtTokenProviderPort.generateToken(loginId);
+            return new JwtResponse(token);
+        } catch (Exception e) {
+            throw new JwtTokenGenerationException("JWT 토큰 발급에 실패했습니다.", e);
+        }
     }
 }
