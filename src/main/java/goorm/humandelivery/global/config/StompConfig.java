@@ -98,7 +98,7 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     try {
                         String token = accessor.getFirstNativeHeader("Authorization");
-
+                        log.info("token: {}", token);
                         // 1. 인증 로직 수행 (예: JWT 검증)
                         boolean isValid = jwtTokenProviderPort.validateToken(token);
 

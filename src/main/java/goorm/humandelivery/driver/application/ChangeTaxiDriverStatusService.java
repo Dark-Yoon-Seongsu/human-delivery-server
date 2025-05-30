@@ -21,6 +21,7 @@ public class ChangeTaxiDriverStatusService implements ChangeTaxiDriverStatusUseC
     @Override
     public TaxiDriverStatus changeStatus(String loginId, TaxiDriverStatus status) {
         log.info("[ChangeTaxiDriverStatusService.changeStatus.loadTaxiDriverPort.findByLoginId] 택시기사 조회. 택시기사 ID : {}", loginId);
+
         TaxiDriver taxiDriver = loadTaxiDriverPort.findByLoginId(loginId)
                 .orElseThrow(DriverEntityNotFoundException::new);
 

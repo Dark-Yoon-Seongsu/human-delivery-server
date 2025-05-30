@@ -4,18 +4,17 @@ import goorm.humandelivery.call.application.port.in.AcceptCallUseCase;
 import goorm.humandelivery.call.application.port.in.GetCallAcceptResponseUseCase;
 import goorm.humandelivery.call.application.port.in.RegisterMatchingUseCase;
 import goorm.humandelivery.call.application.port.out.AcceptCallPort;
-import goorm.humandelivery.call.application.port.out.LoadTaxiDriverPort;
 import goorm.humandelivery.call.application.port.out.NotifyDispatchSuccessToCustomerPort;
 import goorm.humandelivery.call.dto.request.CallAcceptRequest;
 import goorm.humandelivery.call.dto.request.CreateMatchingRequest;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import goorm.humandelivery.call.dto.response.MatchingSuccessResponse;
 import goorm.humandelivery.driver.application.port.in.ChangeTaxiDriverStatusUseCase;
+import goorm.humandelivery.driver.application.port.in.GetDriverCurrentTaxiTypeUseCase;
+import goorm.humandelivery.driver.application.port.in.GetTaxiDriverUseCase;
 import goorm.humandelivery.driver.application.port.in.HandleDriverStatusUseCase;
-import goorm.humandelivery.driver.application.port.out.GetDriverTaxiTypePort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
-import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +25,9 @@ import org.springframework.stereotype.Service;
 public class AcceptCallService implements AcceptCallUseCase {
 
     private final AcceptCallPort acceptCallPort;
-    private final LoadTaxiDriverPort loadTaxiDriverPort;
+    private final GetTaxiDriverUseCase getTaxiDriverUseCase;
     private final RegisterMatchingUseCase registerMatchingUseCase;
-    private final GetDriverTaxiTypePort getDriverTaxiTypePort;
+    private final GetDriverCurrentTaxiTypeUseCase getDriverCurrentTaxiTypeUseCase;
     private final ChangeTaxiDriverStatusUseCase changeTaxiDriverStatusUseCase;
     private final HandleDriverStatusUseCase handleDriverStatusUseCase;
     private final GetCallAcceptResponseUseCase getCallAcceptResponseUseCase;
@@ -42,12 +41,15 @@ public class AcceptCallService implements AcceptCallUseCase {
 
         acceptCallPort.atomicAcceptCall(callId, taxiDriverLoginId);
 
-        Long taxiDriverId = loadTaxiDriverPort.findIdByLoginId(taxiDriverLoginId)
-                .orElseThrow(DriverEntityNotFoundException::new);
+        Long taxiDriverId = getTaxiDriverUseCase.findIdByLoginId(taxiDriverLoginId);
+      
         registerMatchingUseCase.create(new CreateMatchingRequest(callId, taxiDriverId));
+        log.info("[registerMatchingUseCase.create] 완료");
 
-        TaxiType taxiType = getDriverTaxiTypePort.getDriverTaxiType(taxiDriverLoginId);
+        TaxiType taxiType = getDriverCurrentTaxiTypeUseCase.getCurrentTaxiType(taxiDriverLoginId);
+        log.info("taxiType: {}", taxiType);
         TaxiDriverStatus taxiDriverStatus = changeTaxiDriverStatusUseCase.changeStatus(taxiDriverLoginId, TaxiDriverStatus.RESERVED);
+        log.info("taxiDriverStatus: {}", taxiDriverStatus);
 
         // 상태 변경에 따른 redis 처리
         handleDriverStatusUseCase.handleTaxiDriverStatusInRedis(taxiDriverLoginId, taxiDriverStatus, taxiType);

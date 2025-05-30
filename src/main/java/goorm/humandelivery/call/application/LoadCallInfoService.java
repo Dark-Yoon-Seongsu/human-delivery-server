@@ -3,6 +3,7 @@ package goorm.humandelivery.call.application;
 import goorm.humandelivery.call.application.port.in.GetCallAcceptResponseUseCase;
 import goorm.humandelivery.call.application.port.in.GetCustomerLoginIdByCallIdUseCase;
 import goorm.humandelivery.call.application.port.out.LoadCallInfoPort;
+import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.call.dto.response.CallAcceptResponse;
 import goorm.humandelivery.global.exception.CallInfoEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,9 @@ public class LoadCallInfoService implements GetCallAcceptResponseUseCase, GetCus
 
     @Override
     public CallAcceptResponse getCallAcceptResponse(Long callId) {
-        return loadCallInfoPort.findCallInfoAndCustomerByCallId(callId)
+        CallInfo callInfo = loadCallInfoPort.findCallInfoAndCustomerByCallId(callId)
                 .orElseThrow(CallInfoEntityNotFoundException::new);
+        return CallAcceptResponse.from(callInfo);
     }
 
     @Override

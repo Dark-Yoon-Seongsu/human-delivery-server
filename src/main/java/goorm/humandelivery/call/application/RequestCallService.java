@@ -3,9 +3,8 @@ package goorm.humandelivery.call.application;
 import goorm.humandelivery.call.application.port.in.RequestCallUseCase;
 import goorm.humandelivery.call.application.port.out.SaveCallInfoPort;
 import goorm.humandelivery.call.dto.request.CallMessageRequest;
-import goorm.humandelivery.customer.application.port.out.LoadCustomerPort;
+import goorm.humandelivery.customer.application.port.in.LoadCustomerUseCase;
 import goorm.humandelivery.customer.domain.Customer;
-import goorm.humandelivery.customer.exception.CustomerNotFoundException;
 import goorm.humandelivery.shared.application.port.out.MessageQueuePort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RequestCallService implements RequestCallUseCase {
 
-    private final LoadCustomerPort loadCustomerPort;
+    private final LoadCustomerUseCase loadCustomerUseCase;
     private final SaveCallInfoPort saveCallInfoPort;
     private final MessageQueuePort messageQueuePort;
 
@@ -30,8 +29,7 @@ public class RequestCallService implements RequestCallUseCase {
     }
 
     private Long saveCallAndGetCallId(CallMessageRequest request, String customerLoginId) {
-        Customer customer = loadCustomerPort.findByLoginId(customerLoginId)
-                .orElseThrow(CustomerNotFoundException::new);
+        Customer customer = loadCustomerUseCase.findByLoginId(customerLoginId);
         return saveCallInfoPort.save(request.toCallInfo(customer)).getId();
     }
 }

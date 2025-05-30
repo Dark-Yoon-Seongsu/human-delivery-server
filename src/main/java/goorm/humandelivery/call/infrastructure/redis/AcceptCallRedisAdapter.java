@@ -62,6 +62,7 @@ public class AcceptCallRedisAdapter implements AcceptCallPort {
         script.setResultType(Long.class);
 
         Long result = redisTemplate.execute(script, keys, args.toArray());
+        log.info("result: {} [1:콜상태SENT아님, 2:이미기사에게콜할당됨, 3:기사상태가AVAILABLE아님, 4:다른사람이먼저수락]", result);
 
         if (!(result != null && result == 0L)) {
             log.info("[acceptTaxiCall.CallAcceptResponse] 완료된 콜에 대한 배차 신청. 택시기사 : {}, 콜ID : {}", driverLoginId, callId);
