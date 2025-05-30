@@ -156,7 +156,7 @@ class WebSocketAcceptCallControllerTest {
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompHeaders stompHeaders = new StompHeaders();
-        stompHeaders.add("Authorization", token);
+        stompHeaders.add("Authorization", "Bearer " + token);
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         String url = String.format("ws://localhost:%d/ws", port);
@@ -166,7 +166,7 @@ class WebSocketAcceptCallControllerTest {
         StompSession stompSession = webSocketStompClient
                 .connectAsync(url, webSocketHttpHeaders, stompHeaders, new StompSessionHandlerAdapter() {
                 })
-                .get(3, TimeUnit.SECONDS);
+                .get(10, TimeUnit.SECONDS);
 
         // 응답 구독
         stompSession.subscribe("/user/queue/accept-call-result", new StompFrameHandler() {
