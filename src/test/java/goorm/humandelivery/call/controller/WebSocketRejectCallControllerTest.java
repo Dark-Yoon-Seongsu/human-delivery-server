@@ -143,7 +143,7 @@ class WebSocketRejectCallControllerTest {
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompHeaders stompHeaders = new StompHeaders();
-        stompHeaders.add("Authorization", token);
+        stompHeaders.add("Authorization", "Bearer " + token);
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         String url = String.format("ws://localhost:%d/ws", port);
@@ -200,7 +200,7 @@ class WebSocketRejectCallControllerTest {
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompHeaders stompHeaders = new StompHeaders();
-        stompHeaders.add("Authorization", token);
+        stompHeaders.add("Authorization", "Bearer " + token);
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         String url = String.format("ws://localhost:%d/ws", port);
