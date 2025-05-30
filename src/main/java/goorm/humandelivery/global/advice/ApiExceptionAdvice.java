@@ -1,5 +1,6 @@
 package goorm.humandelivery.global.advice;
 
+import goorm.humandelivery.customer.exception.CustomerNotFoundException;
 import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
 import goorm.humandelivery.global.exception.DriverEntityNotFoundException;
 import goorm.humandelivery.global.exception.DuplicateLoginIdException;
@@ -50,13 +51,19 @@ public class ApiExceptionAdvice {
                 ));
     }
 
-    @ExceptionHandler(DriverEntityNotFoundException.class)
-    public ResponseEntity<?> handleEntityNotFound(DriverEntityNotFoundException e) {
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<?> handleCustomerNotFound(CustomerNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of(
-                        "message", e.getMessage()
-                ));
-    }
+                .body(Map.of("message", e.getMessage()));
+}
+
+    @ExceptionHandler(DriverEntityNotFoundException.class)
+    public ResponseEntity<?> handleDriverNotFound(DriverEntityNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", e.getMessage()));
+}
+
 
     /**
      * GET : /api/v1/taxi-driver/token-info
