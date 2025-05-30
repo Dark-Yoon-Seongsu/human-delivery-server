@@ -24,12 +24,13 @@ public class RejectCallService implements RejectCallUseCase {
         log.info("[RejectCallService.addRejectedDriverToCall] 콜 거절.  콜 ID : {}, 택시기사 ID : {}", callId, taxiDriverLoginId);
 
         // 존재 여부 확인
-        loadCallInfoPort.findById(callId)
+        loadCallInfoPort.findCallInfoById(callId)
                 .orElseThrow(CallInfoEntityNotFoundException::new);
         getTaxiDriverUseCase.findIdByLoginId(taxiDriverLoginId);
 
 
         // 해당 콜을 거절한 택시기사 집합에 추가
+        log.info("[addRejectedDriverToCallPort.addRejectedDriverToCall] 해당 콜을 거절한 택시기사 집합에 추가.");
         addRejectedDriverToCallPort.addRejectedDriverToCall(callId, taxiDriverLoginId);
         return new CallRejectResponse(callId);
     }

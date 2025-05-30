@@ -2,8 +2,8 @@ package goorm.humandelivery.shared.location.infrastructure.redis;
 
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
-import goorm.humandelivery.shared.redis.RedisKeyParser;
 import goorm.humandelivery.shared.location.application.port.out.RemoveFromLocationPort;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

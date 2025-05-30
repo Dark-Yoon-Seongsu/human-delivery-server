@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface LoadCallInfoPort {
 
-    Optional<CallInfo> findById(Long callId);
+    Optional<CallInfo> findCallInfoById(Long callId);
 
     Optional<CallInfo> findCallInfoAndCustomerByCallId(Long callId);
 

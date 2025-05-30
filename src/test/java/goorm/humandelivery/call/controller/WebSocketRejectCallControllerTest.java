@@ -4,10 +4,9 @@ import goorm.humandelivery.call.application.port.out.SaveCallInfoPort;
 import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.call.domain.CallStatus;
-import goorm.humandelivery.call.dto.request.CallAcceptRequest;
-import goorm.humandelivery.call.dto.response.CallAcceptResponse;
+import goorm.humandelivery.call.dto.request.CallRejectRequest;
+import goorm.humandelivery.call.dto.response.CallRejectResponse;
 import goorm.humandelivery.call.infrastructure.persistence.JpaCallInfoRepository;
-import goorm.humandelivery.call.infrastructure.persistence.JpaMatchingRepository;
 import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
 import goorm.humandelivery.customer.domain.Customer;
 import goorm.humandelivery.customer.infrastructure.persistence.JpaCustomerRepository;
@@ -49,15 +48,12 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class WebSocketAcceptCallControllerTest {
+class WebSocketRejectCallControllerTest {
 
-    private static final Logger log = LoggerFactory.getLogger(WebSocketAcceptCallControllerTest.class);
+    static final Logger log = LoggerFactory.getLogger(WebSocketRejectCallControllerTest.class);
 
     @LocalServerPort
     int port;
-
-    @Autowired
-    JwtTokenProviderPort jwtTokenProviderPort;
 
     @Autowired
     SetCallWithPort setCallWithPort;
@@ -69,13 +65,21 @@ class WebSocketAcceptCallControllerTest {
     SaveCallInfoPort saveCallInfoPort;
 
     @Autowired
-    UpdateDriverLocationUseCase updateDriverLocationUseCase;
+    RegisterTaxiDriverUseCase registerTaxiDriverUseCase;
 
     @Autowired
     ChangeTaxiDriverStatusUseCase changeTaxiDriverStatusUseCase;
 
     @Autowired
-    RegisterTaxiDriverUseCase registerTaxiDriverUseCase;
+    UpdateDriverLocationUseCase updateDriverLocationUseCase;
+
+    @Autowired
+    JwtTokenProviderPort jwtTokenProviderPort;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
+    WebSocketStompClient webSocketStompClient;
 
     @Autowired
     JpaTaxiRepository jpaTaxiRepository;
@@ -89,31 +93,21 @@ class WebSocketAcceptCallControllerTest {
     @Autowired
     JpaCallInfoRepository jpaCallInfoRepository;
 
-    @Autowired
-    JpaMatchingRepository jpaMatchingRepository;
-
-    @Autowired
-    StringRedisTemplate stringRedisTemplate;
-
-    WebSocketStompClient webSocketStompClient;
-
     @AfterEach
     void tearDown() {
-        jpaMatchingRepository.deleteAllInBatch();
         jpaCallInfoRepository.deleteAllInBatch();
         jpaCustomerRepository.deleteAllInBatch();
         jpaTaxiDriverRepository.deleteAllInBatch();
         jpaTaxiRepository.deleteAllInBatch();
-        stringRedisTemplate.getConnectionFactory().getConnection().serverCommands().flushAll();
-
+        stringRedisTemplate.getConnectionFactory().getConnection().commands().flushAll();
         if (webSocketStompClient != null) {
             webSocketStompClient.stop();
         }
     }
 
     @Test
-    @DisplayName("콜 ID를 통해 콜 요청을 수락할 수 있다.")
-    void acceptTaxiCall() throws Exception {
+    @DisplayName("콜 ID를 통해 콜 요청을 거절할 수 있다.")
+    void rejectTaxiCall() throws Exception {
         // Given
         // 택시 생성하기
         RegisterTaxiRequest registerTaxiRequest = new RegisterTaxiRequest();
@@ -155,24 +149,24 @@ class WebSocketAcceptCallControllerTest {
         String url = String.format("ws://localhost:%d/ws", port);
 
         // 웹 소켓 연결
-        CompletableFuture<CallAcceptResponse> future = new CompletableFuture<>();
+        CompletableFuture<CallRejectResponse> future = new CompletableFuture<>();
         StompSession stompSession = webSocketStompClient
                 .connectAsync(url, webSocketHttpHeaders, stompHeaders, new StompSessionHandlerAdapter() {
                 })
                 .get(3, TimeUnit.SECONDS);
 
         // 응답 구독
-        stompSession.subscribe("/user/queue/accept-call-result", new StompFrameHandler() {
+        stompSession.subscribe("/user/queue/reject-call-result", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
                 log.info("getPayloadType 호출됨");
-                return CallAcceptResponse.class;
+                return CallRejectResponse.class;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 log.info("handleFrame 호출됨: payload = {}", payload);
-                future.complete((CallAcceptResponse) payload);
+                future.complete((CallRejectResponse) payload);
             }
         });
 
@@ -185,23 +179,21 @@ class WebSocketAcceptCallControllerTest {
         setCallWithPort.setCallWith(savedCallInfo.getId(), CallStatus.SENT);
 
         Long target = savedCallInfo.getId();
-        CallAcceptRequest callAcceptRequest = new CallAcceptRequest();
-        callAcceptRequest.setCallId(target);
+        CallRejectRequest callRejectRequest = new CallRejectRequest();
+        callRejectRequest.setCallId(target);
 
         // When
-        stompSession.send("/app/taxi-driver/accept-call", callAcceptRequest);
+        stompSession.send("/app/taxi-driver/reject-call", callRejectRequest);
 
         // Then
-        CallAcceptResponse callAcceptResponse = future.get(10, TimeUnit.SECONDS);
-        assertThat(callAcceptResponse).isNotNull();
-        assertThat(callAcceptResponse.getCallId()).isEqualTo(target);
-        assertThat(callAcceptResponse.getExpectedOrigin()).isEqualTo(expectedOrigin);
-        assertThat(callAcceptResponse.getExpectedDestination()).isEqualTo(expectedDestination);
+        CallRejectResponse callRejectResponse = future.get(10, TimeUnit.SECONDS);
+        assertThat(callRejectResponse).isNotNull();
+        assertThat(callRejectResponse.getCallId()).isEqualTo(target);
     }
 
     @Test
-    @DisplayName("콜 요청 수락시 콜 ID가 존재하지 않으면 예외가 발생한다.")
-    void acceptTaxiCallWithNoCallId() throws Exception {
+    @DisplayName("콜 요청 거절시 콜 ID가 존재하지 않으면 예외가 발생한다.")
+    void rejectTaxiCallWithNoCallId() throws Exception {
         // Given
         String token = jwtTokenProviderPort.generateToken("driver1@email.com");
         webSocketStompClient = new WebSocketStompClient(new StandardWebSocketClient());
@@ -232,10 +224,10 @@ class WebSocketAcceptCallControllerTest {
             }
         });
 
-        CallAcceptRequest callAcceptRequest = new CallAcceptRequest();
+        CallRejectRequest callRejectRequest = new CallRejectRequest();
 
         // When
-        stompSession.send("/app/taxi-driver/accept-call", callAcceptRequest);
+        stompSession.send("/app/taxi-driver/reject-call", callRejectRequest);
 
         // Then
         ErrorResponse errorResponse = future.get(3, TimeUnit.SECONDS);

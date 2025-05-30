@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class CallRejectRequest {
 
-    @NotNull
+    @NotNull(message = "콜 ID는 필수입니다.")
     private Long callId;
 
 }

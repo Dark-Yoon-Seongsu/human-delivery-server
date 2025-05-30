@@ -15,6 +15,8 @@ public interface JpaCallInfoRepository extends
         DeleteCallInfoPort,
         SaveCallInfoPort {
 
+    Optional<CallInfo> findCallInfoById(Long callId);
+
     @Query("SELECT c FROM CallInfo c join fetch c.customer cs where c.id = :callId")
     Optional<CallInfo> findCallInfoAndCustomerByCallId(Long callId);
 

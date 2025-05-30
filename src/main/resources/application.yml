@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: humandelivery
@@ -40,20 +39,20 @@ spring:
       idle-timeout: 60000
 
 
-#  datasource:
-#    url: jdbc:h2:file:C:/_Workplace/Spring_workplace/HumanDelivery/database/h2db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-#    username: sa
-#    password:
+  #  datasource:
+  #    url: jdbc:h2:file:C:/_Workplace/Spring_workplace/HumanDelivery/database/h2db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  #    username: sa
+  #    password:
 
 
-#
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
+  #
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      path: /h2-console
 
-#  datasource:
-#    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+  #  datasource:
+  #    driver-class-name: ${DB_DRIVER:org.h2.Driver}
 
   data:
     redis:
@@ -100,7 +99,7 @@ logging:
           web:
             socket: DEBUG
           messaging: DEBUG
-          cache : DEBUG
+          cache: DEBUG
 
 
 

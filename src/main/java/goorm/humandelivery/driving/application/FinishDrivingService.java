@@ -34,17 +34,17 @@ public class FinishDrivingService implements FinishDrivingUseCase {
         log.info("[FinishDrivingService] 호출. callId: {}", callId);
 
         Matching matching = loadMatchingPort.findMatchingByCallInfoId(callId)
-            .orElseThrow(MatchingEntityNotFoundException::new);
+                .orElseThrow(MatchingEntityNotFoundException::new);
 
         log.info("[finishDriving.DrivingInfoService] findDrivingInfoByMatching 쿼리 호출. Call ID : {}", callId);
         DrivingInfo drivingInfo = loadDrivingInfoPort.findDrivingInfoByMatching(matching)
-            .orElseThrow(DrivingInfoEntityNotFoundException::new);
+                .orElseThrow(DrivingInfoEntityNotFoundException::new);
 
         drivingInfo.finishDriving(destination, LocalDateTime.now());
         saveDrivingInfoPort.save(drivingInfo);
 
         log.info("[finishDriving.DrivingInfoService] findDrivingSummaryResponse 쿼리 호출. Call ID : {}", callId);
         return loadDrivingSummaryPort.findDrivingSummaryResponse(drivingInfo)
-            .orElseThrow(DrivingInfoEntityNotFoundException::new);
+                .orElseThrow(DrivingInfoEntityNotFoundException::new);
     }
 }

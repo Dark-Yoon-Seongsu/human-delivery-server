@@ -1,11 +1,11 @@
 package goorm.humandelivery.driver.application;
 
-import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiDriverPort;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiPort;
 import goorm.humandelivery.driver.dto.request.RegisterTaxiDriverRequest;
 import goorm.humandelivery.driver.dto.request.RegisterTaxiRequest;
 import goorm.humandelivery.driver.dto.response.RegisterTaxiDriverResponse;
+import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

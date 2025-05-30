@@ -1,10 +1,10 @@
 package goorm.humandelivery.customer.application;
 
 import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
-import goorm.humandelivery.global.exception.DuplicateLoginIdException;
-import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
 import goorm.humandelivery.customer.dto.request.RegisterCustomerRequest;
 import goorm.humandelivery.customer.dto.response.RegisterCustomerResponse;
+import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
+import goorm.humandelivery.global.exception.DuplicateLoginIdException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

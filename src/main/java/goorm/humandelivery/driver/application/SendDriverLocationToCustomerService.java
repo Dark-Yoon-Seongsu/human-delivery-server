@@ -4,13 +4,13 @@ import goorm.humandelivery.driver.application.port.in.SendDriverLocationToCustom
 import goorm.humandelivery.driver.application.port.out.SendDriverLocationToCustomerPort;
 import goorm.humandelivery.driver.domain.TaxiDriverStatus;
 import goorm.humandelivery.driver.domain.TaxiType;
+import goorm.humandelivery.driver.dto.response.DriverLocationResponse;
 import goorm.humandelivery.global.exception.CustomerNotAssignedException;
 import goorm.humandelivery.global.exception.OffDutyLocationUpdateException;
-import goorm.humandelivery.shared.redis.RedisKeyParser;
 import goorm.humandelivery.shared.application.port.out.SetValueWithTtlPort;
 import goorm.humandelivery.shared.location.application.port.out.SetLocationPort;
 import goorm.humandelivery.shared.location.domain.Location;
-import goorm.humandelivery.driver.dto.response.DriverLocationResponse;
+import goorm.humandelivery.shared.redis.RedisKeyParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
