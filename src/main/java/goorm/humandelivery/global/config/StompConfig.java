@@ -97,29 +97,29 @@ public class StompConfig implements WebSocketMessageBrokerConfigurer {
 
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     try {
-                        String token = accessor.getFirstNativeHeader("Authorization");
-                        log.info("token: {}", token);
-                        // 1. 인증 로직 수행 (예: JWT 검증)
-                        boolean isValid = jwtTokenProviderPort.validateToken(token);
+                        String authHeader = accessor.getFirstNativeHeader("Authorization");
+                        log.info("Received Authorization header: {}", authHeader);
+                        if (authHeader != null && authHeader.toLowerCase().startsWith("bearer ")) {
+                            String token = authHeader.substring(7); // "Bearer " 다음의 토큰 부분만 추출
+                            log.info("Extracted token: {}", token);
+                            boolean isValid = jwtTokenProviderPort.validateToken(token);
 
-                        if (!isValid) {
-                            // 발생한 예외는 STOMP 클라이언트에게 ERROR 프레임으로 반환됨 -> 클라이언트로..
-                            throw new IllegalArgumentException("Invalid JWT Token");
+                            if (!isValid) {
+                                log.warn("Invalid JWT token received: {}", token);
+                                throw new IllegalArgumentException("Invalid JWT Token");
+                            }
+
+                            Authentication authentication = jwtTokenProviderPort.getAuthentication(token);
+                            log.info("Successfully authenticated via token for user: {}", authentication.getName());
+                            accessor.setUser(authentication);
+                        } else {
+                            log.warn("Authorization header is missing or does not start with Bearer. Header: {}", authHeader);
+                            throw new IllegalArgumentException("Authorization header is missing or invalid");
                         }
-
-                        // 2. 토큰으로부터 Authentication 객체 생성.
-                        // SecurityContext 에 등록할 필요 없음.
-                        Authentication authentication = jwtTokenProviderPort.getAuthentication(token);
-                        log.info("authentication: {}", authentication);
-
-                        // 3. accessor 에 authentication 객체 세팅
-                        // @MessageMapping 메서드가 포함된 컨트롤러에서 @Principal 어노테이션으로 정보 추출 가능.
-                        accessor.setUser(authentication);
                     } catch (Exception e) {
                         log.warn("WebSocket 인증 중 예외 발생: {}", e.getMessage(), e);
                         throw new IllegalArgumentException("Invalid WebSocket Token", e);
                     }
-
                 }
                 return message;
             }
