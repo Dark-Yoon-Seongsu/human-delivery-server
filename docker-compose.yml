@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   # ZooKeeper 3노드
   zookeeper1:
@@ -11,7 +13,9 @@ services:
       - ZOO_SERVER_ID=1
       - ZOO_SERVERS=zookeeper1:2888:3888,zookeeper2:2888:3888,zookeeper3:2888:3888
     volumes:
-      - /bitnami/zookeeper
+      - zookeeper1_data:/bitnami/zookeeper
+    networks:
+      - humandelivery-net
 
   zookeeper2:
     image: bitnami/zookeeper:3.8
@@ -22,7 +26,9 @@ services:
       - ZOO_SERVER_ID=2
       - ZOO_SERVERS=zookeeper1:2888:3888,zookeeper2:2888:3888,zookeeper3:2888:3888
     volumes:
-      - /bitnami/zookeeper
+      - zookeeper2_data:/bitnami/zookeeper
+    networks:
+      - humandelivery-net
 
   zookeeper3:
     image: bitnami/zookeeper:3.8
@@ -33,7 +39,9 @@ services:
       - ZOO_SERVER_ID=3
       - ZOO_SERVERS=zookeeper1:2888:3888,zookeeper2:2888:3888,zookeeper3:2888:3888
     volumes:
-      - /bitnami/zookeeper
+      - zookeeper3_data:/bitnami/zookeeper
+    networks:
+      - humandelivery-net
 
   # Kafka 3노드
   kafka1:
@@ -55,7 +63,9 @@ services:
       - zookeeper2
       - zookeeper3
     volumes:
-      - /bitnami/kafka
+      - kafka1_data:/bitnami/kafka
+    networks:
+      - humandelivery-net
 
   kafka2:
     image: bitnami/kafka:3.8.1
@@ -76,7 +86,9 @@ services:
       - zookeeper2
       - zookeeper3
     volumes:
-      - /bitnami/kafka
+      - kafka2_data:/bitnami/kafka
+    networks:
+      - humandelivery-net
 
   kafka3:
     image: bitnami/kafka:3.8.1
@@ -97,5 +109,69 @@ services:
       - zookeeper2
       - zookeeper3
     volumes:
-      - /bitnami/kafka
+      - kafka3_data:/bitnami/kafka
+    networks:
+      - humandelivery-net
 
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - humandelivery-net
+
+  # MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: humandelivery
+      MYSQL_USER: your_user
+      MYSQL_PASSWORD: your_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - humandelivery-net
+
+  # Spring Application
+  spring:
+    image: 588738576341.dkr.ecr.us-east-1.amazonaws.com/humandelivery/springserver:latest
+    container_name: spring
+    depends_on:
+      - mysql
+      - kafka1
+      - kafka2
+      - kafka3
+      - redis
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/humandelivery
+      SPRING_DATASOURCE_USERNAME: your_user
+      SPRING_DATASOURCE_PASSWORD: your_password
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    networks:
+      - humandelivery-net
+
+volumes:
+  zookeeper1_data:
+  zookeeper2_data:
+  zookeeper3_data:
+  kafka1_data:
+  kafka2_data:
+  kafka3_data:
+  redis_data:
+  mysql_data:
+
+networks:
+  humandelivery-net:
+    driver: bridge
