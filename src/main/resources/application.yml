@@ -38,6 +38,22 @@ spring:
       connection-timeout: 30000
       idle-timeout: 60000
 
+
+  #  datasource:
+  #    url: jdbc:h2:file:C:/_Workplace/Spring_workplace/HumanDelivery/database/h2db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+  #    username: sa
+  #    password:
+
+
+  #
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      path: /h2-console
+
+  #  datasource:
+  #    driver-class-name: ${DB_DRIVER:org.h2.Driver}
+
   data:
     redis:
       host: "${SPRING_DATA_REDIS_HOST:localhost}"
@@ -58,6 +74,9 @@ jwt:
   secret:
     access: "sadpofjaosdjfoapsjdfjaksopdjfpjaskopdjfopasjdpofjapsodfjapsodjfpaoksdjf"
     accessTokenValidTime: "3600000"
+
+
+
 
 logging:
   level:
@@ -82,16 +101,24 @@ logging:
           messaging: DEBUG
           cache: DEBUG
 
+
+
+# 스프링 액츄에이터의 모든 메트릭 노출 활성화
 management:
   endpoints:
     web:
       exposure:
         include: "*"
 
+
+
+# 톰캣 메트릭 추가
 server:
   tomcat:
-    max-connections: 500
-    accept-count: 200
+    max-connections: 500     # 동시에 처리 가능한 최대 커넥션 수
+    accept-count: 200         # 요청 대기 큐 크기 (초과 시 reset 발생 가능)
     threads:
       max: 300
       min-spare: 50
+
+
