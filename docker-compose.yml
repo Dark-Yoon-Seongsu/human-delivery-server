@@ -131,10 +131,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: humandelivery
-      MYSQL_USER: your_user
-      MYSQL_PASSWORD: your_password
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -154,8 +152,8 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/humandelivery
-      SPRING_DATASOURCE_USERNAME: your_user
-      SPRING_DATASOURCE_PASSWORD: your_password
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
