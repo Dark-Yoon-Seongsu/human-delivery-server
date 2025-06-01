@@ -19,8 +19,30 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Run Tests with Gradle
-        run: ./gradlew clean test
+      - name: Start test environment
+        run: docker-compose -f docker-compose.test.yml up -d
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            nc -z localhost 3306 && echo "MySQL is up" && break
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+      - name: Run tests
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/humandelivery
+          SPRING_DATASOURCE_USERNAME: root
+          SPRING_DATASOURCE_PASSWORD: root
+          SPRING_KAFKA_BOOTSTRAP_SERVERS: localhost:9092,localhost:9093,localhost:9094
+          SPRING_DATA_REDIS_HOST: localhost
+          SPRING_DATA_REDIS_PORT: 6379
+        run: ./gradlew test
+
+      - name: Stop test environment
+        if: always()
+        run: docker-compose -f docker-compose.test.yml down
 
       - name: Build Jar with Gradle
         run: ./gradlew build
@@ -38,21 +60,31 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t springserver .
-          docker tag springserver:latest 588738576341.dkr.ecr.us-east-1.amazonaws.com/humandelivery/springserver:latest
+          docker build -t spring .
+          docker tag spring:latest 588738576341.dkr.ecr.us-east-1.amazonaws.com/humandelivery/springserver:latest
 
       - name: Push Docker Image to ECR
-        run: |
-          docker push 588738576341.dkr.ecr.us-east-1.amazonaws.com/humandelivery/springserver:latest
+        run: docker push 588738576341.dkr.ecr.us-east-1.amazonaws.com/humandelivery/springserver:latest
 
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            cd ~/humandelivery
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 588738576341.dkr.ecr.us-east-1.amazonaws.com
-            docker-compose pull spring
-            docker-compose up -d spring
+  deploy:
+    name: Deploy to EC2 with docker-compose
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Pull & Restart docker-compose services on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ubuntu
+            docker-compose pull
+            docker-compose up -d
+          EOF
