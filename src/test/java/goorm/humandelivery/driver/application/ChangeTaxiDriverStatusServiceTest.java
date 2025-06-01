@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.*;
 //./gradlew test --tests "goorm.humandelivery.driver.application.ChangeTaxiDriverStatusServiceTest"
 @ExtendWith(MockitoExtension.class)
 class ChangeTaxiDriverStatusServiceTest {
-//
+
     @Mock
     LoadTaxiDriverPort loadTaxiDriverPort;
 
