@@ -16,7 +16,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-//test
 //./gradlew test --tests "goorm.humandelivery.driver.application.DeleteAssignedCallServiceTest"
 class DeleteAssignedCallServiceTest {
 
