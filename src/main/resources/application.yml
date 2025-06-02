@@ -95,3 +95,8 @@ server:
     threads:
       max: 300
       min-spare: 50
+
+kakao:
+  rest:
+    api:
+      key: ${KAKAO_REST_API_KEY}
