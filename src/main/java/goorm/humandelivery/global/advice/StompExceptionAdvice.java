@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.client.RestClientException;
 
 @ControllerAdvice
 @Slf4j
@@ -105,5 +106,20 @@ public class StompExceptionAdvice {
         log.error("exception: {}", ex.getClass());
         return new ErrorResponse("AlreadyAssignedCallException", ex.getMessage());
     }
+
+    @MessageExceptionHandler(InvalidRouteException.class)
+    @SendToUser("/queue/errors") // /user/queue/errors
+    public ErrorResponse handleInvalidRouteException(InvalidRouteException ex) {
+        log.error("exception: {}", ex.getClass());
+        return new ErrorResponse("InvalidRouteException", ex.getMessage());
+    }
+
+    @MessageExceptionHandler(RestClientException.class)
+    @SendToUser("/queue/errors") // /user/queue/errors
+    public ErrorResponse handleRestClientException(RestClientException ex) {
+        log.error("exception: {}", ex.getClass());
+        return new ErrorResponse("RestClientException", ex.getMessage());
+    }
+
 
 }
