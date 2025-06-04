@@ -41,6 +41,7 @@ class LoginTaxiDriverServiceE2ETest {
         TaxiDriver driver = TaxiDriver.builder()
                 .loginId(validLoginId)
                 .password(passwordEncoder.encode(rawPassword))
+                .licenseCode("TEST")
                 .name("홍길동")
                 .phoneNumber("010-1234-5678")
                 .build();
