@@ -24,17 +24,19 @@ public class TaxiDriver extends BaseEntity {
     @JoinColumn(name = "taxi_id")
     private Taxi taxi;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String loginId;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String licenseCode;
 
-    @NotBlank
-    @Pattern(regexp = "^010-\\d{4}-\\d{4}$", message = "전화번호 형식은 010-XXXX-XXXX 이어야 합니다.")
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     @Enumerated(value = EnumType.STRING)

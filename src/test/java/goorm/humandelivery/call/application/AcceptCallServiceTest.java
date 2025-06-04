@@ -99,7 +99,7 @@ class AcceptCallServiceTest {
         Customer savedCustomer = saveCustomerPort.save(new Customer("testCustomerLoginId", "test", "test", "test"));
         CallInfo savedCallInfo = saveCallInfoPort.save(new CallInfo(null, savedCustomer, null, null, TaxiType.NORMAL));
         Taxi savedTaxi = saveTaxiPort.save(Taxi.builder().taxiType(TaxiType.NORMAL).fuelType(FuelType.DIESEL).build());
-        TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(TaxiDriver.builder().loginId("testDriverLoginId").taxi(savedTaxi).phoneNumber("010-0000-0000").build());
+        TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(TaxiDriver.builder().loginId("testDriverLoginId").password("TEST").name("TEST").taxi(savedTaxi).licenseCode("TEST").phoneNumber("010-0000-0000").build());
         setDriverStatusPort.setDriverStatus(savedTaxiDriver.getLoginId(), TaxiDriverStatus.AVAILABLE);
         setCallWithPort.setCallWith(savedCallInfo.getId(), CallStatus.SENT);
 
@@ -130,7 +130,7 @@ class AcceptCallServiceTest {
         Customer savedCustomer = saveCustomerPort.save(new Customer("testCustomerLoginId", "test", "test", "test"));
         CallInfo savedCallInfo = saveCallInfoPort.save(new CallInfo(null, savedCustomer, null, null, TaxiType.NORMAL));
         Taxi savedTaxi = saveTaxiPort.save(Taxi.builder().taxiType(TaxiType.NORMAL).fuelType(FuelType.DIESEL).build());
-        TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(TaxiDriver.builder().loginId("testDriverLoginId").taxi(savedTaxi).phoneNumber("010-0000-0000").build());
+        TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(TaxiDriver.builder().loginId("testDriverLoginId").password("TEST").name("TEST").taxi(savedTaxi).licenseCode("TEST").phoneNumber("010-0000-0000").build());
         setDriverStatusPort.setDriverStatus(savedTaxiDriver.getLoginId(), TaxiDriverStatus.AVAILABLE);
         setCallWithPort.setCallWith(savedCallInfo.getId(), CallStatus.SENT);
 

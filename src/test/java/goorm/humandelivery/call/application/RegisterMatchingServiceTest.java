@@ -60,7 +60,7 @@ class RegisterMatchingServiceTest {
         @DisplayName("콜 ID와 택시기사 ID를 통해 배차를 등록할 수 있다.")
         void create() throws Exception {
             // Given
-            TaxiDriver taxiDriver = TaxiDriver.builder().phoneNumber("010-0000-0000").build();
+            TaxiDriver taxiDriver = TaxiDriver.builder().loginId("TEST@TEST.com").password("TEST").name("TEST").licenseCode("TEST").phoneNumber("010-0000-0000").build();
             TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(taxiDriver);
             CallInfo savedCallInfo = saveCallInfoPort.save(new CallInfo(null, null, null, null, null));
 
@@ -80,7 +80,7 @@ class RegisterMatchingServiceTest {
         @DisplayName("존재하지 않는 콜 아이디로 배차 등록 요청시 예외가 발생한다.")
         void createWithNotExistsCallInfo() throws Exception {
             // Given
-            TaxiDriver taxiDriver = TaxiDriver.builder().phoneNumber("010-0000-0000").build();
+            TaxiDriver taxiDriver = TaxiDriver.builder().loginId("TEST@TEST.com").password("TEST").name("TEST").licenseCode("TEST").phoneNumber("010-0000-0000").build();
             TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(taxiDriver);
 
             CreateMatchingRequest createMatchingRequest = new CreateMatchingRequest(999L, savedTaxiDriver.getId());

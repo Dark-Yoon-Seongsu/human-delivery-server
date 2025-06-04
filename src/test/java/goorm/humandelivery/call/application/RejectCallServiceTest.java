@@ -54,7 +54,7 @@ class RejectCallServiceTest {
     @DisplayName("택시기사가 콜 요청을 거절하면 해당 콜의 거절 리스트에 추가된다.")
     void addRejectedDriverToCall() throws Exception {
         // Given
-        TaxiDriver taxiDriver = TaxiDriver.builder().loginId("testLoginId").phoneNumber("010-0000-0000").build();
+        TaxiDriver taxiDriver = TaxiDriver.builder().loginId("testLoginId").password("TEST").name("TEST").licenseCode("TEST").phoneNumber("010-0000-0000").build();
         TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(taxiDriver);
         CallInfo savedCallInfo = saveCallInfoPort.save(new CallInfo(null, null, null, null, null));
 
@@ -76,7 +76,7 @@ class RejectCallServiceTest {
     @DisplayName("존재하지 않는 콜 ID로 요청 시 예외가 발생한다.")
     void addRejectedDriverToCallWithNotExistsCallInfo() throws Exception {
         // Given
-        TaxiDriver taxiDriver = TaxiDriver.builder().loginId("testLoginId").phoneNumber("010-0000-0000").build();
+        TaxiDriver taxiDriver = TaxiDriver.builder().loginId("testLoginId").password("TEST").name("TEST").licenseCode("TEST").phoneNumber("010-0000-0000").build();
         TaxiDriver savedTaxiDriver = saveTaxiDriverPort.save(taxiDriver);
 
         // When

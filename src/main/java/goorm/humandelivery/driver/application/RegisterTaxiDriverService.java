@@ -1,5 +1,6 @@
 package goorm.humandelivery.driver.application;
 
+import goorm.humandelivery.customer.exception.DuplicatePhoneNumberException;
 import goorm.humandelivery.driver.application.port.in.RegisterTaxiDriverUseCase;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiDriverPort;
 import goorm.humandelivery.driver.application.port.out.SaveTaxiPort;
@@ -27,6 +28,10 @@ public class RegisterTaxiDriverService implements RegisterTaxiDriverUseCase {
 
         if (saveTaxiDriverPort.existsByLoginId(request.getLoginId())) {
             throw new DuplicateLoginIdException();
+        }
+
+        if (saveTaxiDriverPort.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new DuplicatePhoneNumberException();
         }
 
         RegisterTaxiRequest taxiRequest = request.getTaxi();
