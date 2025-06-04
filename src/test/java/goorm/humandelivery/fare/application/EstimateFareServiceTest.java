@@ -32,11 +32,12 @@ class EstimateFareServiceTest {
     void estimateFare() {
         Location origin = new Location(37.5665, 126.9780);
         Location destination = new Location(37.4979, 127.0276);
-        EstimateFareRequest request = new EstimateFareRequest(origin, destination, LocalTime.of(15, 0));
+        LocalTime requestTime = LocalTime.of(15, 0);
+        EstimateFareRequest request = new EstimateFareRequest(origin, destination);
         TravelInfo travelInfo = new TravelInfo(8000, 1200, BigDecimal.valueOf(10200));
         given(loadTravelInfoPort.loadTravelInfo(origin, destination)).willReturn(travelInfo);
 
-        EstimateFareResponse response = estimateFareService.estimateFare(request);
+        EstimateFareResponse response = estimateFareService.estimateFare(request, requestTime);
 
         assertThat(response.getEstimatedFares().get(TaxiType.NORMAL)).isEqualTo(BigDecimal.valueOf(9600));
         assertThat(response.getEstimatedFares().get(TaxiType.PREMIUM)).isEqualTo(BigDecimal.valueOf(13600));
@@ -49,11 +50,12 @@ class EstimateFareServiceTest {
     void estimateFareWithBeforeNightStart() {
         Location origin = new Location(37.5665, 126.9780);
         Location destination = new Location(37.4979, 127.0276);
-        EstimateFareRequest request = new EstimateFareRequest(origin, destination, LocalTime.of(21, 59, 59));
+        LocalTime requestTime = LocalTime.of(21, 59, 59);
+        EstimateFareRequest request = new EstimateFareRequest(origin, destination);
         TravelInfo travelInfo = new TravelInfo(8000, 1200, BigDecimal.valueOf(10200));
         given(loadTravelInfoPort.loadTravelInfo(origin, destination)).willReturn(travelInfo);
 
-        EstimateFareResponse response = estimateFareService.estimateFare(request);
+        EstimateFareResponse response = estimateFareService.estimateFare(request, requestTime);
 
         assertThat(response.getEstimatedFares().get(TaxiType.NORMAL)).isEqualTo(BigDecimal.valueOf(9600));
         assertThat(response.getEstimatedFares().get(TaxiType.PREMIUM)).isEqualTo(BigDecimal.valueOf(13600));
@@ -65,11 +67,12 @@ class EstimateFareServiceTest {
     void estimateFareWithAfterNightStart() {
         Location origin = new Location(37.5665, 126.9780);
         Location destination = new Location(37.4979, 127.0276);
-        EstimateFareRequest request = new EstimateFareRequest(origin, destination, LocalTime.of(22, 0));
+        LocalTime requestTime = LocalTime.of(22, 0);
+        EstimateFareRequest request = new EstimateFareRequest(origin, destination);
         TravelInfo travelInfo = new TravelInfo(8000, 1200, BigDecimal.valueOf(10200));
         given(loadTravelInfoPort.loadTravelInfo(origin, destination)).willReturn(travelInfo);
 
-        EstimateFareResponse response = estimateFareService.estimateFare(request);
+        EstimateFareResponse response = estimateFareService.estimateFare(request, requestTime);
 
         assertThat(response.getEstimatedFares().get(TaxiType.NORMAL)).isEqualTo(BigDecimal.valueOf(11560));
         assertThat(response.getEstimatedFares().get(TaxiType.PREMIUM)).isEqualTo(BigDecimal.valueOf(16320));
@@ -81,11 +84,12 @@ class EstimateFareServiceTest {
     void estimateFareAtDeepNightStart() {
         Location origin = new Location(37.5665, 126.9780);
         Location destination = new Location(37.4979, 127.0276);
-        EstimateFareRequest request = new EstimateFareRequest(origin, destination, LocalTime.of(23, 0));
+        LocalTime requestTime = LocalTime.of(23, 0);
+        EstimateFareRequest request = new EstimateFareRequest(origin, destination);
         TravelInfo travelInfo = new TravelInfo(8000, 1200, BigDecimal.valueOf(10200));
         given(loadTravelInfoPort.loadTravelInfo(origin, destination)).willReturn(travelInfo);
 
-        EstimateFareResponse response = estimateFareService.estimateFare(request);
+        EstimateFareResponse response = estimateFareService.estimateFare(request, requestTime);
 
         assertThat(response.getEstimatedFares().get(TaxiType.NORMAL)).isEqualTo(BigDecimal.valueOf(13420));
         assertThat(response.getEstimatedFares().get(TaxiType.PREMIUM)).isEqualTo(BigDecimal.valueOf(16320));
@@ -97,11 +101,12 @@ class EstimateFareServiceTest {
     void estimateFareNearDeepNightEnd() {
         Location origin = new Location(37.5665, 126.9780);
         Location destination = new Location(37.4979, 127.0276);
-        EstimateFareRequest request = new EstimateFareRequest(origin, destination, LocalTime.of(1, 59, 59));
+        LocalTime requestTime = LocalTime.of(1, 59, 59);
+        EstimateFareRequest request = new EstimateFareRequest(origin, destination);
         TravelInfo travelInfo = new TravelInfo(8000, 1200, BigDecimal.valueOf(10200));
         given(loadTravelInfoPort.loadTravelInfo(origin, destination)).willReturn(travelInfo);
 
-        EstimateFareResponse response = estimateFareService.estimateFare(request);
+        EstimateFareResponse response = estimateFareService.estimateFare(request, requestTime);
 
         assertThat(response.getEstimatedFares().get(TaxiType.NORMAL)).isEqualTo(BigDecimal.valueOf(13420));
         assertThat(response.getEstimatedFares().get(TaxiType.PREMIUM)).isEqualTo(BigDecimal.valueOf(16320));
@@ -113,11 +118,12 @@ class EstimateFareServiceTest {
     void estimateFareWithBeforeNightEnd() {
         Location origin = new Location(37.5665, 126.9780);
         Location destination = new Location(37.4979, 127.0276);
-        EstimateFareRequest request = new EstimateFareRequest(origin, destination, LocalTime.of(3, 59, 59));
+        LocalTime requestTime = LocalTime.of(3, 59, 59);
+        EstimateFareRequest request = new EstimateFareRequest(origin, destination);
         TravelInfo travelInfo = new TravelInfo(8000, 1200, BigDecimal.valueOf(10200));
         given(loadTravelInfoPort.loadTravelInfo(origin, destination)).willReturn(travelInfo);
 
-        EstimateFareResponse response = estimateFareService.estimateFare(request);
+        EstimateFareResponse response = estimateFareService.estimateFare(request, requestTime);
 
         assertThat(response.getEstimatedFares().get(TaxiType.NORMAL)).isEqualTo(BigDecimal.valueOf(11560));
         assertThat(response.getEstimatedFares().get(TaxiType.PREMIUM)).isEqualTo(BigDecimal.valueOf(16320));
@@ -129,11 +135,12 @@ class EstimateFareServiceTest {
     void estimateFareWithAfterNightEnd() {
         Location origin = new Location(37.5665, 126.9780);
         Location destination = new Location(37.4979, 127.0276);
-        EstimateFareRequest request = new EstimateFareRequest(origin, destination, LocalTime.of(4, 0));
+        LocalTime requestTime = LocalTime.of(4, 0);
+        EstimateFareRequest request = new EstimateFareRequest(origin, destination);
         TravelInfo travelInfo = new TravelInfo(8000, 1200, BigDecimal.valueOf(10200));
         given(loadTravelInfoPort.loadTravelInfo(origin, destination)).willReturn(travelInfo);
 
-        EstimateFareResponse response = estimateFareService.estimateFare(request);
+        EstimateFareResponse response = estimateFareService.estimateFare(request, requestTime);
 
         assertThat(response.getEstimatedFares().get(TaxiType.NORMAL)).isEqualTo(BigDecimal.valueOf(9600));
         assertThat(response.getEstimatedFares().get(TaxiType.PREMIUM)).isEqualTo(BigDecimal.valueOf(13600));
