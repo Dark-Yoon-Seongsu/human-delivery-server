@@ -33,5 +33,4 @@ public class RegisterTaxiDriverRequest {
     @Valid
     private RegisterTaxiRequest taxi;
 
-
 }

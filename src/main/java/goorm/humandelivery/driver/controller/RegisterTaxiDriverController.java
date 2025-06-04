@@ -7,15 +7,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -27,19 +22,10 @@ public class RegisterTaxiDriverController {
 
     // 회원가입
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterTaxiDriverRequest taxiDriverRequest,
-                                      BindingResult bindingResult) {
-
-        // 밸리데이션 응답 추가.
-        if (bindingResult.hasErrors()) {
-            List<String> fieldErrors = bindingResult.getFieldErrors()
-                    .stream()
-                    .map(FieldError::getDefaultMessage)
-                    .toList();
-            return ResponseEntity.badRequest().body(Map.of("errors", fieldErrors));
-        }
-
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterTaxiDriverRequest taxiDriverRequest) {
+        log.info("택시기사 회원가입 요청 수신");
         RegisterTaxiDriverResponse response = registerTaxiDriverUseCase.register(taxiDriverRequest);
+        log.info("신규 택시기사 DB 저장 완료");
         return ResponseEntity.ok(response);
     }
 

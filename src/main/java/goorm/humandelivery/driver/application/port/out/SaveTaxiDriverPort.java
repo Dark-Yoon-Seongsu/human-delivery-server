@@ -10,4 +10,5 @@ public interface SaveTaxiDriverPort {
 
     void deleteAllInBatch();
 
+    boolean existsByPhoneNumber(String phoneNumber);
 }
