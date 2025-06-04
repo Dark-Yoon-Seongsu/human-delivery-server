@@ -20,4 +20,5 @@ public class CallMessage extends QueueMessage {
     private TaxiType taxiType;
     private Integer retryCount;
 
+
 }
