@@ -1,6 +1,5 @@
 package goorm.humandelivery.driver.dto.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,10 +10,9 @@ import lombok.Setter;
 @Builder
 public class LoginTaxiDriverRequest {
 
-    @Email
-    @NotBlank
+    @NotBlank(message = "아이디를 입력해 주세요.")
     private String loginId;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 입력해 주세요.")
     private String password;
 }
