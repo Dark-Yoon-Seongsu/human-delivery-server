@@ -1,5 +1,8 @@
 package goorm.humandelivery.driver.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum TaxiDriverStatus {
     OFF_DUTY("미운행"),
     AVAILABLE("빈차"),

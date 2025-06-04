@@ -39,4 +39,51 @@ public class CallInfo extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private TaxiType taxiType;
 
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CallStatus status = CallStatus.SENT;
+
+
+    public CallInfo(Long id, Customer customer, Location expectedOrigin, Location expectedDestination, TaxiType taxiType) {
+        this.id = id;
+        this.customer = customer;
+        this.expectedOrigin = expectedOrigin;
+        this.expectedDestination = expectedDestination;
+        this.taxiType = taxiType;
+
+    }
+
+
+    public void cancel() {
+        if (this.status == CallStatus.COMPLETED) {
+            throw new IllegalStateException("이미 완료된 콜입니다..");
+        }
+        this.status = CallStatus.CANCELLED;
+    }
+
+    public void match() {
+        this.status = CallStatus.MATCHED;
+    }
+
+    public void complete() {
+        this.status = CallStatus.COMPLETED;
+    }
+
+    public boolean isCancelled() {
+        return this.status == CallStatus.CANCELLED;
+    }
+
+    public boolean isWaiting() {
+        return this.status == CallStatus.SENT;
+    }
+
+    public boolean isMatched() {
+        return this.status == CallStatus.MATCHED;
+    }
+
+    public boolean isCompleted() {
+        return this.status == CallStatus.COMPLETED;
+    }
+
 }
