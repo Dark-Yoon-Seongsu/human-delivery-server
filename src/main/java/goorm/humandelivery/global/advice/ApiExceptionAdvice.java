@@ -99,9 +99,12 @@ public class ApiExceptionAdvice {
     }
 
     @ExceptionHandler(DuplicatePhoneNumberException.class)
-    public ResponseEntity<ErrorResponse> handleDuplicatePhoneNumberException(DuplicatePhoneNumberException ex) {
+    public ResponseEntity<?> handleDuplicatePhoneNumberException(DuplicatePhoneNumberException ex) {
         ErrorResponse response = new ErrorResponse("DUPLICATE_PhoneNumber", ex.getMessage());
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "message", response
+                ));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

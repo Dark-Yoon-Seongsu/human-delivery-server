@@ -32,6 +32,7 @@ public class SecurityConfig {
                                 "/api/v1/taxi-driver/token-info",
                                 "/api/v1/customer",
                                 "/api/v1/customer/auth-tokens",
+                                "/api/v1/estimate",
                                 "/ws/**",
                                 "/topic/**",           // 🔥 추가: 브로커 구독 경로
                                 "/app/**",

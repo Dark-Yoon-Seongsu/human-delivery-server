@@ -41,7 +41,7 @@ public class TaxiDriverConnectionMonitor {
     private final SendDispatchFailToCustomerPort sendDispatchFailToCustomerPort;
     private final LoadCallInfoPort loadCallInfoPort;
 
-    private static final long TIMEOUT_MILLIS = 10_000;
+    private static final long TIMEOUT_MILLIS = 300_000;
 
     /**
      * Scheduled 규칙
@@ -54,7 +54,7 @@ public class TaxiDriverConnectionMonitor {
     @Scheduled(fixedDelay = 5000)
     public void monitorReservedTaxiDrivers() {
         long now = System.currentTimeMillis();
-        log.info("[monitorReservedTaxiDrivers.TaxiDriverConnectionMonitor] start monitoring at : {}", Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDateTime());
+//        log.info("[monitorReservedTaxiDrivers.TaxiDriverConnectionMonitor] start monitoring at : {}", Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDateTime());
 
         // 1. 운행중인 기사목록 조회
         Set<String> activeDrivers = getActiveDriversPort.getActiveDrivers();

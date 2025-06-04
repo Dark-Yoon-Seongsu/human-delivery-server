@@ -44,7 +44,7 @@ public class RegisterCustomerControllerTest {
         void register_Success() throws Exception {
             // Given
             RegisterCustomerRequest request = new RegisterCustomerRequest(
-                "testuser", "password123", "홍길동", "010-1234-5678"
+                "testuser@test.com", "password123", "홍길동", "010-1234-5678"
             );
 
             // When & Then
@@ -54,7 +54,7 @@ public class RegisterCustomerControllerTest {
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.loginId").value("testuser"));
+                    .andExpect(jsonPath("$.loginId").value("testuser@test.com"));
         }
 
         @Test
@@ -62,7 +62,7 @@ public class RegisterCustomerControllerTest {
         void register_DuplicateLoginId_ReturnsConflict() throws Exception {
             // Given
             RegisterCustomerRequest firstRequest = new RegisterCustomerRequest(
-                "testuser", "password123", "홍길동", "010-1234-5678"
+                "testuser@test.com", "password123", "홍길동", "010-1234-5678"
             );
             
             // 첫 번째 회원가입
@@ -72,7 +72,7 @@ public class RegisterCustomerControllerTest {
                     .andExpect(status().isOk());
 
             RegisterCustomerRequest duplicateRequest = new RegisterCustomerRequest(
-                "testuser", "password456", "김철수", "010-9876-5432"
+                "testuser@test.com", "password456", "김철수", "010-9876-5432"
             );
 
             // When & Then
@@ -84,11 +84,11 @@ public class RegisterCustomerControllerTest {
         }
 
         @Test
-        @DisplayName("중복된 전화번호로 회원가입하면 400 에러가 발생한다.")
+        @DisplayName("중복된 전화번호로 회원가입하면 409 에러가 발생한다.")
         void register_DuplicatePhoneNumber_ReturnsBadRequest() throws Exception {
             // Given
             RegisterCustomerRequest firstRequest = new RegisterCustomerRequest(
-                "testuser1", "password123", "홍길동", "010-1234-5678"
+                "testuser1@test.com", "password123", "홍길동", "010-1234-5678"
             );
             
             // 첫 번째 회원가입
@@ -98,7 +98,7 @@ public class RegisterCustomerControllerTest {
                     .andExpect(status().isOk());
 
             RegisterCustomerRequest duplicateRequest = new RegisterCustomerRequest(
-                "testuser2", "password456", "김철수", "010-1234-5678"
+                "testuser2@test.com", "password456", "김철수", "010-1234-5678"
             );
 
             // When & Then
@@ -106,7 +106,7 @@ public class RegisterCustomerControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(duplicateRequest)))
                     .andDo(print())
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isConflict());
         }
 
         @Test

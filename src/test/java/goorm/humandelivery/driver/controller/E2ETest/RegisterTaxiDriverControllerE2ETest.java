@@ -117,6 +117,6 @@ class RegisterTaxiDriverControllerE2ETest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errors", hasItem(containsString("must be a well-formed email addres"))));
+                .andExpect(jsonPath("$.message", endsWith("must be a well-formed email address")));
     }
 }

@@ -69,7 +69,7 @@ class TaxiDriverConnectionMonitorTest {
 
     @Test
     void 위치미갱신_매칭정보없음이면_기사상태변경만_수행된다() {
-        long outdated = System.currentTimeMillis() - 11_000;
+        long outdated = System.currentTimeMillis() - 310_000;
         when(getActiveDriversPort.getActiveDrivers()).thenReturn(Set.of(driverId));
         when(getDriverStatusPort.getDriverStatus(driverId)).thenReturn(TaxiDriverStatus.RESERVED);
         when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(outdated));
@@ -87,7 +87,7 @@ class TaxiDriverConnectionMonitorTest {
 
     @Test
     void 위치미갱신_매칭정보존재시_상태변경_매칭삭제_메세지전송이_수행된다() {
-        long outdated = System.currentTimeMillis() - 11_000;
+        long outdated = System.currentTimeMillis() - 310_000;
         when(getActiveDriversPort.getActiveDrivers()).thenReturn(Set.of(driverId));
         when(getDriverStatusPort.getDriverStatus(driverId)).thenReturn(TaxiDriverStatus.RESERVED);
         when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(outdated));
@@ -116,7 +116,7 @@ class TaxiDriverConnectionMonitorTest {
         when(getDriverStatusPort.getDriverStatus(driver2)).thenReturn(TaxiDriverStatus.RESERVED);
 
         when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn("not-a-number"); // NFE 발생
-        when(getDriverLastUpdatePort.getLastUpdate(driver2)).thenReturn(String.valueOf(System.currentTimeMillis() - 11_000));
+        when(getDriverLastUpdatePort.getLastUpdate(driver2)).thenReturn(String.valueOf(System.currentTimeMillis() - 310_000));
 
         when(getAssignedCallPort.getCallIdByDriverId(driver2)).thenReturn(Optional.empty());
         when(getDriverTaxiTypePort.getDriverTaxiType(driver2)).thenReturn(taxiType);
@@ -136,7 +136,7 @@ class TaxiDriverConnectionMonitorTest {
     void getDriverTaxiType이_null이면_스킵된다() {
         when(getActiveDriversPort.getActiveDrivers()).thenReturn(Set.of("driver1"));
         when(getDriverStatusPort.getDriverStatus("driver1")).thenReturn(TaxiDriverStatus.RESERVED);
-        when(getDriverLastUpdatePort.getLastUpdate("driver1")).thenReturn(String.valueOf(System.currentTimeMillis() - 11000));
+        when(getDriverLastUpdatePort.getLastUpdate("driver1")).thenReturn(String.valueOf(System.currentTimeMillis() - 310_000));
         when(getAssignedCallPort.getCallIdByDriverId("driver1")).thenReturn(Optional.empty());
         when(getDriverTaxiTypePort.getDriverTaxiType("driver1")).thenReturn(null); // 핵심
 
@@ -150,7 +150,7 @@ class TaxiDriverConnectionMonitorTest {
         String driverId = "driver1";
         when(getActiveDriversPort.getActiveDrivers()).thenReturn(Set.of(driverId));
         when(getDriverStatusPort.getDriverStatus(driverId)).thenReturn(TaxiDriverStatus.RESERVED);
-        when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(System.currentTimeMillis() - 11000));
+        when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(System.currentTimeMillis() - 310_000));
         when(getAssignedCallPort.getCallIdByDriverId(driverId)).thenReturn(Optional.of("123"));
         when(getDriverTaxiTypePort.getDriverTaxiType(driverId)).thenReturn(TaxiType.NORMAL);
         when(loadCallInfoPort.findCustomerLoginIdByCallId(123L)).thenReturn(Optional.empty());
@@ -169,7 +169,7 @@ class TaxiDriverConnectionMonitorTest {
 
         when(getActiveDriversPort.getActiveDrivers()).thenReturn(Set.of(driverId));
         when(getDriverStatusPort.getDriverStatus(driverId)).thenReturn(TaxiDriverStatus.RESERVED);
-        when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(System.currentTimeMillis() - 11000));
+        when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(System.currentTimeMillis() - 310_000));
         when(getAssignedCallPort.getCallIdByDriverId(driverId)).thenReturn(Optional.of("123"));
         when(getDriverTaxiTypePort.getDriverTaxiType(driverId)).thenReturn(TaxiType.NORMAL);
         when(loadCallInfoPort.findCustomerLoginIdByCallId(123L)).thenReturn(Optional.of("customer1"));
@@ -186,7 +186,7 @@ class TaxiDriverConnectionMonitorTest {
         String driverId = "driver1";
         when(getActiveDriversPort.getActiveDrivers()).thenReturn(Set.of(driverId));
         when(getDriverStatusPort.getDriverStatus(driverId)).thenReturn(TaxiDriverStatus.RESERVED);
-        when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(System.currentTimeMillis() - 11000));
+        when(getDriverLastUpdatePort.getLastUpdate(driverId)).thenReturn(String.valueOf(System.currentTimeMillis() - 310_000));
         when(getAssignedCallPort.getCallIdByDriverId(driverId)).thenReturn(Optional.of("123"));
         when(getDriverTaxiTypePort.getDriverTaxiType(driverId)).thenReturn(TaxiType.NORMAL);
         when(loadCallInfoPort.findCustomerLoginIdByCallId(123L)).thenReturn(Optional.of("customer1"));
