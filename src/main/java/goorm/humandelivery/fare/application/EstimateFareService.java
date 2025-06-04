@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -25,14 +26,14 @@ public class EstimateFareService implements EstimateFareUseCase {
     private final LoadTravelInfoPort loadTravelInfoPort;
 
     @Override
-    public EstimateFareResponse estimateFare(EstimateFareRequest request) {
+    public EstimateFareResponse estimateFare(EstimateFareRequest request, LocalTime requestTime) {
         TravelInfo travelInfo = loadTravelInfoPort.loadTravelInfo(request.getExpectedOrigin(), request.getExpectedDestination());
         double distance = travelInfo.getDistanceMeters();
         Map<TaxiType, BigDecimal> result = new EnumMap<>(TaxiType.class);
 
         for (TaxiType type : TaxiType.values()) {
             FarePolicy policy = getPolicyByType(type);
-            BigDecimal fare = policy.estimateFare(distance, request.getRequestTime());
+            BigDecimal fare = policy.estimateFare(distance, requestTime);
             result.put(type, fare);
             log.info("[EstimateFareService.estimateFare] 택시타입: {}, 요금: {}", type, fare);
         }
