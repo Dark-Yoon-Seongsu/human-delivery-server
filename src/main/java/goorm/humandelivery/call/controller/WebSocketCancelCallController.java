@@ -14,25 +14,33 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@MessageMapping("/call")
 public class WebSocketCancelCallController {
 
     private final CancelCallUseCase cancelCallUseCase;
-    private final LoadMatchingPort loadMatchingPort;
     private final SimpMessagingTemplate messagingTemplate;
-
     // 승객이 호출 취소 요청을 보냄
-    @MessageMapping("/call/cancel") // /app/call/cancel
-    @SendToUser("/queue/call/cancelled") // /user/queue/call/cancelled
-    public CallCancelMessageResponse handleCallCancel(CallMessage message) {
+    @MessageMapping("/cancel") // /app/call/cancel
+    public void handleCallCancel(CancelCallMessage message, Principal principal) {
         log.info("[WebSocket] Call cancel request received: {}", message.getCallId());
 
         cancelCallUseCase.cancelCall(message.getCallId());
 
-        return new CallCancelMessageResponse("콜이 성공적으로 취소되었습니다.", message.getCallId());
+        CallCancelMessageResponse response = new CallCancelMessageResponse(
+                "콜이 성공적으로 취소되었습니다.", message.getCallId()
+        );
+
+        // ✅ 메시지를 요청한 유저에게만 전송
+        messagingTemplate.convertAndSendToUser(
+                principal.getName(),           // 인증된 사용자명 (e.g. email)
+                "/queue/call-cancelled",       // 클라이언트가 구독한 경로
+                response
+        );
     }
 }
