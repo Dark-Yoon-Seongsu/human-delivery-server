@@ -7,11 +7,14 @@ import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.call.dto.request.CancelCallMessage;
 import goorm.humandelivery.call.infrastructure.persistence.JpaCallInfoRepository;
+import goorm.humandelivery.call.infrastructure.persistence.JpaMatchingRepository;
 import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
 import goorm.humandelivery.customer.domain.Customer;
 import goorm.humandelivery.customer.dto.response.CallCancelMessageResponse;
 import goorm.humandelivery.customer.infrastructure.persistence.JpaCustomerRepository;
 import goorm.humandelivery.driver.domain.TaxiType;
+import goorm.humandelivery.driver.infrastructure.persistence.JpaTaxiDriverRepository;
+import goorm.humandelivery.driver.infrastructure.persistence.JpaTaxiRepository;
 import goorm.humandelivery.global.config.StompConfig;
 import goorm.humandelivery.global.exception.CallInfoEntityNotFoundException;
 import goorm.humandelivery.shared.location.domain.Location;
@@ -19,6 +22,7 @@ import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -27,12 +31,14 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.lang.reflect.Type;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -41,8 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-@Import({StompConfig.class})
+@ExtendWith(SpringExtension.class)
 class WebSocketCancelCallControllerTest {
     private static final Logger log = LoggerFactory.getLogger(WebSocketCancelCallControllerTest.class);
 
@@ -54,6 +59,15 @@ class WebSocketCancelCallControllerTest {
 
     @Autowired
     JpaCustomerRepository jpaCustomerRepository;
+
+    @Autowired
+    JpaTaxiDriverRepository jpaTaxiDriverRepository;
+
+    @Autowired
+    JpaMatchingRepository jpaMatchingRepository;
+
+    @Autowired
+    JpaTaxiRepository jpaTaxiRepository;
 
     @Autowired
     SetCallWithPort setCallWithPort;
@@ -77,9 +91,13 @@ class WebSocketCancelCallControllerTest {
 
     @AfterEach
     void tearDown() {
+        jpaMatchingRepository.deleteAllInBatch();
         jpaCallInfoRepository.deleteAllInBatch();
         jpaCustomerRepository.deleteAllInBatch();
+        jpaTaxiDriverRepository.deleteAllInBatch();
+        jpaTaxiRepository.deleteAllInBatch();
         stringRedisTemplate.getConnectionFactory().getConnection().commands().flushAll();
+
         if (webSocketStompClient != null) {
             webSocketStompClient.stop();
         }
