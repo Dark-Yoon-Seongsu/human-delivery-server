@@ -2,6 +2,7 @@ package goorm.humandelivery.customer.controller;
 
 import goorm.humandelivery.call.application.port.out.LoadCallInfoPort;
 import goorm.humandelivery.call.application.port.out.SaveCallInfoPort;
+import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.call.dto.request.CancelCallMessage;
@@ -13,12 +14,14 @@ import goorm.humandelivery.global.config.StompConfig;
 import goorm.humandelivery.global.exception.CallInfoEntityNotFoundException;
 import goorm.humandelivery.shared.location.domain.Location;
 import goorm.humandelivery.shared.security.port.out.JwtTokenProviderPort;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.*;
 import org.springframework.test.context.ActiveProfiles;
@@ -44,6 +47,8 @@ class WebSocketCancelCallControllerTest {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    SetCallWithPort setCallWithPort;
 
     @Autowired
     JwtTokenProviderPort jwtTokenProviderPort;
@@ -57,7 +62,18 @@ class WebSocketCancelCallControllerTest {
     @Autowired
     private SaveCustomerPort saveCustomerPort;
 
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+
     WebSocketStompClient webSocketStompClient;
+
+    @AfterEach
+    void tearDown() {
+        stringRedisTemplate.getConnectionFactory().getConnection().commands().flushAll();
+        if (webSocketStompClient != null) {
+            webSocketStompClient.stop();
+        }
+    }
 
     @Test
     @DisplayName("WebSocket으로 콜 취소 요청시 성공적으로 콜이 취소된다")
@@ -75,7 +91,7 @@ class WebSocketCancelCallControllerTest {
         TaxiType taxiType = TaxiType.NORMAL;
         CallInfo callInfo = new CallInfo(null, savedCustomer, origin, destination, taxiType);
         Long callId = saveCallInfoPort.save(callInfo).getId();
-
+        setCallWithPort.setCallWith(callId, CallStatus.SENT);
 
         CountDownLatch latch = new CountDownLatch(1);
 

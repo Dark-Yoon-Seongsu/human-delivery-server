@@ -49,7 +49,7 @@ public class CallInfoRedisAdapter implements UpdateCallInfoPort {
 
         Long result;
         try {
-            result = redisTemplate.execute(CANCEL_CALL_SCRIPT, keys, args);
+            result = redisTemplate.execute(CANCEL_CALL_SCRIPT, keys, args.toArray());
         } catch (Exception e) {
             log.error("[CallInfoRedisAdapter.cancel] Redis Lua 스크립트 실행 중 예외 발생. callId: {}", callId, e);
             throw new RuntimeException("Redis Lua 스크립트 실행 중 오류", e);
