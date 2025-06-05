@@ -6,9 +6,11 @@ import goorm.humandelivery.call.application.port.out.SetCallWithPort;
 import goorm.humandelivery.call.domain.CallInfo;
 import goorm.humandelivery.call.domain.CallStatus;
 import goorm.humandelivery.call.dto.request.CancelCallMessage;
+import goorm.humandelivery.call.infrastructure.persistence.JpaCallInfoRepository;
 import goorm.humandelivery.customer.application.port.out.SaveCustomerPort;
 import goorm.humandelivery.customer.domain.Customer;
 import goorm.humandelivery.customer.dto.response.CallCancelMessageResponse;
+import goorm.humandelivery.customer.infrastructure.persistence.JpaCustomerRepository;
 import goorm.humandelivery.driver.domain.TaxiType;
 import goorm.humandelivery.global.config.StompConfig;
 import goorm.humandelivery.global.exception.CallInfoEntityNotFoundException;
@@ -48,6 +50,12 @@ class WebSocketCancelCallControllerTest {
     private int port;
 
     @Autowired
+    JpaCallInfoRepository jpaCallInfoRepository;
+
+    @Autowired
+    JpaCustomerRepository jpaCustomerRepository;
+
+    @Autowired
     SetCallWithPort setCallWithPort;
 
     @Autowired
@@ -69,6 +77,8 @@ class WebSocketCancelCallControllerTest {
 
     @AfterEach
     void tearDown() {
+        jpaCallInfoRepository.deleteAllInBatch();
+        jpaCustomerRepository.deleteAllInBatch();
         stringRedisTemplate.getConnectionFactory().getConnection().commands().flushAll();
         if (webSocketStompClient != null) {
             webSocketStompClient.stop();
