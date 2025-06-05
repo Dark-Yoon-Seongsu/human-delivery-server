@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,9 +25,8 @@ public class FavoriteDestinationPersistenceAdapter implements FavoriteDestinatio
     }
 
     @Override
-    public FavoriteDestination findById(Long id) {
-        return favoriteDestinationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Favorite destination not found"));
+    public Optional<FavoriteDestination> findById(Long id) {
+        return favoriteDestinationRepository.findById(id);
     }
 
     @Override

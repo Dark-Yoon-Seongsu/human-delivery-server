@@ -50,7 +50,8 @@ public class FavoriteDestinationService implements FavoriteDestinationUseCase {
     @Override
     @Transactional
     public FavoriteDestinationDto.Response updateFavoriteDestination(Long customerId, Long destinationId, FavoriteDestinationDto.UpdateRequest request) {
-        FavoriteDestination favoriteDestination = favoriteDestinationPort.findById(destinationId);
+        FavoriteDestination favoriteDestination = favoriteDestinationPort.findById(destinationId)
+                .orElseThrow(() -> new IllegalArgumentException("Favorite destination not found"));
 
         if (!favoriteDestination.getCustomer().getId().equals(customerId)) {
             throw new IllegalArgumentException("Not authorized to update this destination");
