@@ -1,4 +1,4 @@
-package goorm.humandelivery.customer.controller;
+package goorm.humandelivery.call.controller;
 
 import goorm.humandelivery.call.application.port.out.LoadCallInfoPort;
 import goorm.humandelivery.call.application.port.out.SaveCallInfoPort;
