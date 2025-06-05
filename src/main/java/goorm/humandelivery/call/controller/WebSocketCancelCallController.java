@@ -29,7 +29,7 @@ public class WebSocketCancelCallController {
     @MessageMapping("/cancel") // /app/call/cancel
     @SendToUser("/queue/call-cancelled") // /user/{username}/queue/call-cancelled
     public CallCancelMessageResponse handleCallCancel(CancelCallMessage message, Principal principal) {
-        log.info("[WebSocket] Call cancel request received: {}", message.getCallId());
+        log.info("[WebSocket] Call cancel request received: {} loginId : {}", message.getCallId(), principal.getName());
 
         cancelCallUseCase.cancelCall(message.getCallId());
 
