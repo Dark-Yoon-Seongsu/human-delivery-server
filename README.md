@@ -19,8 +19,8 @@
 | 이 수 | 택시&승객 클라이언트 개발 | https://github.com/SooLee99       |
 
 
-##  프로젝트 개요
-이 프로젝트는 기존 [인간배달](https://github.com/humandelivery/backend) 프로젝트를 기반으로,
+##  프로젝트 개요   
+ 이 프로젝트는 기존 [인간배달](https://github.com/humandelivery/backend) 프로젝트를 기반으로,
 실시간 택시 배차 시스템을 분석하고 리팩토링하여 유지보수성과 성능을 개선하는 것을 목표로 합니다.
 기존 시스템은 WebSocket을 통한 실시간 통신과 Redis를 활용한 위치 정보 처리를 포함하고 있으며,
 메시지 큐를 통해 콜 요청을 분산 처리합니다.
