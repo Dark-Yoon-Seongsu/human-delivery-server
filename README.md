@@ -1,6 +1,6 @@
 # 실시간 택시 배차 시스템 
 <p align="center">
-  <img src="image.png" alt="인간배달 로고" width="400"/>
+  <img src="imageV2.png" alt="인간배달 로고" width="400"/>
 </p>
 
 ## 발표자료
